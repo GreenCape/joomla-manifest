@@ -56,7 +56,7 @@ abstract class Manifest
 	/**
 	 * @var string String that identifies the version of Joomla for which this extension is developed.
 	 */
-	protected $version = '2.5';
+	protected $target = '2.5';
 
 	/**
 	 * @var string Installation method, one of 'install', 'upgrade'
@@ -81,7 +81,7 @@ abstract class Manifest
 	{
 		$root = new \DOMDocument('1.0', 'utf-8');
 		$xml  = '<extension type="%s" version="%s" method="%s"></extension>';
-		$root->loadXML(sprintf($xml, $this->getType(), $this->getVersion(), $this->getMethod()));
+		$root->loadXML(sprintf($xml, $this->getType(), $this->getTarget(), $this->getMethod()));
 
 		return $root;
 	}
@@ -91,14 +91,14 @@ abstract class Manifest
 		return $this->type;
 	}
 
-	public function setVersion($version)
+	public function setTarget($version)
 	{
-		$this->version = $version;
+		$this->target = $version;
 	}
 
-	public function getVersion()
+	public function getTarget()
 	{
-		return $this->version;
+		return $this->target;
 	}
 
 	public function getMethod()

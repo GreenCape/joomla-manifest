@@ -72,7 +72,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 	public function testDefaultVersionIs25()
 	{
-		$this->assertEquals('2.5', $this->manifest->getVersion());
+		$this->assertEquals('2.5', $this->manifest->getTarget());
 	}
 
 	public function provideVersions()
@@ -91,9 +91,9 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVersionCanBeChanged($version, $expected)
 	{
-		$this->manifest->setVersion($version);
+		$this->manifest->setTarget($version);
 
-		$this->assertEquals($expected, $this->manifest->getVersion());
+		$this->assertEquals($expected, $this->manifest->getTarget());
 	}
 
 	public function testDefaultMethodIsInstall()
