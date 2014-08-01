@@ -51,15 +51,4 @@ class ComponentManifest extends Manifest
 	{
 		$this->type = 'component';
 	}
-
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$xml = $this->getManifestRoot();
-		return $xml->saveXML();
-	}
 }

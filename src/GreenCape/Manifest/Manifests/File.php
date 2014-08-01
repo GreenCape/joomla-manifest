@@ -51,15 +51,4 @@ class FileManifest extends Manifest
 	{
 		$this->type = 'file';
 	}
-
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$xml = $this->getManifestRoot();
-		return $xml->saveXML();
-	}
 }

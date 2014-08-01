@@ -51,15 +51,4 @@ class TemplateManifest extends Manifest
 	{
 		$this->type = 'template';
 	}
-
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$xml = $this->getManifestRoot();
-		return $xml->saveXML();
-	}
 }

@@ -70,7 +70,12 @@ abstract class Manifest
 	 *
 	 * @return string
 	 */
-	abstract public function __toString();
+	final public function __toString()
+	{
+		$xml = $this->getManifestRoot();
+		$this->addRootAttributes($xml);
+		return $xml->saveXML();
+	}
 
 	public function getManifestRoot()
 	{
@@ -100,4 +105,6 @@ abstract class Manifest
 	{
 		return $this->method;
 	}
+
+	protected function addRootAttributes($xml){}
 }

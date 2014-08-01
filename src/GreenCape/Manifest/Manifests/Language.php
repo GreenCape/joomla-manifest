@@ -51,15 +51,4 @@ class LanguageManifest extends Manifest
 	{
 		$this->type = 'language';
 	}
-
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$xml = $this->getManifestRoot();
-		return $xml->saveXML();
-	}
 }

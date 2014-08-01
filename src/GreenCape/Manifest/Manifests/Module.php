@@ -73,15 +73,8 @@ class ModuleManifest extends Manifest
 		$this->type = 'module';
 	}
 
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
+	protected function addRootAttributes($xml)
 	{
-		$xml = $this->getManifestRoot();
 		$xml->firstChild->appendChild(new \DOMAttr('client', $this->getClient()));
-		return $xml->saveXML();
 	}
 }

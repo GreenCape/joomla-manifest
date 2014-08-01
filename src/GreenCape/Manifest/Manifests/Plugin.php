@@ -75,15 +75,8 @@ class PluginManifest extends Manifest
 		$this->type = 'plugin';
 	}
 
-	/**
-	 * Render the content as XML
-	 *
-	 * @return string
-	 */
-	public function __toString()
+	protected function addRootAttributes($xml)
 	{
-		$xml = $this->getManifestRoot();
 		$xml->firstChild->appendChild(new \DOMAttr('group', $this->getGroup()));
-		return $xml->saveXML();
 	}
 }
