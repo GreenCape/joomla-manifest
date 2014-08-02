@@ -137,7 +137,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
 	}
 
-	public function testDump()
+	public function xtestDump()
 	{
 		$this->manifest->setName('com_foo');
 		$this->manifest->setAuthor('Chuck Norris');
