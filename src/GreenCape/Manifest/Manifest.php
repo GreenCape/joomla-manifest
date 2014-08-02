@@ -113,23 +113,8 @@ abstract class Manifest
 		$xml = $this->getManifestRoot();
 		$this->addRootAttributes($xml);
 		$this->addMetadata($xml);
-		$xmlString = $xml->saveXML();
 
-		if (class_exists('tidy'))
-		{
-			$config = array(
-				'indent'    => true,
-				'input-xml' => true,
-				'wrap'      => 200,
-			);
-
-			$tidy = new \tidy;
-			$tidy->parseString($xmlString, $config, 'utf8');
-			$tidy->cleanRepair();
-			$xmlString = (string) $tidy;
-		}
-
-		return $xmlString;
+		return $this->beautify($xml->saveXML());
 	}
 
 	/**
@@ -367,4 +352,28 @@ abstract class Manifest
 	}
 
 	protected function addRootAttributes($xml){}
+
+	/**
+	 * @param $xmlString
+	 *
+	 * @return string
+	 */
+	private function beautify($xmlString)
+	{
+		if (class_exists('tidy'))
+		{
+			$config = array(
+				'indent'    => true,
+				'input-xml' => true,
+				'wrap'      => 200,
+			);
+
+			$tidy = new \tidy;
+			$tidy->parseString($xmlString, $config, 'utf8');
+			$tidy->cleanRepair();
+			$xmlString = (string)$tidy;
+		}
+
+		return $xmlString;
+	}
 }
