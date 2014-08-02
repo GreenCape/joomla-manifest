@@ -107,4 +107,44 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~^\<\?xml version="1.0"\?>\s*\<extension~sm', $xml);
 	}
+
+	public function testNamePresetsDescription()
+	{
+		$this->manifest->setName('com_foo');
+
+		$this->assertEquals('COM_FOO_XML_DESCRIPTION', $this->manifest->getDescription());
+	}
+
+	public function testAuthorPresetsCopyrightOwner()
+	{
+		$this->manifest->setAuthor('Any Name');
+
+		$this->assertRegExp('~Any Name\. All rights reserved\.~', $this->manifest->getCopyright());
+	}
+
+	public function testDefaultCreationDateIsToday()
+	{
+		$this->manifest->setCreationDate();
+
+		$this->assertEquals(date('F Y'), $this->manifest->getCreationDate());
+	}
+
+	public function testCreationDateTriggersCopyrightYearRange()
+	{
+		$this->manifest->setAuthor('Sean Connery');
+		$this->manifest->setCreationDate('02.08.2010');
+
+		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
+	}
+
+	public function testDump()
+	{
+		$this->manifest->setName('com_foo');
+		$this->manifest->setAuthor('Chuck Norris');
+		$this->manifest->setCreationDate('02.08.2010');
+
+		$xml = (string) $this->manifest;
+
+		$this->assertEquals('', $xml);
+	}
 }

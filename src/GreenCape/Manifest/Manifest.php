@@ -48,6 +48,10 @@ namespace GreenCape\Manifest;
 abstract class Manifest
 {
 	/**
+	 * Manifest Attributes
+	 */
+
+	/**
 	 * @var string This attribute describes the type of the extension for the installer.
 	 *             Based on this type further requirements to sub-tags apply.
 	 */
@@ -66,6 +70,40 @@ abstract class Manifest
 	protected $method = 'install';
 
 	/**
+	 * Metadata
+	 */
+
+	/** @var string Raw component name (e.g. com_banners). This is a translatable field. */
+	protected $name = '';
+
+	/** @var string Author's name (e.g. Joomla! Project) */
+	protected $author = '';
+
+	/** @var string Date of creation or release (e.g. April 2006) */
+	protected $creationDate = '';
+
+	/** @var string The year (or range) for the copyright statement (e.g. 2005 - 2011) */
+	protected $copyrightYear = '';
+
+	/** @var string The owner of the copyright (e.g. Open Source Matters) */
+	protected $copyrightOwner = '';
+
+	/** @var string A license statement */
+	protected $license = 'GNU General Public License version 2 or later; see LICENSE.txt';
+
+	/** @var string Author's email address (e.g. admin@joomla.org) */
+	protected $authorEmail = '';
+
+	/** @var string URL to the author's website (e.g. www.joomla.org) */
+	protected $authorUrl = '';
+
+	/** @var string The version number of the extension (e.g. 1.6.0) */
+	protected $version = '';
+
+	/** @var string The description of the extension. This is a translatable field. (e.g. COM_BANNERS_XML_DESCRIPTION) */
+	protected $description = '';
+
+	/**
 	 * Render the content as XML
 	 *
 	 * @return string
@@ -74,9 +112,29 @@ abstract class Manifest
 	{
 		$xml = $this->getManifestRoot();
 		$this->addRootAttributes($xml);
-		return $xml->saveXML();
+		$this->addMetadata($xml);
+		$xmlString = $xml->saveXML();
+
+		if (class_exists('tidy'))
+		{
+			$config = array(
+				'indent'    => true,
+				'input-xml' => true,
+				'wrap'      => 200,
+			);
+
+			$tidy = new \tidy;
+			$tidy->parseString($xmlString, $config, 'utf8');
+			$tidy->cleanRepair();
+			$xmlString = (string) $tidy;
+		}
+
+		return $xmlString;
 	}
 
+	/**
+	 * @return \DOMDocument
+	 */
 	public function getManifestRoot()
 	{
 		$root = new \DOMDocument('1.0', 'utf-8');
@@ -84,6 +142,36 @@ abstract class Manifest
 		$root->loadXML(sprintf($xml, $this->getType(), $this->getTarget(), $this->getMethod()));
 
 		return $root;
+	}
+
+	/**
+	 * @param \DOMDocument $xml
+	 */
+	protected function addMetadata($xml)
+	{
+		if (empty($this->creationDate))
+		{
+			$this->setCreationDate();
+		}
+
+		$this->addElement($xml, 'name');
+		$this->addElement($xml, 'author');
+		$this->addElement($xml, 'creationDate');
+		$this->addElement($xml, 'copyright');
+		$this->addElement($xml, 'license');
+		$this->addElement($xml, 'authorEmail');
+		$this->addElement($xml, 'authorUrl');
+		$this->addElement($xml, 'version');
+		$this->addElement($xml, 'description');
+	}
+
+	private function addElement($xml, $key)
+	{
+		$value = call_user_func(array($this, 'get' . ucfirst($key)));
+		if (!empty($value))
+		{
+			$xml->firstChild->appendChild(new \DOMElement($key, $value));
+		}
 	}
 
 	public function getType()
@@ -104,6 +192,178 @@ abstract class Manifest
 	public function getMethod()
 	{
 		return $this->method;
+	}
+
+	/**
+	 * @param string $author
+	 */
+	public function setAuthor($author)
+	{
+		$this->author = $author;
+		if (empty($this->copyrightOwner))
+		{
+			$this->copyrightOwner = $author;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthor()
+	{
+		return $this->author;
+	}
+
+	/**
+	 * @param string $authorEmail
+	 */
+	public function setAuthorEmail($authorEmail)
+	{
+		$this->authorEmail = $authorEmail;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthorEmail()
+	{
+		return $this->authorEmail;
+	}
+
+	/**
+	 * @param string $authorUrl
+	 */
+	public function setAuthorUrl($authorUrl)
+	{
+		$this->authorUrl = $authorUrl;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthorUrl()
+	{
+		return $this->authorUrl;
+	}
+
+	/**
+	 * @param string $year
+	 * @param string $owner
+	 */
+	public function setCopyright($year, $owner)
+	{
+		$this->copyrightYear  = $year;
+		if (empty($this->creationDate))
+		{
+			$this->creationDate = $year;
+		}
+
+		$this->copyrightOwner = $owner;
+		if (empty($this->author))
+		{
+			$this->author = $owner;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCopyright()
+	{
+		return "(C) {$this->copyrightYear} {$this->copyrightOwner}. All rights reserved.";
+	}
+
+	/**
+	 * @param string $creationDate Defaults to 'today'
+	 */
+	public function setCreationDate($creationDate = 'today')
+	{
+		$datetime           = strtotime($creationDate);
+		$this->creationDate = date('F Y', $datetime);
+		if (empty($this->copyrightYear))
+		{
+			$this->copyrightYear = date('Y', $datetime);
+			if ($this->copyrightYear != date('Y'))
+			{
+				$this->copyrightYear .= ' - ' . date('Y');
+			}
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCreationDate()
+	{
+		return $this->creationDate;
+	}
+
+	/**
+	 * @param string $description
+	 */
+	public function setDescription($description)
+	{
+		$this->description = $description;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
+
+	/**
+	 * @param string $license
+	 */
+	public function setLicense($license)
+	{
+		$this->license = $license;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLicense()
+	{
+		return $this->license;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+		if (empty($this->description))
+		{
+			$this->description = strtoupper("{$name}_XML_DESCRIPTION");
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $version
+	 */
+	public function setVersion($version)
+	{
+		$this->version = $version;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		return $this->version;
 	}
 
 	protected function addRootAttributes($xml){}
