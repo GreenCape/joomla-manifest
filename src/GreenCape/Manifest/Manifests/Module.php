@@ -73,8 +73,8 @@ class ModuleManifest extends Manifest
 		$this->type = 'module';
 	}
 
-	protected function addRootAttributes($xml)
+	protected function addAttributes(&$data)
 	{
-		$xml->firstChild->appendChild(new \DOMAttr('client', $this->getClient()));
+		$data['@client'] = $this->getClient();
 	}
 }

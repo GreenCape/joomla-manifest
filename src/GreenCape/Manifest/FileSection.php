@@ -34,49 +34,65 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @plugin     GreenCape\Manifest
- * @subplugin  Unittests
+ * @package     GreenCape\Manifest
+ * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
  * @link        http://www.greencape.com/
- * @since       Plugin available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
 
-class PluginManifest extends Manifest
+class FileSection
 {
-	/**
-	 * @var string The group name specifies for which group of plugins the new plugin is available.
-	 *             The existing groups are the folder names within the directory /plugins.
-	 *             The installer will create new folder names for group names that do not exist yet.
-	 */
-	protected $group = null;
+	protected $section = 'files';
 
 	/**
-	 * @param string $group
+	 * @var string The base folder in the zip package
 	 */
-	public function setGroup($group)
+	protected $base = null;
+
+	protected $files = array();
+	protected $folders = array();
+
+	/**
+	 * @param string $filename
+	 */
+	public function addFile($filename)
 	{
-		$this->group = $group;
+		$this->files[] = $filename;
 	}
 
 	/**
-	 * @return string
+	 * Build the section structure
+	 *
+	 * @return array
 	 */
-	public function getGroup()
+	public function getStructure()
 	{
-		return $this->group;
+		$structure = array();
+
+		if (!empty($this->base))
+		{
+			$structure['@folder'] = $this->base;
+		}
+
+		foreach ($this->files as $file)
+		{
+			$tmp['filename'] = $file;
+			$structure[] = $tmp;
+		}
+
+		foreach ($this->folders as $folder)
+		{
+			$tmp['folder'] = $folder;
+			$structure[] = $tmp;
+		}
+
+		return array($this->section => $structure);
 	}
 
-	public function __construct()
-	{
-		$this->type = 'plugin';
-	}
-
-	protected function addAttributes(&$data)
-	{
-		$data['@group'] = $this->getGroup();
-	}
+	protected function addAttributes(&$data){}
 }

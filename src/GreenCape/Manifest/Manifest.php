@@ -110,52 +110,54 @@ abstract class Manifest
 	 */
 	final public function __toString()
 	{
-		$xml = $this->getManifestRoot();
-		$this->addRootAttributes($xml);
-		$this->addMetadata($xml);
+		$data = $this->getManifestRoot('extension');
+		$this->addAttributes($data);
+		$this->addMetadata($data['extension']);
 
-		return $this->beautify($xml->saveXML());
+		$xml = new \GreenCape\Xml\Converter($data);
+		return (string) $xml;
 	}
 
 	/**
-	 * @return \DOMDocument
+	 * @return array
 	 */
-	public function getManifestRoot()
+	public function getManifestRoot($tag)
 	{
-		$root = new \DOMDocument('1.0', 'utf-8');
-		$xml  = '<extension type="%s" version="%s" method="%s"></extension>';
-		$root->loadXML(sprintf($xml, $this->getType(), $this->getTarget(), $this->getMethod()));
-
-		return $root;
+		return array(
+			'@type'    => $this->getType(),
+			'@version' => $this->getVersion(),
+			'@method'  => $this->getMethod(),
+			$tag => array()
+		);
 	}
 
 	/**
-	 * @param \DOMDocument $xml
+	 * @param \DOMDocument $data
 	 */
-	protected function addMetadata($xml)
+	protected function addMetadata(&$data)
 	{
 		if (empty($this->creationDate))
 		{
 			$this->setCreationDate();
 		}
 
-		$this->addElement($xml, 'name');
-		$this->addElement($xml, 'author');
-		$this->addElement($xml, 'creationDate');
-		$this->addElement($xml, 'copyright');
-		$this->addElement($xml, 'license');
-		$this->addElement($xml, 'authorEmail');
-		$this->addElement($xml, 'authorUrl');
-		$this->addElement($xml, 'version');
-		$this->addElement($xml, 'description');
+		$this->addElement($data, 'name');
+		$this->addElement($data, 'author');
+		$this->addElement($data, 'creationDate');
+		$this->addElement($data, 'copyright');
+		$this->addElement($data, 'license');
+		$this->addElement($data, 'authorEmail');
+		$this->addElement($data, 'authorUrl');
+		$this->addElement($data, 'version');
+		$this->addElement($data, 'description');
 	}
 
-	private function addElement($xml, $key)
+	private function addElement(&$data, $key)
 	{
 		$value = call_user_func(array($this, 'get' . ucfirst($key)));
 		if (!empty($value))
 		{
-			$xml->firstChild->appendChild(new \DOMElement($key, $value));
+			$data[$key] = $value;
 		}
 	}
 
@@ -351,29 +353,5 @@ abstract class Manifest
 		return $this->version;
 	}
 
-	protected function addRootAttributes($xml){}
-
-	/**
-	 * @param $xmlString
-	 *
-	 * @return string
-	 */
-	private function beautify($xmlString)
-	{
-		if (class_exists('tidy'))
-		{
-			$config = array(
-				'indent'    => true,
-				'input-xml' => true,
-				'wrap'      => 200,
-			);
-
-			$tidy = new \tidy;
-			$tidy->parseString($xmlString, $config, 'utf8');
-			$tidy->cleanRepair();
-			$xmlString = (string)$tidy;
-		}
-
-		return $xmlString;
-	}
+	protected function addAttributes(&$data){}
 }

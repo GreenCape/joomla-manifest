@@ -43,10 +43,10 @@
  * @since       File available since Release 0.1.0
  */
 
-class ManifestTest extends PHPUnit_Framework_TestCase
+class FileSectionTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var GreenCape\Manifest\FileSection */
+	private $section = null;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -54,7 +54,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
+		$this->section = new \GreenCape\Manifest\FileSection();
 	}
 
 	/**
@@ -65,86 +65,11 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 	{
 	}
 
-	public function testIsManifest()
+	public function testAddFile()
 	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+		$this->section->addFile('foo.txt');
+		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
 
-	public function testDefaultVersionIs25()
-	{
-		$this->assertEquals('2.5', $this->manifest->getTarget());
-	}
-
-	public function provideVersions()
-	{
-		return array(
-			array('version' => '1.5', 'expected' => '1.5'),
-			array('version' => '2.5', 'expected' => '2.5'),
-			array('version' => '3.0', 'expected' => '3.0'),
-		);
-	}
-
-	/**
-	 * @dataProvider provideVersions
-	 * @param $version
-	 * @param $expected
-	 */
-	public function testVersionCanBeChanged($version, $expected)
-	{
-		$this->manifest->setTarget($version);
-
-		$this->assertEquals($expected, $this->manifest->getTarget());
-	}
-
-	public function testDefaultMethodIsInstall()
-	{
-		$this->assertEquals('install', $this->manifest->getMethod());
-	}
-
-	public function testExtensionIsManifestRoot()
-	{
-		$xml = (string) $this->manifest;
-
-		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension~sm', $xml);
-	}
-
-	public function testNamePresetsDescription()
-	{
-		$this->manifest->setName('com_foo');
-
-		$this->assertEquals('COM_FOO_XML_DESCRIPTION', $this->manifest->getDescription());
-	}
-
-	public function testAuthorPresetsCopyrightOwner()
-	{
-		$this->manifest->setAuthor('Any Name');
-
-		$this->assertRegExp('~Any Name\. All rights reserved\.~', $this->manifest->getCopyright());
-	}
-
-	public function testDefaultCreationDateIsToday()
-	{
-		$this->manifest->setCreationDate();
-
-		$this->assertEquals(date('F Y'), $this->manifest->getCreationDate());
-	}
-
-	public function testCreationDateTriggersCopyrightYearRange()
-	{
-		$this->manifest->setAuthor('Sean Connery');
-		$this->manifest->setCreationDate('02.08.2010');
-
-		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
-	}
-
-	public function xtestDump()
-	{
-		$this->manifest->setName('com_foo');
-		$this->manifest->setAuthor('Chuck Norris');
-		$this->manifest->setCreationDate('02.08.2010');
-
-		$xml = (string) $this->manifest;
-
-		$this->assertEquals('', $xml);
+		$this->assertRegExp('~\<filename>foo\.txt\</filename>~sm', (string) $xml);
 	}
 }
