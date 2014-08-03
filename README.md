@@ -5,6 +5,10 @@
 
 `joomla-manifest` is a class library for handling Joomla! extension manifest files.
 
+## Requirements
+
+PHP 5.4+
+
 ## Installation
 
 ### Composer
