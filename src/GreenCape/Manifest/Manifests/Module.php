@@ -54,10 +54,14 @@ class ModuleManifest extends Manifest
 
 	/**
 	 * @param string $client
+	 *
+	 * @return $this
 	 */
 	public function setClient($client)
 	{
 		$this->client = $client;
+
+		return $this;
 	}
 
 	/**
@@ -68,11 +72,17 @@ class ModuleManifest extends Manifest
 		return $this->client;
 	}
 
+	/**
+	 *
+	 */
 	public function __construct()
 	{
 		$this->type = 'module';
 	}
 
+	/**
+	 * @param array $data
+	 */
 	protected function addAttributes(&$data)
 	{
 		$data['@client'] = $this->getClient();

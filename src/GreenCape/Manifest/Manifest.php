@@ -45,6 +45,11 @@
 
 namespace GreenCape\Manifest;
 
+/**
+ * Class Manifest
+ *
+ * @package GreenCape\Manifest
+ */
 abstract class Manifest
 {
 	/**
@@ -120,6 +125,8 @@ abstract class Manifest
 	}
 
 	/**
+	 * @param string $tag
+	 *
 	 * @return array
 	 */
 	public function getManifestRoot($tag)
@@ -133,7 +140,47 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param \DOMDocument $data
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		return $this->version;
+	}
+
+	/**
+	 * @param string $version
+	 *
+	 * @return $this
+	 */
+	public function setVersion($version)
+	{
+		$this->version = $version;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMethod()
+	{
+		return $this->method;
+	}
+
+	protected function addAttributes(&$data)
+	{
+	}
+
+	/**
+	 * @param array &$data
 	 */
 	protected function addMetadata(&$data)
 	{
@@ -153,6 +200,10 @@ abstract class Manifest
 		$this->addElement($data, 'description');
 	}
 
+	/**
+	 * @param array  &$data
+	 * @param string $key
+	 */
 	private function addElement(&$data, $key)
 	{
 		$value = call_user_func(array($this, 'get' . ucfirst($key)));
@@ -162,36 +213,24 @@ abstract class Manifest
 		}
 	}
 
-	public function getType()
-	{
-		return $this->type;
-	}
-
-	public function setTarget($version)
-	{
-		$this->target = $version;
-	}
-
+	/**
+	 * @return string
+	 */
 	public function getTarget()
 	{
 		return $this->target;
 	}
 
-	public function getMethod()
-	{
-		return $this->method;
-	}
-
 	/**
-	 * @param string $author
+	 * @param $version
+	 *
+	 * @return $this
 	 */
-	public function setAuthor($author)
+	public function setTarget($version)
 	{
-		$this->author = $author;
-		if (empty($this->copyrightOwner))
-		{
-			$this->copyrightOwner = $author;
-		}
+		$this->target = $version;
+
+		return $this;
 	}
 
 	/**
@@ -203,11 +242,19 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param string $authorEmail
+	 * @param string $author
+	 *
+	 * @return $this
 	 */
-	public function setAuthorEmail($authorEmail)
+	public function setAuthor($author)
 	{
-		$this->authorEmail = $authorEmail;
+		$this->author = $author;
+		if (empty($this->copyrightOwner))
+		{
+			$this->copyrightOwner = $author;
+		}
+
+		return $this;
 	}
 
 	/**
@@ -219,11 +266,15 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param string $authorUrl
+	 * @param string $authorEmail
+	 *
+	 * @return $this
 	 */
-	public function setAuthorUrl($authorUrl)
+	public function setAuthorEmail($authorEmail)
 	{
-		$this->authorUrl = $authorUrl;
+		$this->authorEmail = $authorEmail;
+
+		return $this;
 	}
 
 	/**
@@ -235,8 +286,22 @@ abstract class Manifest
 	}
 
 	/**
+	 * @param string $authorUrl
+	 *
+	 * @return $this
+	 */
+	public function setAuthorUrl($authorUrl)
+	{
+		$this->authorUrl = $authorUrl;
+
+		return $this;
+	}
+
+	/**
 	 * @param string $year
 	 * @param string $owner
+	 *
+	 * @return $this
 	 */
 	public function setCopyright($year, $owner)
 	{
@@ -251,6 +316,8 @@ abstract class Manifest
 		{
 			$this->author = $owner;
 		}
+
+		return $this;
 	}
 
 	/**
@@ -262,7 +329,17 @@ abstract class Manifest
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCreationDate()
+	{
+		return $this->creationDate;
+	}
+
+	/**
 	 * @param string $creationDate Defaults to 'today'
+	 *
+	 * @return $this
 	 */
 	public function setCreationDate($creationDate = 'today')
 	{
@@ -276,22 +353,8 @@ abstract class Manifest
 				$this->copyrightYear .= ' - ' . date('Y');
 			}
 		}
-	}
 
-	/**
-	 * @return string
-	 */
-	public function getCreationDate()
-	{
-		return $this->creationDate;
-	}
-
-	/**
-	 * @param string $description
-	 */
-	public function setDescription($description)
-	{
-		$this->description = $description;
+		return $this;
 	}
 
 	/**
@@ -303,11 +366,15 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param string $license
+	 * @param string $description
+	 *
+	 * @return $this
 	 */
-	public function setLicense($license)
+	public function setDescription($description)
 	{
-		$this->license = $license;
+		$this->description = $description;
+
+		return $this;
 	}
 
 	/**
@@ -319,15 +386,15 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $license
+	 *
+	 * @return $this
 	 */
-	public function setName($name)
+	public function setLicense($license)
 	{
-		$this->name = $name;
-		if (empty($this->description))
-		{
-			$this->description = strtoupper("{$name}_XML_DESCRIPTION");
-		}
+		$this->license = $license;
+
+		return $this;
 	}
 
 	/**
@@ -339,20 +406,18 @@ abstract class Manifest
 	}
 
 	/**
-	 * @param string $version
+	 * @param string $name
+	 *
+	 * @return $this
 	 */
-	public function setVersion($version)
+	public function setName($name)
 	{
-		$this->version = $version;
-	}
+		$this->name = $name;
+		if (empty($this->description))
+		{
+			$this->description = strtoupper("{$name}_XML_DESCRIPTION");
+		}
 
-	/**
-	 * @return string
-	 */
-	public function getVersion()
-	{
-		return $this->version;
+		return $this;
 	}
-
-	protected function addAttributes(&$data){}
 }

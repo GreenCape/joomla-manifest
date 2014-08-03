@@ -56,10 +56,14 @@ class PluginManifest extends Manifest
 
 	/**
 	 * @param string $group
+	 *
+	 * @return $this
 	 */
 	public function setGroup($group)
 	{
 		$this->group = $group;
+
+		return $this;
 	}
 
 	/**
