@@ -117,7 +117,6 @@ abstract class Manifest
 	{
 		$tag  = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
 		$data = $this->getManifestRoot($tag);
-		$this->addAttributes($data);
 		$this->addMetadata($data[$tag]);
 
 		$xml = new \GreenCape\Xml\Converter($data);
@@ -131,12 +130,15 @@ abstract class Manifest
 	 */
 	public function getManifestRoot($tag)
 	{
-		return array(
+		$data = array(
 			'@type'    => $this->getType(),
-			'@version' => $this->getVersion(),
+			'@version' => $this->getTarget(),
 			'@method'  => $this->getMethod(),
-			$tag => array()
+			$tag       => array()
 		);
+		$this->addAttributes($data);
+
+		return $data;
 	}
 
 	/**
@@ -175,6 +177,13 @@ abstract class Manifest
 		return $this->method;
 	}
 
+	/**
+	 * Add additional attributes to the manifest.
+	 *
+	 * This method should be overwritten by derived classes, if the manifest type requires additional attributes.
+	 *
+	 * @param array &$data
+	 */
 	protected function addAttributes(&$data)
 	{
 	}
