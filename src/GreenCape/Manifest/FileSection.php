@@ -47,8 +47,6 @@ namespace GreenCape\Manifest;
 
 class FileSection
 {
-	protected $section = 'files';
-
 	/**
 	 * @var string The base folder in the zip package
 	 */
@@ -82,11 +80,6 @@ class FileSection
 	{
 		$structure = array();
 
-		if (!empty($this->base))
-		{
-			$structure['@folder'] = $this->base;
-		}
-
 		foreach ($this->files as $file)
 		{
 			$structure[] = array('filename' => $file);
@@ -97,8 +90,44 @@ class FileSection
 			$structure[] = array('folder' => $folder);
 		}
 
-		return array($this->section => $structure);
+		return $structure;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		$attributes = array();
+
+		if (!empty($this->base))
+		{
+			$attributes['@folder'] = $this->base;
+		}
+
+		return $attributes;
 	}
 
 	protected function addAttributes(&$data){}
+
+	/**
+	 * @param string $base
+	 *
+	 * @return $this
+	 */
+	public function setBase($base)
+	{
+		$this->base = $base;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBase()
+	{
+		return $this->base;
+	}
+
 }

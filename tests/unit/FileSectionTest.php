@@ -69,7 +69,7 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 	public function testAddFile()
 	{
 		$this->section->addFile('foo.txt');
-		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -82,7 +82,7 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 	public function testAddFolder()
 	{
 		$this->section->addFolder('foo');
-		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -94,7 +94,7 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 
 	public function testEmptySectionIsEmpty()
 	{
-		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -110,7 +110,7 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 		$this->section->addFolder('foo');
 		$this->section->addFolder('bar');
 
-		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';

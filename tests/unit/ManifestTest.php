@@ -145,4 +145,16 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
 	}
+
+	public function testAddFileSection()
+	{
+		$files = new \GreenCape\Manifest\FileSection();
+		$files->setBase('site');
+		$files->addFile('foo.php');
+		$files->addFolder('bar');
+
+		$this->manifest->setSections('files', $files);
+
+		$this->assertRegExp('~\<files folder="site">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</files>~sm', (string) $this->manifest);
+	}
 }

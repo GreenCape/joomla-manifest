@@ -109,15 +109,31 @@ abstract class Manifest
 	protected $description = '';
 
 	/**
+	 * Sections
+	 */
+
+	/** @var FileSection[] */
+	protected $sections = array();
+
+	/**
 	 * Render the content as XML
 	 *
 	 * @return string
 	 */
 	final public function __toString()
 	{
-		$tag  = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
-		$data = $this->getManifestRoot($tag);
-		$this->addMetadata($data[$tag]);
+		$root  = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
+		$data = $this->getManifestRoot($root);
+		$this->addMetadata($data[$root]);
+
+		foreach ($this->sections as $tag => $section)
+		{
+			$data[$root][$tag] = $section->getStructure();
+			foreach ($section->getAttributes() as $attribute => $value)
+			{
+				$data[$root][$attribute] = $value;
+			}
+		}
 
 		$xml = new \GreenCape\Xml\Converter($data);
 		return (string) $xml;
@@ -426,6 +442,19 @@ abstract class Manifest
 		{
 			$this->description = strtoupper("{$name}_XML_DESCRIPTION");
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param string      $tag
+	 * @param FileSection $section
+	 *
+	 * @return $this
+	 */
+	public function setSections($tag, $section)
+	{
+		$this->sections[$tag] = $section;
 
 		return $this;
 	}
