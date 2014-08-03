@@ -110,9 +110,10 @@ abstract class Manifest
 	 */
 	final public function __toString()
 	{
-		$data = $this->getManifestRoot('extension');
+		$tag  = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
+		$data = $this->getManifestRoot($tag);
 		$this->addAttributes($data);
-		$this->addMetadata($data['extension']);
+		$this->addMetadata($data[$tag]);
 
 		$xml = new \GreenCape\Xml\Converter($data);
 		return (string) $xml;

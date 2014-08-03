@@ -66,6 +66,14 @@ class FileSection
 	}
 
 	/**
+	 * @param string $folder
+	 */
+	public function addFolder($folder)
+	{
+		$this->folders[] = $folder;
+	}
+
+	/**
 	 * Build the section structure
 	 *
 	 * @return array
@@ -81,14 +89,12 @@ class FileSection
 
 		foreach ($this->files as $file)
 		{
-			$tmp['filename'] = $file;
-			$structure[] = $tmp;
+			$structure[] = array('filename' => $file);
 		}
 
 		foreach ($this->folders as $folder)
 		{
-			$tmp['folder'] = $folder;
-			$structure[] = $tmp;
+			$structure[] = array('folder' => $folder);
 		}
 
 		return array($this->section => $structure);

@@ -105,7 +105,16 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 	{
 		$xml = (string) $this->manifest;
 
-		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension~sm', $xml);
+		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension\b~sm', $xml);
+	}
+
+	public function testInstallIsLegacyManifestRoot()
+	{
+		$this->manifest->setTarget('1.5');
+
+		$xml = (string) $this->manifest;
+
+		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<install\b~sm', $xml);
 	}
 
 	public function testNamePresetsDescription()
@@ -135,16 +144,5 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$this->manifest->setCreationDate('02.08.2010');
 
 		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
-	}
-
-	public function xtestDump()
-	{
-		$this->manifest->setName('com_foo');
-		$this->manifest->setAuthor('Chuck Norris');
-		$this->manifest->setCreationDate('02.08.2010');
-
-		$xml = (string) $this->manifest;
-
-		$this->assertEquals('', $xml);
 	}
 }

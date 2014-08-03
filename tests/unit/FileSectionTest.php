@@ -63,6 +63,7 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function tearDown()
 	{
+		unset($this->section);
 	}
 
 	public function testAddFile()
@@ -70,6 +71,55 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 		$this->section->addFile('foo.txt');
 		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
 
-		$this->assertRegExp('~\<filename>foo\.txt\</filename>~sm', (string) $xml);
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	public function testAddFolder()
+	{
+		$this->section->addFolder('foo');
+		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '<folder>foo</folder>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	public function testEmptySectionIsEmpty()
+	{
+		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	public function testAddMultiple()
+	{
+		$this->section->addFile('foo.txt');
+		$this->section->addFile('bar.txt');
+		$this->section->addFolder('foo');
+		$this->section->addFolder('bar');
+
+		$xml = new \GreenCape\Xml\Converter($this->section->getStructure());
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '<filename>bar.txt</filename>';
+		$expected .= '<folder>foo</folder>';
+		$expected .= '<folder>bar</folder>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
 }
