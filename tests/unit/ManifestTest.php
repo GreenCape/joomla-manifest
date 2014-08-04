@@ -157,4 +157,18 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~\<files folder="site">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</files>~sm', (string) $this->manifest);
 	}
+
+	public function testAttributesDoNotFlowIntoSiblings()
+	{
+		$files = new \GreenCape\Manifest\FileSection();
+		$files->setBase('site');
+		$files->addFile('foo.php');
+		$files->addFolder('bar');
+
+		$this->manifest->setSections('files', $files);
+
+		preg_match_all('~\<(\w+)[^>]*folder="site"~sm', (string) $this->manifest, $matches, PREG_SET_ORDER);
+		$this->assertEquals(1, count($matches));
+		$this->assertEquals('files', $matches[0][1]);
+	}
 }

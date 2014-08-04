@@ -122,20 +122,8 @@ abstract class Manifest
 	 */
 	final public function __toString()
 	{
-		$root  = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
-		$data = $this->getManifestRoot($root);
-		$this->addMetadata($data[$root]);
+		$xml = new \GreenCape\Xml\Converter($this->getStructure());
 
-		foreach ($this->sections as $tag => $section)
-		{
-			$data[$root][$tag] = $section->getStructure();
-			foreach ($section->getAttributes() as $attribute => $value)
-			{
-				$data[$root][$attribute] = $value;
-			}
-		}
-
-		$xml = new \GreenCape\Xml\Converter($data);
 		return (string) $xml;
 	}
 
@@ -234,7 +222,7 @@ abstract class Manifest
 		$value = call_user_func(array($this, 'get' . ucfirst($key)));
 		if (!empty($value))
 		{
-			$data[$key] = $value;
+			$data[] = array($key => $value);
 		}
 	}
 
@@ -457,5 +445,29 @@ abstract class Manifest
 		$this->sections[$tag] = $section;
 
 		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$root = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
+		$data = $this->getManifestRoot($root);
+
+		$this->addMetadata($data[$root]);
+
+		foreach ($this->sections as $tag => $section)
+		{
+			$element = array();
+			$element[$tag] = $section->getStructure();
+			foreach ($section->getAttributes() as $attribute => $value)
+			{
+				$element[$attribute] = $value;
+			}
+			$data[$root][] = $element;
+		}
+
+		return $data;
 	}
 }
