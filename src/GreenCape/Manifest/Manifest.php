@@ -206,7 +206,9 @@ abstract class Manifest implements Section
 	}
 
 	/**
-	 * @param string $tag
+	 * Get the manifest root element
+	 *
+	 * @param string $tag The root tag (version dependent)
 	 *
 	 * @return array
 	 */
@@ -219,7 +221,9 @@ abstract class Manifest implements Section
 	}
 
 	/**
-	 * @param array &$data
+	 * Add the meta data to the structure
+	 *
+	 * @param array &$data The current structure
 	 */
 	private function addMetadata(&$data)
 	{
@@ -240,8 +244,12 @@ abstract class Manifest implements Section
 	}
 
 	/**
-	 * @param array  &$data
-	 * @param string $key
+	 * Add a single element to the structure
+	 *
+	 * Only non-empty elements will be added.
+	 *
+	 * @param array  &$data The current structure
+	 * @param string $key   The meta data field
 	 */
 	private function addElement(&$data, $key)
 	{

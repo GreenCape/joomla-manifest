@@ -179,4 +179,17 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, count($matches));
 		$this->assertEquals('files', $matches[0][1]);
 	}
+
+	public function testAddMediaSection()
+	{
+		$files = new \GreenCape\Manifest\MediaSection();
+		$files->setBase('media');
+		$files->setDestination('com_foo');
+		$files->addFile('foo.php');
+		$files->addFolder('bar');
+
+		$this->manifest->addSection('media', $files);
+
+		$this->assertRegExp('~\<media folder="media" destination="com_foo">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</media>~sm', (string) $this->manifest);
+	}
 }
