@@ -35,16 +35,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
  * @link        http://www.greencape.com/
- * @since       Module available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
 
+/**
+ * Module Manifest
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
+ */
 class ModuleManifest extends Manifest
 {
 	/**
@@ -53,7 +59,7 @@ class ModuleManifest extends Manifest
 	protected $client = 'site';
 
 	/**
-	 *
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -61,23 +67,31 @@ class ModuleManifest extends Manifest
 	}
 
 	/**
-	 * @param string $client
+	 * Getter and Setter
+	 */
+
+	/**
+	 * Get the name of the client application
 	 *
-	 * @return $this
+	 * @return string Name of the which application client for which the new module is available
+	 */
+	public function getClient()
+	{
+		return $this->client;
+	}
+
+	/**
+	 * Set the name of the client application
+	 *
+	 * @param string $client Name of the which application client for which the new module is available
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
 	public function setClient($client)
 	{
 		$this->client = $client;
 
 		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getClient()
-	{
-		return $this->client;
 	}
 
 	/**

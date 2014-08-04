@@ -44,21 +44,31 @@
 
 namespace GreenCape\Manifest;
 
+/**
+ * File Section
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
+ */
 class FileSection implements Section
 {
-	/**
-	 * @var string The base folder in the zip package
-	 */
+	/** @var string The base folder in the zip package */
 	protected $base = null;
 
+	/** @var array The file list */
 	protected $files = array();
+
+	/** @var array The folder list */
 	protected $folders = array();
 
 	/**
-	 * @param string $filename
-	 * @param array  $attributes
+	 * Add a file to the section
 	 *
-	 * @return $this
+	 * @param string $filename   The name of the file
+	 * @param array  $attributes Optional attributes for this entry
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
 	public function addFile($filename, $attributes = array())
 	{
@@ -73,10 +83,32 @@ class FileSection implements Section
 	}
 
 	/**
-	 * @param string $folder
-	 * @param array  $attributes
+	 * Remove a file from the section
 	 *
-	 * @return $this
+	 * @param string $filename   The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function removeFile($filename)
+	{
+		foreach ($this->files as $key => $element)
+		{
+			if ($element['filename'] == $filename)
+			{
+				unset($this->files[$key]);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Add a folder to the section
+	 *
+	 * @param string $folder     The name of the folder
+	 * @param array  $attributes Optional attributes for this entry
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
 	public function addFolder($folder, $attributes = array())
 	{
@@ -90,26 +122,52 @@ class FileSection implements Section
 		return $this;
 	}
 
-	protected function addAttributes(&$data){}
+	/**
+	 * Remove a folder from the section
+	 *
+	 * @param string $folder The name of the folder
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function removeFolder($folder)
+	{
+		foreach ($this->folders as $key => $element)
+		{
+			if ($element['folder'] == $folder)
+			{
+				unset($this->folders[$key]);
+			}
+		}
+
+		return $this;
+	}
 
 	/**
-	 * @param string $base
+	 * Getter and setter
+	 */
+
+	/**
+	 * Get the base folder within the distribution package (zip file)
 	 *
-	 * @return $this
+	 * @return string The base folder within the distribution package
+	 */
+	public function getBase()
+	{
+		return $this->base;
+	}
+
+	/**
+	 * Set the base folder within the distribution package (zip file)
+	 *
+	 * @param string $base The base folder within the distribution package
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
 	public function setBase($base)
 	{
 		$this->base = $base;
 
 		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getBase()
-	{
-		return $this->base;
 	}
 
 	/**

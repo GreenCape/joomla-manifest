@@ -43,6 +43,14 @@
  * @since       File available since Release 0.1.0
  */
 
+/**
+ * Component Manifest Tests
+ *
+ * @package    GreenCape\Manifest
+ * @subpackage Unittests
+ * @author     Niels Braczek <nbraczek@bsds.de>
+ * @since      Class available since Release 0.1.0
+ */
 class ComponentManifestTest extends PHPUnit_Framework_TestCase
 {
 	/** @var \GreenCape\Manifest\Manifest */

@@ -43,6 +43,14 @@
  * @since       File available since Release 0.1.0
  */
 
+/**
+ * File Section Tests
+ *
+ * @package    GreenCape\Manifest
+ * @subpackage Unittests
+ * @author     Niels Braczek <nbraczek@bsds.de>
+ * @since      Class available since Release 0.1.0
+ */
 class FileSectionTest extends PHPUnit_Framework_TestCase
 {
 	/** @var GreenCape\Manifest\FileSection */
@@ -135,4 +143,37 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 
 		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
+
+	public function testRemoveFile()
+	{
+		$this->section->addFile('foo.txt');
+		$this->section->addFile('bar.txt');
+		$this->section->removeFile('foo.txt');
+
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '<filename>bar.txt</filename>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	public function testRemoveFolder()
+	{
+		$this->section->addFolder('foo');
+		$this->section->addFolder('bar');
+		$this->section->removeFolder('foo');
+
+		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<files>';
+		$expected .= '<folder>bar</folder>';
+		$expected .= '</files>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
 }

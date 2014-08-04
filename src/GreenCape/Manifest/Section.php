@@ -44,6 +44,13 @@
 
 namespace GreenCape\Manifest;
 
+/**
+ * Section Interface
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Interface available since Release 0.1.0
+ */
 interface Section
 {
 	/**

@@ -34,17 +34,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @plugin     GreenCape\Manifest
- * @subplugin  Unittests
+ * @package     GreenCape\Manifest
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
  * @link        http://www.greencape.com/
- * @since       Plugin available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
 
+/**
+ * Plugin Manifest
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
+ */
 class PluginManifest extends Manifest
 {
 	/**
@@ -55,7 +61,7 @@ class PluginManifest extends Manifest
 	protected $group = null;
 
 	/**
-	 *
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -63,7 +69,23 @@ class PluginManifest extends Manifest
 	}
 
 	/**
-	 * @param string $group
+	 * Getter and Setter
+	 */
+
+	/**
+	 * Get the plugin group
+	 *
+	 * @return string The name of the group of plugins for which the new plugin is available
+	 */
+	public function getGroup()
+	{
+		return $this->group;
+	}
+
+	/**
+	 * Set the plugin group
+	 *
+	 * @param string $group The name of the group of plugins for which the new plugin is available
 	 *
 	 * @return $this
 	 */
@@ -72,14 +94,6 @@ class PluginManifest extends Manifest
 		$this->group = $group;
 
 		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getGroup()
-	{
-		return $this->group;
 	}
 
 	/**

@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -45,8 +44,18 @@
 
 namespace GreenCape\Manifest;
 
+/**
+ * File Manifest
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
+ */
 class FileManifest extends Manifest
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		$this->type = 'file';

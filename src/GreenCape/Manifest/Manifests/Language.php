@@ -35,18 +35,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
  * @link        http://www.greencape.com/
- * @since       Language available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
 
+/**
+ * Language Manifest
+ *
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
+ */
 class LanguageManifest extends Manifest
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		$this->type = 'language';

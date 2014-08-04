@@ -43,6 +43,14 @@
  * @since       File available since Release 0.1.0
  */
 
+/**
+ * Generic Manifest Tests
+ *
+ * @package    GreenCape\Manifest
+ * @subpackage Unittests
+ * @author     Niels Braczek <nbraczek@bsds.de>
+ * @since      Class available since Release 0.1.0
+ */
 class ManifestTest extends PHPUnit_Framework_TestCase
 {
 	/** @var \GreenCape\Manifest\Manifest */
@@ -153,7 +161,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$files->addFile('foo.php');
 		$files->addFolder('bar');
 
-		$this->manifest->setSection('files', $files);
+		$this->manifest->addSection('files', $files);
 
 		$this->assertRegExp('~\<files folder="site">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</files>~sm', (string) $this->manifest);
 	}
@@ -165,7 +173,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$files->addFile('foo.php');
 		$files->addFolder('bar');
 
-		$this->manifest->setSection('files', $files);
+		$this->manifest->addSection('files', $files);
 
 		preg_match_all('~\<(\w+)[^>]*folder="site"~sm', (string) $this->manifest, $matches, PREG_SET_ORDER);
 		$this->assertEquals(1, count($matches));

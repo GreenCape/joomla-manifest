@@ -34,8 +34,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @plugin     GreenCape\Manifest
- * @subplugin  Unittests
+ * @package     GreenCape\Manifest
+ * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,6 +43,14 @@
  * @since       File available since Release 0.1.0
  */
 
+/**
+ * Plugin Manifest Tests
+ *
+ * @package    GreenCape\Manifest
+ * @subpackage Unittests
+ * @author     Niels Braczek <nbraczek@bsds.de>
+ * @since      Class available since Release 0.1.0
+ */
 class PluginManifestTest extends PHPUnit_Framework_TestCase
 {
 	/** @var \GreenCape\Manifest\PluginManifest */
