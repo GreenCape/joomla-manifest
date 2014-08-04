@@ -34,68 +34,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @plugin     GreenCape\Manifest
- * @subplugin  Unittests
+ * @package     GreenCape\Manifest
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
  * @link        http://www.greencape.com/
- * @since       Plugin available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
 
-class PluginManifest extends Manifest
+interface Section
 {
 	/**
-	 * @var string The group name specifies for which group of plugins the new plugin is available.
-	 *             The existing groups are the folder names within the directory /plugins.
-	 *             The installer will create new folder names for group names that do not exist yet.
-	 */
-	protected $group = null;
-
-	/**
-	 *
-	 */
-	public function __construct()
-	{
-		$this->type = 'plugin';
-	}
-
-	/**
-	 * @param string $group
-	 *
-	 * @return $this
-	 */
-	public function setGroup($group)
-	{
-		$this->group = $group;
-
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getGroup()
-	{
-		return $this->group;
-	}
-
-	/**
-	 * Section interface
-	 */
-
-	/**
-	 * Get the attributes for the plugin manifest
+	 * Get the section structure
 	 *
 	 * @return array
 	 */
-	public function getAttributes()
-	{
-		$attributes = parent::getAttributes();
-		$attributes['@group'] = $this->getGroup();
+	public function getStructure();
 
-		return $attributes;
-	}
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes();
 }

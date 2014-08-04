@@ -50,7 +50,7 @@ namespace GreenCape\Manifest;
  *
  * @package GreenCape\Manifest
  */
-abstract class Manifest
+abstract class Manifest implements Section
 {
 	/**
 	 * Manifest Attributes
@@ -134,13 +134,8 @@ abstract class Manifest
 	 */
 	public function getManifestRoot($tag)
 	{
-		$data = array(
-			'@type'    => $this->getType(),
-			'@version' => $this->getTarget(),
-			'@method'  => $this->getMethod(),
-			$tag       => array()
-		);
-		$this->addAttributes($data);
+		$data       = $this->getAttributes();
+		$data[$tag] = array();
 
 		return $data;
 	}
@@ -179,17 +174,6 @@ abstract class Manifest
 	public function getMethod()
 	{
 		return $this->method;
-	}
-
-	/**
-	 * Add additional attributes to the manifest.
-	 *
-	 * This method should be overwritten by derived classes, if the manifest type requires additional attributes.
-	 *
-	 * @param array &$data
-	 */
-	protected function addAttributes(&$data)
-	{
 	}
 
 	/**
@@ -436,11 +420,11 @@ abstract class Manifest
 
 	/**
 	 * @param string      $tag
-	 * @param FileSection $section
+	 * @param Section $section
 	 *
 	 * @return $this
 	 */
-	public function setSection($tag, $section)
+	public function setSection($tag, Section $section)
 	{
 		$this->sections[$tag] = $section;
 
@@ -448,6 +432,12 @@ abstract class Manifest
 	}
 
 	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the manifest structure
+	 *
 	 * @return array
 	 */
 	public function getStructure()
@@ -469,5 +459,19 @@ abstract class Manifest
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Get the attributes for the manifest
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array(
+			'@type'    => $this->getType(),
+			'@version' => $this->getTarget(),
+			'@method'  => $this->getMethod()
+		);
 	}
 }

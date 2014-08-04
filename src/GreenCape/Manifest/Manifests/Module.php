@@ -53,6 +53,14 @@ class ModuleManifest extends Manifest
 	protected $client = 'site';
 
 	/**
+	 *
+	 */
+	public function __construct()
+	{
+		$this->type = 'module';
+	}
+
+	/**
 	 * @param string $client
 	 *
 	 * @return $this
@@ -73,18 +81,19 @@ class ModuleManifest extends Manifest
 	}
 
 	/**
-	 *
+	 * Section interface
 	 */
-	public function __construct()
-	{
-		$this->type = 'module';
-	}
 
 	/**
-	 * @param array $data
+	 * Get the attributes for the module manifest
+	 *
+	 * @return array
 	 */
-	protected function addAttributes(&$data)
+	public function getAttributes()
 	{
-		$data['@client'] = $this->getClient();
+		$attributes = parent::getAttributes();
+		$attributes['@client'] = $this->getClient();
+
+		return $attributes;
 	}
 }

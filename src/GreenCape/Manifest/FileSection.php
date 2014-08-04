@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -45,7 +44,7 @@
 
 namespace GreenCape\Manifest;
 
-class FileSection
+class FileSection implements Section
 {
 	/**
 	 * @var string The base folder in the zip package
@@ -91,43 +90,6 @@ class FileSection
 		return $this;
 	}
 
-	/**
-	 * Build the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
-
-		foreach ($this->files as $file)
-		{
-			$structure[] = $file;
-		}
-
-		foreach ($this->folders as $folder)
-		{
-			$structure[] = $folder;
-		}
-
-		return $structure;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = array();
-
-		if (!empty($this->base))
-		{
-			$attributes['@folder'] = $this->base;
-		}
-
-		return $attributes;
-	}
-
 	protected function addAttributes(&$data){}
 
 	/**
@@ -150,4 +112,46 @@ class FileSection
 		return $this->base;
 	}
 
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$structure = array();
+
+		foreach ($this->files as $file)
+		{
+			$structure[] = $file;
+		}
+
+		foreach ($this->folders as $folder)
+		{
+			$structure[] = $folder;
+		}
+
+		return $structure;
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		$attributes = array();
+
+		if (!empty($this->base))
+		{
+			$attributes['@folder'] = $this->base;
+		}
+
+		return $attributes;
+	}
 }
