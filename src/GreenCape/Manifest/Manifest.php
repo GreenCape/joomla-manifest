@@ -440,7 +440,7 @@ abstract class Manifest
 	 *
 	 * @return $this
 	 */
-	public function setSections($tag, $section)
+	public function setSection($tag, $section)
 	{
 		$this->sections[$tag] = $section;
 

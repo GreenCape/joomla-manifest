@@ -57,18 +57,38 @@ class FileSection
 
 	/**
 	 * @param string $filename
+	 * @param array  $attributes
+	 *
+	 * @return $this
 	 */
-	public function addFile($filename)
+	public function addFile($filename, $attributes = array())
 	{
-		$this->files[] = $filename;
+		$element       = array('filename' => $filename);
+		foreach ($attributes as $key => $value)
+		{
+			$element["@{$key}"] = (string) $value;
+		}
+		$this->files[] = $element;
+
+		return $this;
 	}
 
 	/**
 	 * @param string $folder
+	 * @param array  $attributes
+	 *
+	 * @return $this
 	 */
-	public function addFolder($folder)
+	public function addFolder($folder, $attributes = array())
 	{
-		$this->folders[] = $folder;
+		$element       = array('folder' => $folder);
+		foreach ($attributes as $key => $value)
+		{
+			$element["@{$key}"] = (string) $value;
+		}
+		$this->folders[] = $element;
+
+		return $this;
 	}
 
 	/**
@@ -82,12 +102,12 @@ class FileSection
 
 		foreach ($this->files as $file)
 		{
-			$structure[] = array('filename' => $file);
+			$structure[] = $file;
 		}
 
 		foreach ($this->folders as $folder)
 		{
-			$structure[] = array('folder' => $folder);
+			$structure[] = $folder;
 		}
 
 		return $structure;
