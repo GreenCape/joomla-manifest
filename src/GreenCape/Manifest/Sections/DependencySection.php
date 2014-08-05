@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,72 +42,94 @@
  * @since       File available since Release 0.1.0
  */
 
+namespace GreenCape\Manifest;
+
 /**
- * Component Manifest Tests
+ * Dependency Section
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
  */
-class ComponentManifestTest extends PHPUnit_Framework_TestCase
+class DependencySection implements Section
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var array The dependency list */
+	protected $dependencies = array();
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
+	 * Add a dependency to the section
+	 *
+	 * These are used for backups to determine which dependencies to backup;
+	 * ones marked optional are only backed up if they exist
+	 *
+	 * @param string $type     Type of required item
+	 * @param string $name     Name of required item
+	 * @param string $operator Comparision operator
+	 * @param string $version  Required version
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function setUp()
+	public function addDependency($type, $name, $operator, $version)
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
+		$element = array('dependency' => '');
+		$element['@type']     = $type;
+		$element['@name']     = $name;
+		$element['@operator'] = $operator;
+		$element['@version']  = $version;
+
+		$this->dependencies[] = $element;
+
+		return $this;
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
+	 * Remove a dependency from the section
+	 *
+	 * @param string $name The name of the dependency
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function tearDown()
+	public function removeDependency($name)
 	{
-	}
-
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('component', $this->manifest->getType());
-	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/component.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		usort($expected->data['extension'], array($this, 'sort'));
-
-		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		usort($manifest->data['extension'], array($this, 'sort'));
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort($a, $b)
-	{
-		reset($a);
-		$nameA = key($a);
-		reset($b);
-		$nameB = key($b);
-
-		if ($nameA == $nameB)
+		foreach ($this->dependencies as $key => $element)
 		{
-			return 0;
+			if ($element['@name'] == $name)
+			{
+				unset($this->dependencies[$key]);
+			}
 		}
-		return $nameA < $nameB ? -1 : 1;
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$structure = array();
+
+		foreach ($this->dependencies as $dependency)
+		{
+			$structure[] = $dependency;
+		}
+
+		return $structure;
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array();
 	}
 }

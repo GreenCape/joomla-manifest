@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,72 +42,90 @@
  * @since       File available since Release 0.1.0
  */
 
+namespace GreenCape\Manifest;
+
 /**
- * Component Manifest Tests
+ * Server Section
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
  */
-class ComponentManifestTest extends PHPUnit_Framework_TestCase
+class ServerSection implements Section
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var array The server list */
+	protected $server = array();
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
+	 * Add an update server to the section
+	 *
+	 * @param string $type     The server type, one of 'extension', 'collection'
+	 * @param string $name     A name for the server
+	 * @param string $url      The URL of the update XML file
+	 * @param int    $priority The priority
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function setUp()
+	public function addServer($type, $name, $url, $priority = 2)
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
+		$element              = array('server' => $url);
+		$element['@type']     = (string) $type;
+		$element['@name']     = (string) $name;
+		$element['@priority'] = (string) $priority;
+
+		$this->server[] = $element;
+
+		return $this;
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
+	 * Remove a server from the section
+	 *
+	 * @param string $name The name of the server
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function tearDown()
+	public function removeServer($name)
 	{
-	}
-
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('component', $this->manifest->getType());
-	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/component.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		usort($expected->data['extension'], array($this, 'sort'));
-
-		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		usort($manifest->data['extension'], array($this, 'sort'));
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort($a, $b)
-	{
-		reset($a);
-		$nameA = key($a);
-		reset($b);
-		$nameB = key($b);
-
-		if ($nameA == $nameB)
+		foreach ($this->server as $key => $element)
 		{
-			return 0;
+			if ($element['@name'] == $name)
+			{
+				unset($this->server[$key]);
+			}
 		}
-		return $nameA < $nameB ? -1 : 1;
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$structure = array();
+
+		foreach ($this->server as $server)
+		{
+			$structure[] = $server;
+		}
+
+		return $structure;
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array();
 	}
 }

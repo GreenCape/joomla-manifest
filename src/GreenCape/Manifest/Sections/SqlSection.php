@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,72 +42,90 @@
  * @since       File available since Release 0.1.0
  */
 
+namespace GreenCape\Manifest;
+
 /**
- * Component Manifest Tests
+ * SQL Section
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
  */
-class ComponentManifestTest extends PHPUnit_Framework_TestCase
+class SqlSection implements Section
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var array The file list */
+	protected $files = array();
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
+	 * Add a file to the section
+	 *
+	 * @param string $driver     The name of a database driver
+	 * @param string $filename   The name of the file
+	 * @param array  $attributes Optional attributes for this entry
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function setUp()
+	public function addFile($driver, $filename, $attributes = array())
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
-
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('component', $this->manifest->getType());
-	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/component.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		usort($expected->data['extension'], array($this, 'sort'));
-
-		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		usort($manifest->data['extension'], array($this, 'sort'));
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort($a, $b)
-	{
-		reset($a);
-		$nameA = key($a);
-		reset($b);
-		$nameB = key($b);
-
-		if ($nameA == $nameB)
+		$element            = array('file' => $filename);
+		$element['@driver'] = (string) $driver;
+		foreach ($attributes as $key => $value)
 		{
-			return 0;
+			$element["@{$key}"] = (string) $value;
 		}
-		return $nameA < $nameB ? -1 : 1;
+		$this->files[] = $element;
+
+		return $this;
+	}
+
+	/**
+	 * Remove a file from the section
+	 *
+	 * @param string $filename   The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function removeFile($filename)
+	{
+		foreach ($this->files as $key => $element)
+		{
+			if ($element['file'] == $filename)
+			{
+				unset($this->files[$key]);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$structure = array();
+
+		foreach ($this->files as $file)
+		{
+			$structure[] = $file;
+		}
+
+		return array('sql' =>$structure);
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array();
 	}
 }

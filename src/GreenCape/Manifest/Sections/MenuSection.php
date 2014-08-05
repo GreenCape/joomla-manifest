@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,72 +42,117 @@
  * @since       File available since Release 0.1.0
  */
 
+namespace GreenCape\Manifest;
+
 /**
- * Component Manifest Tests
+ * Menu Section
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
  */
-class ComponentManifestTest extends PHPUnit_Framework_TestCase
+class MenuSection implements Section
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	protected $menu = array();
+
+	protected $submenu = array();
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
+	 * Add a menu item
+	 *
+	 * @param string $label
+	 * @param string $link
+	 *
+	 * @return $this This object, to provide a fluent interface
 	 */
-	protected function setUp()
+	public function addMenu($label, $link)
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
+		$this->submenu[] = array(
+			'menu'  => $label,
+			'@link' => $link
+		);
+
+		return $this;
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
+	 * Getter and setter
 	 */
-	protected function tearDown()
+
+	/**
+	 * Get the menu label
+	 *
+	 * @return string The label
+	 */
+	public function getMenuLabel()
 	{
+		return $this->menu['menu'];
 	}
 
-	public function testIsManifest()
+	/**
+	 * Set the menu label
+	 *
+	 * @param string $label The label
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setMenuLabel($label)
 	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
+		$this->menu['menu'] = $label;
+
+		return $this;
 	}
 
-	public function testTypeIsCorrect()
+	/**
+	 * Get the icon filename
+	 *
+	 * @return string  The icon filename
+	 */
+	public function getMenuIcon()
 	{
-		$this->assertEquals('component', $this->manifest->getType());
+		return $this->menu['@img'];
 	}
 
-	public function testReproduceSample()
+	/**
+	 * Set the icon filename
+	 *
+	 * @param string $icon The icon filename
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setMenuIcon($icon)
 	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/component.php';
-		ob_clean();
+		$this->menu['@img'] = $icon;
 
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		usort($expected->data['extension'], array($this, 'sort'));
-
-		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		usort($manifest->data['extension'], array($this, 'sort'));
-
-		$this->assertEquals($expected->data, $manifest->data);
+		return $this;
 	}
 
-	private function sort($a, $b)
-	{
-		reset($a);
-		$nameA = key($a);
-		reset($b);
-		$nameB = key($b);
+	/**
+	 * Section interface
+	 */
 
-		if ($nameA == $nameB)
-		{
-			return 0;
-		}
-		return $nameA < $nameB ? -1 : 1;
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$structure = array(
+			$this->menu,
+			array('submenu' => $this->submenu)
+		);
+
+		return $structure;
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array();
 	}
 }

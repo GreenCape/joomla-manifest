@@ -117,6 +117,19 @@ abstract class Manifest implements Section
 	protected $sections = array();
 
 	/**
+	 * Install hooks
+	 */
+
+	/** @var string Install file, deprecated in 1.6 */
+	protected $installFile = null;
+
+	/** @var string Uninstall file, deprecated in 1.6 */
+	protected $uninstallFile = null;
+
+	/** @var string Install/update/uninstall file, new in 1.6 */
+	protected $scriptFile = null;
+
+	/**
 	 * Magic methods
 	 */
 
@@ -188,6 +201,8 @@ abstract class Manifest implements Section
 			$data[$root][] = $element;
 		}
 
+		$this->addInstallHooks($data[$root]);
+
 		return $data;
 	}
 
@@ -241,6 +256,18 @@ abstract class Manifest implements Section
 		$this->addElement($data, 'authorUrl');
 		$this->addElement($data, 'version');
 		$this->addElement($data, 'description');
+	}
+
+	/**
+	 * Add the install hooks to the structure
+	 *
+	 * @param array &$data The current structure
+	 */
+	private function addInstallHooks(&$data)
+	{
+		$this->addElement($data, 'installfile');
+		$this->addElement($data, 'uninstallfile');
+		$this->addElement($data, 'scriptfile');
 	}
 
 	/**
@@ -451,25 +478,27 @@ abstract class Manifest implements Section
 	/**
 	 * Set the copyright information
 	 *
-	 * If the copyright year is different from the current year, it is expanded
-	 * to a range <copyright year> - <current year>.
+	 * If the copyright year is different from the current year, and $createRange
+	 * is set to true, the copyright year is expanded to a range
+	 * <copyright year> - <current year>.
 	 *
 	 * The creation date is preset to the copyright year, if not already set.
 	 * The author is preset to the copyright owner, if not already set.
 	 *
-	 * @param string $year  The year for the copyright statement (e.g. 2011)
-	 * @param string $owner The owner of the copyright (e.g. Open Source Matters)
+	 * @param string $year        The year for the copyright statement (e.g. 2011)
+	 * @param string $owner       The owner of the copyright (e.g. Open Source Matters)
+	 * @param bool   $createRange Whether or not to create a range of years (default: true)
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setCopyright($year, $owner)
+	public function setCopyright($year, $owner, $createRange = true)
 	{
 		$this->copyrightYear  = $year;
 		if (empty($this->creationDate))
 		{
 			$this->creationDate = $year;
 		}
-		if ($this->copyrightYear != date('Y'))
+		if ($createRange && $this->copyrightYear != date('Y'))
 		{
 			$this->copyrightYear .= ' - ' . date('Y');
 		}
@@ -601,6 +630,90 @@ abstract class Manifest implements Section
 	public function setDescription($description)
 	{
 		$this->description = $description;
+
+		return $this;
+	}
+
+	/**
+	 * Get the install file
+	 *
+	 * Deprecated in Joomla! 1.6
+	 *
+	 * @return string The name of the file
+	 */
+	public function getInstallFile()
+	{
+		return $this->installFile;
+	}
+
+	/**
+	 * Set the install file
+	 *
+	 * Deprecated in Joomla! 1.6
+	 *
+	 * @param string $installFile The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setInstallFile($installFile)
+	{
+		$this->installFile = $installFile;
+
+		return $this;
+	}
+
+	/**
+	 * Get the uninstall file
+	 *
+	 * Deprecated in Joomla! 1.6
+	 *
+	 * @return string The name of the file
+	 */
+	public function getUninstallFile()
+	{
+		return $this->uninstallFile;
+	}
+
+	/**
+	 * Set the uninstall file
+	 *
+	 * Deprecated in Joomla! 1.6
+	 *
+	 * @param string $uninstallFile The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setUninstallFile($uninstallFile)
+	{
+		$this->uninstallFile = $uninstallFile;
+
+		return $this;
+	}
+
+	/**
+	 * Get the install/update/uninstall script
+	 *
+	 * New in Joomla! 1.6
+	 *
+	 * @return string The name of the file
+	 */
+	public function getScriptFile()
+	{
+		return $this->scriptFile;
+	}
+
+	/**
+	 * Set the install/update/uninstall script
+	 *
+	 * New in Joomla! 1.6
+	 *
+	 * @param string $scriptFile The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setScriptFile($scriptFile)
+	{
+		$this->scriptFile = $scriptFile;
 
 		return $this;
 	}
