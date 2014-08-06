@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
+ * @subpackage  Demo
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,75 +43,47 @@
  * @since       File available since Release 0.1.0
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
- * Template Manifest Tests
+ * This demo class reproduces the sample manifest found in tests/data/templateDetails.xml.
+ * It is based on the Joomla! test data (as of August 2014).
+ * The copyright statement was supplemented with 'All rights reserved.'
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * For the original,
+ * @see http://svn.joomla.org/project/cms/development/trunk/tests/_data/installer_packages/tpl_simple/templateDetails.xml
  */
-class TemplateManifestTest extends PHPUnit_Framework_TestCase
+class TemplateManifestDemo
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
-
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
+	public static function getManifest()
 	{
-		$this->manifest = new \GreenCape\Manifest\TemplateManifest();
-	}
+		// Create the template manifest
+		$manifest = new \GreenCape\Manifest\TemplateManifest();
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+		// Meta data
+		$manifest
+			->setTarget('1.6')
+			->setMethod('upgrade')
+			->setName('simple_template')
+			->setCreationDate('July 2008')
+			->setAuthor('John Doe')
+			->setAuthorEmail('john.doe@example.org')
+			->setAuthorUrl('http://www.example.org')
+			->setCopyright(2008, 'Copyright Info', false)
+			->setLicense('License Info')
+			->setVersion('1.6.0')
+			->setDescription('TPL_TPL_SIMPLE_XML_DESCRIPTION')
+		;
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+		// Front-end files
+		$files = new \GreenCape\Manifest\FileSection();
+		$files
+			->addFile('index.php');
 
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('template', $this->manifest->getType());
-	}
+		$manifest->addSection('files', $files);
 
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/template.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/templateDetails.xml');
-		$this->sort($expected->data['extension']);
-
-		$manifest = new \GreenCape\Xml\Converter((string) TemplateManifestDemo::getManifest());
-		$this->sort($manifest->data['extension']);
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
-
-			if ($nameA == $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
+		return $manifest;
 	}
 }
+
+print_r((string) TemplateManifestDemo::getManifest());

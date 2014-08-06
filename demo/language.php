@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
+ * @subpackage  Demo
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,75 +43,47 @@
  * @since       File available since Release 0.1.0
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
- * Template Manifest Tests
+ * This demo class reproduces the sample manifest found in tests/data/xx-XX.xml.
+ * It is based on the Joomla! test data (as of August 2014).
+ * The creation date was changed to the standard 'Month YYYY' format.
+ * The word 'Copyright' was removed from the copyright statement.
+ * A description was added. Empty params section was removed.
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * For the original,
+ * @see http://svn.joomla.org/project/cms/development/trunk/tests/_data/installer_packages/lng_xx-XX/xx-XX.xml
  */
-class TemplateManifestTest extends PHPUnit_Framework_TestCase
+class LanguageManifestDemo
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
-
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
+	public static function getManifest()
 	{
-		$this->manifest = new \GreenCape\Manifest\TemplateManifest();
-	}
+		// Create the language manifest
+		$manifest = new \GreenCape\Manifest\LanguageManifest();
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+		// Meta data
+		$manifest
+			->setTarget('1.6')
+			->setClient('site')
+			->setName('Examplish (Example)')
+			->setTag('xx-XX')
+			->setVersion('1.6.0')
+			->setCreationDate('March 2008')
+			->setAuthor('Joomla! Project')
+			->setAuthorEmail('admin@joomla.org')
+			->setAuthorUrl('www.joomla.org')
+			->setCopyright('2005 - 2011', 'Open Source Matters', false)
+			->setLicense('http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL')
+			->setDescription('EXAMPLISH_XML_DESCRIPTION')
+			->setRtl(false)
+			->setLocale('xx_XX.utf8, xx_XX.UTF-8, xx_XX, xx, examplish, examplish-example')
+			->setCodePage('iso-8859-1')
+			->setBackwardLanguage('examplish')
+			->setFontName('freesans');
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('template', $this->manifest->getType());
-	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/template.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/templateDetails.xml');
-		$this->sort($expected->data['extension']);
-
-		$manifest = new \GreenCape\Xml\Converter((string) TemplateManifestDemo::getManifest());
-		$this->sort($manifest->data['extension']);
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
-
-			if ($nameA == $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
+		return $manifest;
 	}
 }
+
+print_r((string) LanguageManifestDemo::getManifest());

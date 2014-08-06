@@ -54,10 +54,280 @@ namespace GreenCape\Manifest;
 class LanguageManifest extends Manifest
 {
 	/**
+	 * @var string The client attribute allows you to specify for which application client the language is available.
+	 */
+	protected $client = 'site';
+
+	/** @var string The ISO code for the language */
+	protected $tag = null;
+
+	/** @var  int  */
+	protected $rtl;
+
+	/** @var  string */
+	protected $locale;
+
+	/** @var  string */
+	protected $codePage;
+
+	/** @var  string */
+	protected $backwardLanguage;
+
+	/** @var  string */
+	protected $fontName;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
 		$this->type = 'language';
+		$this->sections['metadata'] = array();
+	}
+
+	/**
+	 * Getter and Setter
+	 */
+
+	/**
+	 * Set the extension name
+	 *
+	 * The description is preset to "<name>_XML_DESCRIPTION", if not already set.
+	 *
+	 * @param string $name Language name. This is a translatable field.
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setName($name)
+	{
+		parent::setName($name);
+		$this->sections['metadata']['name'] = $name;
+
+		return $this;
+	}
+
+	/**
+	 * Get the name of the client application
+	 *
+	 * @return string Name of the which application client for which the language is available
+	 */
+	public function getClient()
+	{
+		return $this->client;
+	}
+
+	/**
+	 * Set the name of the client application
+	 *
+	 * @param string $client Name of the which application client for which the language is available
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setClient($client)
+	{
+		$this->client = $client;
+
+		return $this;
+	}
+
+	/**
+	 * Get the ISO tag
+	 *
+	 * @return string The ISO code for the language
+	 */
+	public function getTag()
+	{
+		return $this->tag;
+	}
+
+	/**
+	 * Set the ISO tag
+	 *
+	 * @param string $tag The ISO code for the language
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setTag($tag)
+	{
+		$this->tag = $tag;
+		$this->sections['metadata']['tag'] = $tag;
+
+		return $this;
+	}
+
+	/**
+	 * Get the PDF font name
+	 *
+	 * @return string PDF font name
+	 */
+	public function getFontName()
+	{
+		return $this->fontName;
+	}
+
+	/**
+	 * Set the PDF font name
+	 *
+	 * @param string $fontName PDF font name
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setFontName($fontName)
+	{
+		$this->fontName = $fontName;
+		$this->sections['metadata']['pdfFontName'] = $fontName;
+
+		return $this;
+	}
+
+	/**
+	 * Get the locale
+	 *
+	 * @return string The locale string
+	 */
+	public function getLocale()
+	{
+		return $this->locale;
+	}
+
+	/**
+	 * Set the locale
+	 *
+	 * @param string $locale The locale string
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setLocale($locale)
+	{
+		$this->locale = $locale;
+		$this->sections['metadata']['locale'] = $locale;
+
+		return $this;
+	}
+
+	/**
+	 * Get RTL value
+	 *
+	 * @return boolean true = RTL, false = LTR
+	 */
+	public function getRtl()
+	{
+		return (bool) $this->rtl;
+	}
+
+	/**
+	 * Set RTL value
+	 *
+	 * @param boolean $rtl  true = RTL, false = LTR
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setRtl($rtl)
+	{
+		$this->rtl = $rtl ? 1 : 0;
+		$this->sections['metadata']['rtl'] = $this->rtl;
+
+		return $this;
+	}
+
+	/**
+	 * Get the code page
+	 *
+	 * @return string The code page
+	 */
+	public function getCodePage()
+	{
+		return $this->codePage;
+	}
+
+	/**
+	 * Set the code page
+	 *
+	 * @param string $page The code page
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setCodePage($page)
+	{
+		$this->codePage = $page;
+		$this->sections['metadata']['winCodePage'] = $page;
+
+		return $this;
+	}
+
+	/**
+	 * Get the backward language
+	 *
+	 * @return string The backward language
+	 */
+	public function getBackwardLanguage()
+	{
+		return $this->backwardLanguage;
+	}
+
+	/**
+	 * Set the backward language
+	 *
+	 * @param string $backwardLanguage The backward language
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setBackwardLanguage($backwardLanguage)
+	{
+		$this->backwardLanguage = $backwardLanguage;
+		$this->sections['metadata']['backwardLang'] = $backwardLanguage;
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the manifest structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$data = $this->getManifestRoot('metafile');
+
+		$this->addMetadata($data['metafile']);
+		$this->addElement($data['metafile'], 'tag');
+
+		foreach ($this->sections as $tag => $section)
+		{
+			$element = array();
+			if ($section instanceof Section)
+			{
+				$element[$tag] = $section->getStructure();
+				foreach ($section->getAttributes() as $attribute => $value)
+				{
+					$element[$attribute] = $value;
+				}
+			}
+			else
+			{
+				$element[$tag] = $section;
+			}
+			$data['metafile'][] = $element;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Get the attributes for the language manifest
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		$attributes = array();
+		$attributes['@version'] = $this->getTarget();
+		$attributes['@client']  = $this->getClient();
+
+		return $attributes;
 	}
 }

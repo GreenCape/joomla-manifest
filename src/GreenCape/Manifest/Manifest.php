@@ -227,7 +227,7 @@ abstract class Manifest implements Section
 	 *
 	 * @return array
 	 */
-	private function getManifestRoot($tag)
+	protected function getManifestRoot($tag)
 	{
 		$data       = $this->getAttributes();
 		$data[$tag] = array();
@@ -240,7 +240,7 @@ abstract class Manifest implements Section
 	 *
 	 * @param array &$data The current structure
 	 */
-	private function addMetadata(&$data)
+	protected function addMetadata(&$data)
 	{
 		if (empty($this->creationDate))
 		{
@@ -263,7 +263,7 @@ abstract class Manifest implements Section
 	 *
 	 * @param array &$data The current structure
 	 */
-	private function addInstallHooks(&$data)
+	protected function addInstallHooks(&$data)
 	{
 		$this->addElement($data, 'installfile');
 		$this->addElement($data, 'uninstallfile');
@@ -278,7 +278,7 @@ abstract class Manifest implements Section
 	 * @param array  &$data The current structure
 	 * @param string $key   The meta data field
 	 */
-	private function addElement(&$data, $key)
+	protected function addElement(&$data, $key)
 	{
 		$value = call_user_func(array($this, 'get' . ucfirst($key)));
 		if (!empty($value))

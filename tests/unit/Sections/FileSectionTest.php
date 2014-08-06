@@ -113,17 +113,6 @@ class FileSectionTest extends PHPUnit_Framework_TestCase
 		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
 
-	public function testEmptySectionIsEmpty()
-	{
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
-
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '</files>';
-
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
-
 	public function testAddMultiple()
 	{
 		$this->section->addFile('foo.txt');

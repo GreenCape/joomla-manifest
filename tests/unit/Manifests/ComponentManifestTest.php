@@ -90,25 +90,28 @@ class ComponentManifestTest extends PHPUnit_Framework_TestCase
 		ob_clean();
 
 		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		usort($expected->data['extension'], array($this, 'sort'));
+		$this->sort($expected->data['extension']);
 
 		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		usort($manifest->data['extension'], array($this, 'sort'));
+		$this->sort($manifest->data['extension']);
 
 		$this->assertEquals($expected->data, $manifest->data);
 	}
 
-	private function sort($a, $b)
+	private function sort(&$manifestData)
 	{
-		reset($a);
-		$nameA = key($a);
-		reset($b);
-		$nameB = key($b);
-
-		if ($nameA == $nameB)
+		usort($manifestData, function ($a, $b)
 		{
-			return 0;
-		}
-		return $nameA < $nameB ? -1 : 1;
+			reset($a);
+			$nameA = key($a);
+			reset($b);
+			$nameB = key($b);
+
+			if ($nameA == $nameB)
+			{
+				return 0;
+			}
+			return $nameA < $nameB ? -1 : 1;
+		});
 	}
 }

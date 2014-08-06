@@ -5,26 +5,24 @@
 	<author>John Doe</author>
 	<authorEmail>john.doe@example.org</authorEmail>
 	<authorUrl>http://www.example.org</authorUrl>
-	<copyright>(C) 2008 Copyright Info</copyright>
+	<copyright>(C) 2008 Copyright Info. All rights reserved.</copyright>
 	<license>License Info</license>
 	<version>1.6.0</version>
 	<description>PLG_ALPHA_XML_DESCRIPTION</description>
 
-	<scriptfile>alpha.scriptfile.php</scriptfile> <!-- New for 1.6 -->
+	<scriptfile>alpha.scriptfile.php</scriptfile>
 
-	<!-- SQL Files -->
-	<!-- Note: SQL Support added in 1.6 for modules and plugins -->
-	<install> <!-- Runs on install -->
+	<install>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
 		</sql>
 	</install>
-	<uninstall> <!-- Runs on uninstall -->
+	<uninstall>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
 		</sql>
 	</uninstall>
-	<update> <!-- Runs on update -->
+	<update>
 		<schemas>
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
@@ -36,9 +34,8 @@
 		<folder>language</folder>
 	</files>
 
-	<!-- Languages; deprecated 1.5 style -->
-	<!-- <languages folder="language">
+	<languages folder="language">
 		<language client="administrator" tag="en-GB">admin/en-GB.plg_system_alpha.ini</language>
 		<language client="site" tag="en-GB">site/en-GB.plg_system_alpha.ini</language>
-	</languages> -->
+	</languages>
 </extension>
