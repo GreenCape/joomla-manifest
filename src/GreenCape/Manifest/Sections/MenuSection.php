@@ -58,6 +58,42 @@ class MenuSection implements Section
 	protected $submenu = array();
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $menu Optional XML structure to preset the manifest
+	 */
+	public function __construct($menu = null, $submenu = null)
+	{
+		if (!is_null($menu))
+		{
+			$this->set($menu, $submenu);
+		}
+	}
+
+	/**
+	 * Set the section values from XML structure
+	 *
+	 * @param array $menu
+	 * @param array $submenu
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set($menu, $submenu)
+	{
+		$this
+			->setMenuLabel($menu['menu'])
+			->setMenuIcon($menu['@img']);
+
+		foreach ($submenu['submenu'] as $item)
+		{
+			$this->addMenu($item['menu'], $item['@link']);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Add a menu item
 	 *
 	 * @param string $label

@@ -63,6 +63,64 @@ class FileSection implements Section
 	protected $folders = array();
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the manifest
+	 */
+	public function __construct($data = null)
+	{
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
+	}
+
+	/**
+	 * Set the section values from XML structure
+	 *
+	 * @param array $data
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set($data)
+	{
+		foreach ($data as $key => $value)
+		{
+			if ($key[0] == '@')
+			{
+				$attribute = substr($key, 1);
+				if ($attribute == 'folder')
+				{
+					$attribute = 'base';
+				}
+				$method = 'set' . ucfirst($attribute);
+				if (!is_callable(array($this, $method)))
+				{
+					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+				}
+				$this->$method($value);
+
+				continue;
+			}
+			if (isset($value['filename']))
+			{
+				$this->files[] = $value;
+			}
+			elseif (isset($value['folder']))
+			{
+				$this->folders[] = $value;
+			}
+			else
+			{
+				$this->files = $value;
+			}
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Add a file to the section
 	 *
 	 * @param string $filename   The name of the file
@@ -72,7 +130,7 @@ class FileSection implements Section
 	 */
 	public function addFile($filename, $attributes = array())
 	{
-		$element       = array('filename' => $filename);
+		$element = array('filename' => $filename);
 		foreach ($attributes as $key => $value)
 		{
 			$element["@{$key}"] = (string) $value;

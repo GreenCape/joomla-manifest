@@ -57,6 +57,56 @@ class SqlSection implements Section
 	protected $files = array();
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the manifest
+	 */
+	public function __construct($data = null)
+	{
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
+	}
+
+	/**
+	 * Set the section values from XML structure
+	 *
+	 * @param array $data
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set($data)
+	{
+		foreach ($data as $key => $value)
+		{
+			if ($key[0] == '@')
+			{
+				$attribute = substr($key, 1);
+				$method = 'set' . ucfirst($attribute);
+				if (!is_callable(array($this, $method)))
+				{
+					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+				}
+				$this->$method($value);
+
+				continue;
+			}
+			if (isset($value['sql'][0]))
+			{
+				$this->files = $value['sql'];
+			}
+			else
+			{
+				$this->files[] = $value['sql'];
+			}
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Add a file to the section
 	 *
 	 * @param string $driver     The name of a database driver

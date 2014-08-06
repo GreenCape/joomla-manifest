@@ -55,9 +55,16 @@ class FileManifest extends Manifest
 {
 	/**
 	 * Constructor
+	 *
+	 * @param string $xml Optional XML string to preset the manifest
 	 */
-	public function __construct()
+	public function __construct($xml = null)
 	{
 		$this->type = 'file';
+
+		if (!is_null($xml))
+		{
+			$this->set($xml);
+		}
 	}
 }

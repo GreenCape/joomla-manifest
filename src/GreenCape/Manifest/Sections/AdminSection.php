@@ -63,6 +63,73 @@ class AdminSection implements Section
 	protected $language = null;
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the manifest
+	 */
+	public function __construct($data = null)
+	{
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
+	}
+
+	/**
+	 * Set the section values from XML structure
+	 *
+	 * @param array $data
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set($data)
+	{
+		foreach ($data as $key => $value)
+		{
+			if ($key[0] == '@')
+			{
+				$attribute = substr($key, 1);
+				$method = 'set' . ucfirst($attribute);
+				if (!is_callable(array($this, $method)))
+				{
+					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+				}
+				$this->$method($value);
+
+				continue;
+			}
+			$menu = $submenu = null;
+			foreach ($value as $section)
+			{
+				if (isset($section['menu']))
+				{
+					$menu = $section;
+					continue;
+				}
+				if (isset($section['submenu']))
+				{
+					$submenu = $section;
+					continue;
+				}
+				if (isset($section['files']))
+				{
+					$this->files = new FileSection($section);
+					continue;
+				}
+				if (isset($section['languages']))
+				{
+					$this->language = new LanguageSection($section);
+					continue;
+				}
+			}
+			$this->menu = new MenuSection($menu, $submenu);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Getter and setter
 	 */
 
@@ -107,7 +174,7 @@ class AdminSection implements Section
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setFiles($files)
+	public function setFiles(FileSection $files)
 	{
 		$this->files = $files;
 
@@ -131,7 +198,7 @@ class AdminSection implements Section
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setLanguage($language)
+	public function setLanguage(LanguageSection $language)
 	{
 		$this->language = $language;
 

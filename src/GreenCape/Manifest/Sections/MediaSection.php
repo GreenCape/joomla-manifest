@@ -57,6 +57,19 @@ class MediaSection extends FileSection
 	protected $destination = null;
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the manifest
+	 */
+	public function __construct($data = null)
+	{
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
+	}
+
+	/**
 	 * Getter and setter
 	 */
 

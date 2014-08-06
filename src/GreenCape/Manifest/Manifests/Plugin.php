@@ -62,10 +62,17 @@ class PluginManifest extends Manifest
 
 	/**
 	 * Constructor
+	 *
+	 * @param string $xml Optional XML string to preset the manifest
 	 */
-	public function __construct()
+	public function __construct($xml = null)
 	{
 		$this->type = 'plugin';
+
+		if (!is_null($xml))
+		{
+			$this->set($xml);
+		}
 	}
 
 	/**
@@ -87,7 +94,7 @@ class PluginManifest extends Manifest
 	 *
 	 * @param string $group The name of the group of plugins for which the new plugin is available
 	 *
-	 * @return $this
+	 * @return $this This object, to provide a fluent interface
 	 */
 	public function setGroup($group)
 	{

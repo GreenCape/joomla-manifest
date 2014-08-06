@@ -44,6 +44,8 @@
 
 namespace GreenCape\Manifest;
 
+use \GreenCape\Xml\Converter;
+
 /**
  * Component Manifest
  *
@@ -55,9 +57,34 @@ class ComponentManifest extends Manifest
 {
 	/**
 	 * Constructor
+	 *
+	 * @param Converter $xml Optional XML to preset the manifest
 	 */
-	public function __construct()
+	public function __construct(Converter $xml = null)
 	{
-		$this->type = 'component';
+		$this->type                  = 'component';
+		$this->map['administration'] = 'AdminSection';
+		$this->map['tables']         = 'TableSection';
+		$this->map['dependencies']   = 'DependencySection';
+
+		if (!is_null($xml))
+		{
+			$this->set($xml);
+		}
+	}
+
+	/**
+	 * Set the manifest values and sections from XML
+	 *
+	 * @param Converter $xml
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set(Converter $xml)
+	{
+		parent::set($xml);
+
+		return $this;
 	}
 }

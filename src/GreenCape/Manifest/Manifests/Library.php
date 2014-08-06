@@ -55,9 +55,16 @@ class LibraryManifest extends Manifest
 {
 	/**
 	 * Constructor
+	 *
+	 * @param string $xml Optional XML string to preset the manifest
 	 */
-	public function __construct()
+	public function __construct($xml = null)
 	{
 		$this->type = 'library';
+
+		if (!is_null($xml))
+		{
+			$this->set($xml);
+		}
 	}
 }

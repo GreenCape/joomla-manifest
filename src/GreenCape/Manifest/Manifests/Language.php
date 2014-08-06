@@ -78,11 +78,18 @@ class LanguageManifest extends Manifest
 
 	/**
 	 * Constructor
+	 *
+	 * @param string $xml Optional XML string to preset the manifest
 	 */
-	public function __construct()
+	public function __construct($xml = null)
 	{
-		$this->type = 'language';
+		$this->type                 = 'language';
 		$this->sections['metadata'] = array();
+
+		if (!is_null($xml))
+		{
+			$this->set($xml);
+		}
 	}
 
 	/**
@@ -251,6 +258,29 @@ class LanguageManifest extends Manifest
 	{
 		$this->codePage = $page;
 		$this->sections['metadata']['winCodePage'] = $page;
+
+		return $this;
+	}
+
+	/**
+	 * Set the meta data
+	 *
+	 * This method is called during load of an XML file.
+	 * This makes the section look like a simple property to the import method.
+	 *
+	 * @param array $data The code page
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	protected function setMetadata($data)
+	{
+		foreach ($data as $entry)
+		{
+			foreach ($entry as $key => $value)
+			{
+				$this->sections['metadata'][$key] = $value;
+			}
+		}
 
 		return $this;
 	}

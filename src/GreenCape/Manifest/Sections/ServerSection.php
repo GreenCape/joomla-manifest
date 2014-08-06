@@ -57,6 +57,49 @@ class ServerSection implements Section
 	protected $server = array();
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the manifest
+	 */
+	public function __construct($data = null)
+	{
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
+	}
+
+	/**
+	 * Set the section values from XML structure
+	 *
+	 * @param array $data
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set($data)
+	{
+		foreach ($data as $key => $value)
+		{
+			if ($key[0] == '@')
+			{
+				$attribute = substr($key, 1);
+				$method = 'set' . ucfirst($attribute);
+				if (!is_callable(array($this, $method)))
+				{
+					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+				}
+				$this->$method($value);
+
+				continue;
+			}
+			$this->server = $value;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Add an update server to the section
 	 *
 	 * @param string $type     The server type, one of 'extension', 'collection'

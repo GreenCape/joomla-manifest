@@ -44,6 +44,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Class Manifest
  *
@@ -116,6 +118,17 @@ abstract class Manifest implements Section
 	/** @var Section[] */
 	protected $sections = array();
 
+	/** @var array Section map */
+	protected $map = array(
+		'install'       => 'SqlSection',
+		'uninstall'     => 'SqlSection',
+		'update'        => 'SchemaSection',
+		'files'         => 'FileSection',
+		'languages'     => 'LanguageSection',
+		'media'         => 'MediaSection',
+		'updateservers' => 'ServerSection',
+	);
+
 	/**
 	 * Install hooks
 	 */
@@ -140,9 +153,111 @@ abstract class Manifest implements Section
 	 */
 	public function __toString()
 	{
-		$xml = new \GreenCape\Xml\Converter($this->getStructure());
+		$xml = new Converter($this->getStructure());
 
 		return (string) $xml;
+	}
+
+	/**
+	 * Public API
+	 */
+
+	/**
+	 * Load a manifest file
+	 *
+	 * @param string $file The manifest filename
+	 *
+	 * @return Manifest
+	 */
+	public static function load($file)
+	{
+		$xml = new Converter($file);
+		$type = empty($xml['@type']) ? 'language' : $xml['@type'];
+		$classname = '\\GreenCape\\Manifest\\' . ucfirst($type) . 'Manifest';
+		$manifest = new $classname($xml);
+
+		return $manifest;
+	}
+
+	/**
+	 * Set the manifest values and sections from XML
+	 *
+	 * @param Converter $xml
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
+	 */
+	protected function set(Converter $xml)
+	{
+		// Remove type and comments, if any
+		unset($xml['#comment'], $xml['@type']);
+
+		// Get attributes
+		foreach ($xml as $key => $value)
+		{
+			if ($key[0] != '@')
+			{
+				continue;
+			}
+
+			$attribute = substr($key, 1);
+			if ($attribute == 'version')
+			{
+				$attribute = 'target';
+			}
+			$method = 'set' . ucfirst($attribute);
+			if (!is_callable(array($this, $method)))
+			{
+				throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+			}
+			$this->$method($value);
+
+			unset($xml[$key]);
+		}
+
+		// Get children; in fact, only 'extension' => Array is left
+		foreach ($xml as $root)
+		{
+			foreach ((array) $root as $section)
+			{
+				$key = $value = null;
+				foreach ((array) $section as $key => $value)
+				{
+					if ($key[0] != '@' && $key[0] != '#')
+					{
+						break;
+					}
+				}
+				switch ($key)
+				{
+					case 'copyright':
+						if (preg_match('~^\D*(\d{4})[ \d-]+(.*?)(?:\.?\s+All rights reserved\.)?$~', $value, $match))
+						{
+							$this->setCopyright($match[1], $match[2]);
+						}
+						break;
+
+					default:
+						if (isset($this->map[$key]))
+						{
+							$classname = '\\GreenCape\\Manifest\\' . $this->map[$key];
+							$this->removeSection($key);
+							$this->addSection($key, new $classname($section));
+							break;
+						}
+						$method = 'set' . ucfirst($key);
+						if (!is_callable(array($this, $method)))
+						{
+							throw new \UnexpectedValueException("Can't handle section '$key'");
+						}
+						$this->$method($value);
+						break;
+				}
+			}
+		}
+		unset($xml);
+
+		return $this;
 	}
 
 	/**
