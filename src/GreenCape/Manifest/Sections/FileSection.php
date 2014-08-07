@@ -103,7 +103,11 @@ class FileSection implements Section
 
 				continue;
 			}
-			if (isset($value['filename']))
+			if (isset($value['file']))
+			{
+				$this->files[] = $this->reTag($value, 'file', 'filename');
+			}
+			elseif (isset($value['filename']))
 			{
 				$this->files[] = $value;
 			}
@@ -235,20 +239,23 @@ class FileSection implements Section
 	/**
 	 * Get the section structure
 	 *
+	 * @param string $fileTag   Alternative tag for files
+	 * @param string $folderTag Alternative tag for folders
+	 *
 	 * @return array
 	 */
-	public function getStructure()
+	public function getStructure($fileTag = 'filename', $folderTag = 'folder')
 	{
 		$structure = array();
 
 		foreach ($this->files as $file)
 		{
-			$structure[] = $file;
+			$structure[] = $this->reTag($file, 'filename', $fileTag);
 		}
 
 		foreach ($this->folders as $folder)
 		{
-			$structure[] = $folder;
+			$structure[] = $this->reTag($folder, 'folder', $folderTag);
 		}
 
 		return $structure;
@@ -269,5 +276,37 @@ class FileSection implements Section
 		}
 
 		return $attributes;
+	}
+
+	/**
+	 * Exchange the element tags, if necessary
+	 *
+	 * @param array  $entry  The file or folder entry
+	 * @param string $oldTag The old tag
+	 * @param string $newTag The new tag
+	 *
+	 * @return array
+	 */
+	private function reTag($entry, $oldTag, $newTag)
+	{
+		if ($newTag == $oldTag)
+		{
+			return $entry;
+		}
+
+		$modifiedEntry = array();
+		foreach ($entry as $tag => $value)
+		{
+			if ($tag == $oldTag)
+			{
+				$modifiedEntry[$newTag] = $value;
+			}
+			else
+			{
+				$modifiedEntry[$tag] = $value;
+			}
+		}
+
+		return $modifiedEntry;
 	}
 }

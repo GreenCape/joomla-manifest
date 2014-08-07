@@ -112,7 +112,7 @@ class FileManifestTest extends PHPUnit_Framework_TestCase
 		$expected .= '<license>GNU General Public License version 2 or later; see LICENSE.txt</license>';
 		$expected .= '<fileset>';
 		$expected .= '<files folder="dir">';
-		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '<file>foo.txt</file>';
 		$expected .= '</files>';
 		$expected .= '</fileset>';
 		$expected .= '</extension>';

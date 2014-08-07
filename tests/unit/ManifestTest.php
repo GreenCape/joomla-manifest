@@ -222,6 +222,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 			array('plugin', 'plg_system_alpha.xml', 'extension'),
 			array('language', 'xx-XX.xml', 'metafile'),
 			array('template', 'templateDetails.xml', 'extension'),
+			array('file', 'file.xml', 'extension'),
 		);
 	}
 

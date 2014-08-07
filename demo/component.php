@@ -166,7 +166,8 @@ class ComponentManifestDemo
 			->addServer(
 				'collection',
 				'Collection Update Site',
-				'http://jsitepoint.com/update/update.xml'
+				'http://jsitepoint.com/update/update.xml',
+				2
 			);
 
 		$manifest->addSection('updateservers', $server);

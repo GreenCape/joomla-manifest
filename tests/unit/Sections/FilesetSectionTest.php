@@ -90,7 +90,7 @@ class FilesetSectionTest extends PHPUnit_Framework_TestCase
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<fileset>';
 		$expected .= '<files folder="dir">';
-		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '<file>foo.txt</file>';
 		$expected .= '</files>';
 		$expected .= '</fileset>';
 
@@ -121,10 +121,10 @@ class FilesetSectionTest extends PHPUnit_Framework_TestCase
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<fileset>';
 		$expected .= '<files folder="dir">';
-		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '<file>foo.txt</file>';
 		$expected .= '</files>';
 		$expected .= '<files folder="another/dir">';
-		$expected .= '<filename>bar.txt</filename>';
+		$expected .= '<file>bar.txt</file>';
 		$expected .= '</files>';
 		$expected .= '</fileset>';
 

@@ -97,29 +97,9 @@ class FilesetSection implements Section
 	public function addFileset(FileSection $files)
 	{
 		$element = $files->getAttributes();
-		$element['files'] = $files->getStructure();
+		$element['files'] = $files->getStructure('file', 'folder');
 
 		$this->filesets[] = $element;
-
-		return $this;
-	}
-
-	/**
-	 * Remove a file from the section
-	 *
-	 * @param string $filename   The name of the file
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeFile($filename)
-	{
-		foreach ($this->filesets as $key => $element)
-		{
-			if ($element['filename'] == $filename)
-			{
-				unset($this->filesets[$key]);
-			}
-		}
 
 		return $this;
 	}

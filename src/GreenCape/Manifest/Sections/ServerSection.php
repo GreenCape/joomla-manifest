@@ -109,12 +109,18 @@ class ServerSection implements Section
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function addServer($type, $name, $url, $priority = 2)
+	public function addServer($type, $name, $url, $priority = null)
 	{
 		$element              = array('server' => $url);
 		$element['@type']     = (string) $type;
-		$element['@name']     = (string) $name;
-		$element['@priority'] = (string) $priority;
+		if (!empty($name))
+		{
+			$element['@name'] = (string) $name;
+		}
+		if (!empty($priority))
+		{
+			$element['@priority'] = (string) $priority;
+		}
 
 		$this->server[] = $element;
 
