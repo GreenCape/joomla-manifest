@@ -199,7 +199,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 	public function testMethodAttributeIsImportedCorrectly()
 	{
 
-		$xml = GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#3.xml');
+		$xml = GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#4.xml');
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<extension type="component" version="1.6" method="upgrade">';
