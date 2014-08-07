@@ -189,25 +189,28 @@ class MenuSection implements Section
 	}
 
 	/**
-	 * Get the view
+	 * Get an attribute
 	 *
-	 * @return string  The view
+	 * @param string $key The key
+	 *
+	 * @return string  The parameter
 	 */
-	public function getView()
+	public function getAttribute($key)
 	{
-		return $this->menu['@view'];
+		return $this->menu["@{$key}"];
 	}
 
 	/**
-	 * Set the view
+	 * Set an attribute
 	 *
-	 * @param string $view The view
+	 * @param string $key   The key
+	 * @param string $value The value
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setView($view)
+	public function setAttribute($key, $value)
 	{
-		$this->menu['@view'] = $view;
+		$this->menu["@{$key}"] = $value;
 
 		return $this;
 	}

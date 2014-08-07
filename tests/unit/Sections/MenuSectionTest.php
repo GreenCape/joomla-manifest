@@ -130,23 +130,23 @@ class MenuSectionTest extends PHPUnit_Framework_TestCase
 		$submenu1
 			->setLabel('menu1')
 			->setIcon('icon1')
-			->setLink('link1')
-			->setView('view1')
 			->setAlt('alt1')
-		;
+			->setLink('link1')
+			->setAttribute('view', 'view1');
 
 		$this->section
 			->setLabel('menu')
 			->setIcon('icon')
-			->setLink('link')
-			->setView('view')
 			->setAlt('alt')
+			->setLink('link')
+			->setAttribute('view', 'view')
+			->setAttribute('foo', 'bar')
 			->addMenu($submenu1);
 		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<administration>';
-		$expected .= '<menu link="link" view="view" img="icon" alt="alt">menu</menu>';
+		$expected .= '<menu link="link" view="view" img="icon" alt="alt" foo="bar">menu</menu>';
 		$expected .= '<submenu>';
 		$expected .= '<menu link="link1" view="view1" img="icon1" alt="alt1">menu1</menu>';
 		$expected .= '</submenu>';
