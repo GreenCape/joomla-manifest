@@ -174,10 +174,12 @@ class MenuSection implements Section
 	 */
 	public function getStructure()
 	{
-		$structure = array(
-			$this->menu,
-			array('submenu' => $this->submenu)
-		);
+		$structure = array();
+		$structure[] = $this->menu;
+		if (!empty($this->submenu))
+		{
+			$structure[] = array('submenu' => $this->submenu);
+		}
 
 		return $structure;
 	}
