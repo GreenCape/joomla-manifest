@@ -114,4 +114,32 @@ class ModuleManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~\<extension [^>]*client="site"~sm', $xml);
 	}
+
+	/**
+	 * Issue #11: help is not supported
+	 */
+	public function testHelpIsSupported()
+	{
+		/** @var \GreenCape\Manifest\ModuleManifest $xml */
+		$xml = GreenCape\Manifest\Manifest::load(__DIR__ . '/../../data/issue#11.xml');
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<extension type="module" version="1.6" method="upgrade" client="site">';
+		$expected .= '<name>mod_alpha</name>';
+		$expected .= '<author>John Doe</author>';
+		$expected .= '<creationDate>March 2006</creationDate>';
+		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+		$expected .= '<license>License Info</license>';
+		$expected .= '<description>MOD_ALPHA_XML_DESCRIPTION</description>';
+		$expected .= '<help key="MOD_ALPHA_HELP_KEY" />';
+		$expected .= '</extension>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+
+		$this->assertEquals('MOD_ALPHA_HELP_KEY', $xml->getHelp());
+
+		$xml->setHelp('CHANGED');
+
+		$this->assertEquals('CHANGED', $xml->getHelp());
+	}
 }

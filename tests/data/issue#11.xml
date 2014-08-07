@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension type="component" version="1.6" method="upgrade">
-    <name>com_alpha</name>
+<extension type="module" version="1.6" method="upgrade">
+    <name>mod_alpha</name>
     <author>John Doe</author>
     <creationDate>March 2006</creationDate>
     <copyright>(C) 2008 Copyright Info. All rights reserved.</copyright>
     <license>License Info</license>
-    <description>COM_ALPHA_XML_DESCRIPTION</description>
+    <description>MOD_ALPHA_XML_DESCRIPTION</description>
+    <help key="MOD_ALPHA_HELP_KEY" />
 </extension>

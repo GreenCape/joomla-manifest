@@ -66,6 +66,7 @@ class ModuleManifest extends Manifest
 	public function __construct($xml = null)
 	{
 		$this->type = 'module';
+		$this->map['help'] = 'VerbatimSection';
 
 		if (!is_null($xml))
 		{
@@ -97,6 +98,31 @@ class ModuleManifest extends Manifest
 	public function setClient($client)
 	{
 		$this->client = $client;
+
+		return $this;
+	}
+
+	/**
+	 * Get the help key
+	 *
+	 * @return string The help key
+	 */
+	public function getHelp()
+	{
+		$attribute = $this->sections['help']->getAttributes();
+		return $attribute['@key'];
+	}
+
+	/**
+	 * Set the help key
+	 *
+	 * @param string $help The help key
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setHelp($help)
+	{
+		$this->sections['help'] = new VerbatimSection(array('help' => null, '@key' => $help));
 
 		return $this;
 	}

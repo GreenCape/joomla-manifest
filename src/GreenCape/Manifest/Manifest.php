@@ -312,12 +312,8 @@ abstract class Manifest implements Section
 
 		foreach ($this->sections as $tag => $section)
 		{
-			$element = array();
+			$element       = $section->getAttributes();
 			$element[$tag] = $section->getStructure();
-			foreach ($section->getAttributes() as $attribute => $value)
-			{
-				$element[$attribute] = $value;
-			}
 			$data[$root][] = $element;
 		}
 

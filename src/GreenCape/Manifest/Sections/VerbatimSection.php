@@ -86,12 +86,11 @@ class VerbatimSection implements Section
 		{
 			if ($key[0] == '@')
 			{
-				$attribute = substr($key, 1);
-				$this->attributes[$attribute] = $value;
+				$this->attributes[$key] = (string) $value;
 
 				continue;
 			}
-			$this->structure[] = $value;
+			$this->structure = $value;
 		}
 
 		return $this;
