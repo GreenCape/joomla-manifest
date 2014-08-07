@@ -79,13 +79,77 @@ class MenuSectionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEmptySubmenusAreOmitted()
 	{
-		$this->section->setMenuLabel('Menu');
-		$this->section->setMenuIcon('Icon');
+		$this->section->setLabel('Menu');
+		$this->section->setIcon('Icon');
 		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<administration>';
 		$expected .= '<menu img="Icon">Menu</menu>';
+		$expected .= '</administration>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	public function testMenuSectionWorksAsSubmenu()
+	{
+		$submenu1 = new \GreenCape\Manifest\MenuSection();
+		$submenu1
+			->setLabel('submenu 1')
+			->setIcon('icon1');
+
+		$submenu2 = new \GreenCape\Manifest\MenuSection();
+		$submenu2
+			->setLabel('submenu 2')
+			->setIcon('icon2');
+
+		$this->section->setLabel('Menu');
+		$this->section->setIcon('Icon');
+		$this->section->addMenu($submenu1);
+		$this->section->addMenu($submenu2);
+		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<administration>';
+		$expected .= '<menu img="Icon">Menu</menu>';
+		$expected .= '<submenu>';
+		$expected .= '<menu img="icon1">submenu 1</menu>';
+		$expected .= '<menu img="icon2">submenu 2</menu>';
+		$expected .= '</submenu>';
+		$expected .= '</administration>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
+	/**
+	 * Issue #3, issue #6
+	 */
+	public function testMenuHasMissingAttributes()
+	{
+		$submenu1 = new \GreenCape\Manifest\MenuSection();
+		$submenu1
+			->setLabel('menu1')
+			->setIcon('icon1')
+			->setLink('link1')
+			->setView('view1')
+			->setAlt('alt1')
+		;
+
+		$this->section
+			->setLabel('menu')
+			->setIcon('icon')
+			->setLink('link')
+			->setView('view')
+			->setAlt('alt')
+			->addMenu($submenu1);
+		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<administration>';
+		$expected .= '<menu link="link" view="view" img="icon" alt="alt">menu</menu>';
+		$expected .= '<submenu>';
+		$expected .= '<menu link="link1" view="view1" img="icon1" alt="alt1">menu1</menu>';
+		$expected .= '</submenu>';
 		$expected .= '</administration>';
 
 		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);

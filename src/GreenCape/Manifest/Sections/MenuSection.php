@@ -81,14 +81,8 @@ class MenuSection implements Section
 	 */
 	protected function set($menu, $submenu)
 	{
-		$this
-			->setMenuLabel($menu['menu'])
-			->setMenuIcon($menu['@img']);
-
-		foreach ($submenu['submenu'] as $item)
-		{
-			$this->addMenu($item['menu'], $item['@link']);
-		}
+		$this->menu = $menu;
+		$this->submenu = $submenu['submenu'];
 
 		return $this;
 	}
@@ -96,17 +90,24 @@ class MenuSection implements Section
 	/**
 	 * Add a menu item
 	 *
-	 * @param string $label
+	 * @param MenuSection|string $label
 	 * @param string $link
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function addMenu($label, $link)
+	public function addMenu($label, $link = '#')
 	{
-		$this->submenu[] = array(
-			'menu'  => $label,
-			'@link' => $link
-		);
+		if (is_string($label))
+		{
+			$this->submenu[] = array(
+				'menu'  => $label,
+				'@link' => $link
+			);
+		}
+		else
+		{
+			$this->submenu = array_merge($this->submenu, $label->getStructure());
+		}
 
 		return $this;
 	}
@@ -120,7 +121,7 @@ class MenuSection implements Section
 	 *
 	 * @return string The label
 	 */
-	public function getMenuLabel()
+	public function getLabel()
 	{
 		return $this->menu['menu'];
 	}
@@ -132,7 +133,7 @@ class MenuSection implements Section
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setMenuLabel($label)
+	public function setLabel($label)
 	{
 		$this->menu['menu'] = $label;
 
@@ -144,7 +145,7 @@ class MenuSection implements Section
 	 *
 	 * @return string  The icon filename
 	 */
-	public function getMenuIcon()
+	public function getIcon()
 	{
 		return $this->menu['@img'];
 	}
@@ -156,9 +157,81 @@ class MenuSection implements Section
 	 *
 	 * @return $this This object, to provide a fluent interface
 	 */
-	public function setMenuIcon($icon)
+	public function setIcon($icon)
 	{
 		$this->menu['@img'] = $icon;
+
+		return $this;
+	}
+
+	/**
+	 * Get the link
+	 *
+	 * @return string  The link
+	 */
+	public function getLink()
+	{
+		return $this->menu['@link'];
+	}
+
+	/**
+	 * Set the link
+	 *
+	 * @param string $link The link
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setLink($link)
+	{
+		$this->menu['@link'] = $link;
+
+		return $this;
+	}
+
+	/**
+	 * Get the view
+	 *
+	 * @return string  The view
+	 */
+	public function getView()
+	{
+		return $this->menu['@view'];
+	}
+
+	/**
+	 * Set the view
+	 *
+	 * @param string $view The view
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setView($view)
+	{
+		$this->menu['@view'] = $view;
+
+		return $this;
+	}
+
+	/**
+	 * Get the alt text
+	 *
+	 * @return string  The alt text
+	 */
+	public function getAlt()
+	{
+		return $this->menu['@alt'];
+	}
+
+	/**
+	 * Set the alt text
+	 *
+	 * @param string $alt The alt text
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setAlt($alt)
+	{
+		$this->menu['@alt'] = $alt;
 
 		return $this;
 	}

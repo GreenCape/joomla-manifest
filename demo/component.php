@@ -126,8 +126,8 @@ class ComponentManifestDemo
 		// Backend files
 		$menu = new \GreenCape\Manifest\MenuSection();
 		$menu
-			->setMenuLabel('Alpha')
-			->setMenuIcon('components/com_alpha/applications-internet-16.png')
+			->setLabel('Alpha')
+			->setIcon('components/com_alpha/applications-internet-16.png')
 			->addMenu('Installer', 'option=com_installer')
 			->addMenu('Users', 'option=com_users');
 
