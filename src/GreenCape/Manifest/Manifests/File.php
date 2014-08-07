@@ -61,6 +61,7 @@ class FileManifest extends Manifest
 	public function __construct($xml = null)
 	{
 		$this->type = 'file';
+		$this->map['fileset'] = 'FilesetSection';
 
 		if (!is_null($xml))
 		{
