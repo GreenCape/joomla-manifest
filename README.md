@@ -30,4 +30,13 @@ For a system-wide installation via Composer, you can run:
 Make sure you have `~/.composer/vendor/bin/` in your path.
 
 ## Usage Examples
-[ToDo]
+
+See the samples in the demo directory.
+
+## Resources
+
+### Documentation and Examples
+
+  - [General description of **Manifest** files](http://docs.joomla.org/Manifest_files)
+  - [**File** manifest example](http://docs.joomla.org/J2.5:Making_non-core_language_packs)
+  - [**Package** manifest example](http://docs.joomla.org/Package)
