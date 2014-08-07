@@ -54,6 +54,11 @@ namespace GreenCape\Manifest;
 class TemplateManifest extends Manifest
 {
 	/**
+	 * @var string The client attribute allows you to specify for which application client the template is available.
+	 */
+	protected $client = null;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $xml Optional XML string to preset the manifest
@@ -66,5 +71,53 @@ class TemplateManifest extends Manifest
 		{
 			$this->set($xml);
 		}
+	}
+
+	/**
+	 * Getter and Setter
+	 */
+
+	/**
+	 * Get the name of the client application
+	 *
+	 * @return string Name of the which application client for which the new module is available
+	 */
+	public function getClient()
+	{
+		return $this->client;
+	}
+
+	/**
+	 * Set the name of the client application
+	 *
+	 * @param string $client Name of the which application client for which the new module is available
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setClient($client)
+	{
+		$this->client = $client;
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the attributes for the module manifest
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		$attributes = parent::getAttributes();
+		if (!empty($this->client))
+		{
+			$attributes['@client'] = $this->getClient();
+		}
+
+		return $attributes;
 	}
 }

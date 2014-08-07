@@ -53,7 +53,7 @@
  */
 class TemplateManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
+	/** @var \GreenCape\Manifest\TemplateManifest */
 	private $manifest = null;
 
 	/**
@@ -81,5 +81,13 @@ class TemplateManifestTest extends PHPUnit_Framework_TestCase
 	public function testTypeIsCorrect()
 	{
 		$this->assertEquals('template', $this->manifest->getType());
+	}
+
+	public function testManifestRootHasClientAttribute()
+	{
+		$this->manifest
+			->setClient('site');
+
+		$this->assertRegExp('~\<extension [^>]*client="site"~sm', (string) $this->manifest);
 	}
 }
