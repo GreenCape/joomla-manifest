@@ -76,6 +76,9 @@ class LanguageManifest extends Manifest
 	/** @var  string */
 	protected $fontName;
 
+	/** @var  int  */
+	protected $firstDay = 0;
+
 	/**
 	 * Constructor
 	 *
@@ -258,6 +261,31 @@ class LanguageManifest extends Manifest
 	{
 		$this->codePage = $page;
 		$this->sections['metadata']['winCodePage'] = $page;
+
+		return $this;
+	}
+
+	/**
+	 * Get the first day of week
+	 *
+	 * @return string The first day of week
+	 */
+	public function getFirstDay()
+	{
+		return $this->firstDay;
+	}
+
+	/**
+	 * Set the first day of week
+	 *
+	 * @param string $dayNum The first day of week
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setFirstDay($dayNum)
+	{
+		$this->firstDay = $dayNum;
+		$this->sections['metadata']['firstDay'] = $dayNum;
 
 		return $this;
 	}

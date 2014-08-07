@@ -53,7 +53,7 @@
  */
 class LanguageManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
+	/** @var \GreenCape\Manifest\LanguageManifest */
 	private $manifest = null;
 
 	/**
@@ -81,5 +81,30 @@ class LanguageManifestTest extends PHPUnit_Framework_TestCase
 	public function testTypeIsCorrect()
 	{
 		$this->assertEquals('language', $this->manifest->getType());
+	}
+
+	/**
+	 * Issue #8: metadata/firstDay is not supported
+	 */
+	public function testMetadataFirstdayIsSupported()
+	{
+		$this->manifest
+			->setAuthor('Test')
+			->setCreationDate('August 2014')
+			->setCopyright('2014', 'Test', false)
+			->setfirstDay(0);
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<metafile client="site" version="2.5">';
+		$expected .= '<author>Test</author>';
+		$expected .= '<creationDate>August 2014</creationDate>';
+		$expected .= '<copyright>(C) 2014 Test. All rights reserved.</copyright>';
+		$expected .= '<license>GNU General Public License version 2 or later; see LICENSE.txt</license>';
+		$expected .= '<metadata>';
+		$expected .= '<firstDay>0</firstDay>';
+		$expected .= '</metadata>';
+		$expected .= '</metafile>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $this->manifest);
 	}
 }
