@@ -117,36 +117,4 @@ class PluginManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~\<extension [^>]*group="foo"~sm', $xml);
 	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/plugin.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/plg_system_alpha.xml');
-		$this->sort($expected->data['extension']);
-
-		$manifest = new \GreenCape\Xml\Converter((string) PluginManifestDemo::getManifest());
-		$this->sort($manifest->data['extension']);
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
-
-			if ($nameA == $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
-	}
 }

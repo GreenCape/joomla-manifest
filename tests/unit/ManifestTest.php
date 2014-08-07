@@ -213,4 +213,56 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
+
+	public function provideSampleFiles()
+	{
+		return array(
+			array('component', 'com_alpha.xml', 'extension'),
+			array('module', 'mod_alpha.xml', 'extension'),
+			array('plugin', 'plg_system_alpha.xml', 'extension'),
+			array('language', 'xx-XX.xml', 'metafile'),
+			array('template', 'templateDetails.xml', 'extension'),
+		);
+	}
+
+	/**
+	 * @dataProvider provideSampleFiles
+	 *
+	 * @param string $demo    The demo script
+	 * @param string $xml     The sample XML
+	 * @param string $rootTag The root tag in the sample file
+	 */
+	public function testReproduceSample($demo, $xml, $rootTag)
+	{
+		$demoFile  = $demo . '.php';
+		$demoClass = ucfirst($demo) . 'ManifestDemo';
+		ob_start();
+		include_once __DIR__ . '/../../demo/' . $demoFile;
+		ob_clean();
+
+		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../data/'. $xml);
+		$this->sort($expected->data[$rootTag]);
+
+		$manifest = new \GreenCape\Xml\Converter((string) call_user_func(array($demoClass, 'getManifest')));
+		$this->sort($manifest->data[$rootTag]);
+
+		$this->assertEquals($expected->data, $manifest->data);
+	}
+
+	private function sort(&$manifestData)
+	{
+		usort($manifestData, function ($a, $b)
+		{
+			reset($a);
+			$nameA = key($a);
+			reset($b);
+			$nameB = key($b);
+
+			if ($nameA == $nameB)
+			{
+				return 0;
+			}
+			return $nameA < $nameB ? -1 : 1;
+		});
+	}
 }

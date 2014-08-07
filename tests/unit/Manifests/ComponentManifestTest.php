@@ -82,36 +82,4 @@ class ComponentManifestTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals('component', $this->manifest->getType());
 	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/component.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/com_alpha.xml');
-		$this->sort($expected->data['extension']);
-
-		$manifest = new \GreenCape\Xml\Converter((string) ComponentManifestDemo::getManifest());
-		$this->sort($manifest->data['extension']);
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
-
-			if ($nameA == $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
-	}
 }

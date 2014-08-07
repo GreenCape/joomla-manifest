@@ -82,36 +82,4 @@ class LanguageManifestTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals('language', $this->manifest->getType());
 	}
-
-	public function testReproduceSample()
-	{
-		ob_start();
-		include_once __DIR__ . '/../../../demo/language.php';
-		ob_clean();
-
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../../data/xx-XX.xml');
-		$this->sort($expected->data['metafile']);
-
-		$manifest = new \GreenCape\Xml\Converter((string) LanguageManifestDemo::getManifest());
-		$this->sort($manifest->data['metafile']);
-
-		$this->assertEquals($expected->data, $manifest->data);
-	}
-
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
-
-			if ($nameA == $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
-	}
 }
