@@ -67,7 +67,12 @@ class TemplateManifest extends Manifest
 	{
 		$this->type = 'template';
 		/** @todo Implement PositionSection */
-		$this->map['positions'] = 'VerbatimSection';
+		$this->map['positions']      = 'VerbatimSection';
+
+		// Legacy Joomla! 1.5 sections
+		$this->map['administration'] = 'AdminSection';
+		$this->map['images']         = 'FileSection';
+		$this->map['css']            = 'FileSection';
 
 		if (!is_null($xml))
 		{
