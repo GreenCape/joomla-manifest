@@ -66,6 +66,8 @@ class TemplateManifest extends Manifest
 	public function __construct($xml = null)
 	{
 		$this->type = 'template';
+		/** @todo Implement PositionSection */
+		$this->map['positions'] = 'VerbatimSection';
 
 		if (!is_null($xml))
 		{
