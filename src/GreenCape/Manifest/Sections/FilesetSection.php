@@ -35,7 +35,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package     GreenCape\Manifest
- * @subpackage  Unittests
  * @author      Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
  * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
@@ -43,81 +42,113 @@
  * @since       File available since Release 0.1.0
  */
 
+namespace GreenCape\Manifest;
+
 /**
- * File Manifest Tests
+ * Fileset Section
  *
- * @package    GreenCape\Manifest
- * @subpackage Unittests
- * @author     Niels Braczek <nbraczek@bsds.de>
- * @since      Class available since Release 0.1.0
+ * @package GreenCape\Manifest
+ * @author  Niels Braczek <nbraczek@bsds.de>
+ * @since   Class available since Release 0.1.0
  */
-class FileManifestTest extends PHPUnit_Framework_TestCase
+class FilesetSection implements Section
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var array The filesets */
+	protected $filesets = array();
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
+	 * Constructor
+	 *
+	 * @param array $data Optional XML structure to preset the section
 	 */
-	protected function setUp()
+	public function __construct($data = null)
 	{
-		$this->manifest = new \GreenCape\Manifest\FileManifest();
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
-
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('file', $this->manifest->getType());
+		if (!is_null($data))
+		{
+			$this->set($data);
+		}
 	}
 
 	/**
-	 * Issue #9: File manifest: fileset is not supported
+	 * Set the section values from XML structure
+	 *
+	 * @param array $data
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 * @throws \UnexpectedValueException on unsupported attributes
 	 */
-	public function testAddFileset()
+	protected function set($data)
 	{
-		$this->manifest
-			->setAuthor('Test')
-			->setCreationDate('August 2014')
-			->setCopyright('2014', 'Test', false);
+		foreach ($data as $key => $value)
+		{
+			$this->filesets[] = $value;
+		}
 
-		$section = new \GreenCape\Manifest\FilesetSection();
-
-		$files = new \GreenCape\Manifest\FileSection();
-		$files
-			->setBase('dir')
-			->addFile('foo.txt');
-
-		$section->addFileset($files);
-
-		$this->manifest->addSection('fileset', $section);
-
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<extension method="install" type="file" version="2.5">';
-		$expected .= '<author>Test</author>';
-		$expected .= '<creationDate>August 2014</creationDate>';
-		$expected .= '<copyright>(C) 2014 Test. All rights reserved.</copyright>';
-		$expected .= '<license>GNU General Public License version 2 or later; see LICENSE.txt</license>';
-		$expected .= '<fileset>';
-		$expected .= '<files folder="dir">';
-		$expected .= '<filename>foo.txt</filename>';
-		$expected .= '</files>';
-		$expected .= '</fileset>';
-		$expected .= '</extension>';
-
-		$this->assertXmlStringEqualsXmlString($expected, (string) $this->manifest);
+		return $this;
 	}
 
+	/**
+	 * Add a file to the section
+	 *
+	 * @param FileSection $files      The file section
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function addFileset(FileSection $files)
+	{
+		$element = $files->getAttributes();
+		$element['files'] = $files->getStructure();
+
+		$this->filesets[] = $element;
+
+		return $this;
+	}
+
+	/**
+	 * Remove a file from the section
+	 *
+	 * @param string $filename   The name of the file
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function removeFile($filename)
+	{
+		foreach ($this->filesets as $key => $element)
+		{
+			if ($element['filename'] == $filename)
+			{
+				unset($this->filesets[$key]);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Getter and setter
+	 */
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the section structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		return $this->filesets;
+	}
+
+	/**
+	 * Get the attributes for the section
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return array();
+	}
 }

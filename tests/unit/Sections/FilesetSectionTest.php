@@ -44,17 +44,17 @@
  */
 
 /**
- * File Manifest Tests
+ * Fileset Section Tests
  *
  * @package    GreenCape\Manifest
  * @subpackage Unittests
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class FileManifestTest extends PHPUnit_Framework_TestCase
+class FilesetSectionTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var GreenCape\Manifest\FilesetSection */
+	private $section = null;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -62,7 +62,7 @@ class FileManifestTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\FileManifest();
+		$this->section = new \GreenCape\Manifest\FilesetSection();
 	}
 
 	/**
@@ -71,53 +71,63 @@ class FileManifestTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function tearDown()
 	{
-	}
-
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
-
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('file', $this->manifest->getType());
+		unset($this->section);
 	}
 
 	/**
 	 * Issue #9: File manifest: fileset is not supported
 	 */
-	public function testAddFileset()
+	public function testAddFileSection()
 	{
-		$this->manifest
-			->setAuthor('Test')
-			->setCreationDate('August 2014')
-			->setCopyright('2014', 'Test', false);
-
-		$section = new \GreenCape\Manifest\FilesetSection();
-
 		$files = new \GreenCape\Manifest\FileSection();
 		$files
 			->setBase('dir')
 			->addFile('foo.txt');
 
-		$section->addFileset($files);
-
-		$this->manifest->addSection('fileset', $section);
+		$this->section->addFileset($files);
+		$xml = new \GreenCape\Xml\Converter(array('fileset' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<extension method="install" type="file" version="2.5">';
-		$expected .= '<author>Test</author>';
-		$expected .= '<creationDate>August 2014</creationDate>';
-		$expected .= '<copyright>(C) 2014 Test. All rights reserved.</copyright>';
-		$expected .= '<license>GNU General Public License version 2 or later; see LICENSE.txt</license>';
 		$expected .= '<fileset>';
 		$expected .= '<files folder="dir">';
 		$expected .= '<filename>foo.txt</filename>';
 		$expected .= '</files>';
 		$expected .= '</fileset>';
-		$expected .= '</extension>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $this->manifest);
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
 
+	/**
+	 * Issue #9: File manifest: fileset is not supported
+	 */
+	public function testAddMultipleFileSections()
+	{
+		$files = new \GreenCape\Manifest\FileSection();
+		$files
+			->setBase('dir')
+			->addFile('foo.txt');
+
+		$this->section->addFileset($files);
+
+		$files = new \GreenCape\Manifest\FileSection();
+		$files
+			->setBase('another/dir')
+			->addFile('bar.txt');
+
+		$this->section->addFileset($files);
+
+		$xml = new \GreenCape\Xml\Converter(array('fileset' => $this->section->getStructure()));
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<fileset>';
+		$expected .= '<files folder="dir">';
+		$expected .= '<filename>foo.txt</filename>';
+		$expected .= '</files>';
+		$expected .= '<files folder="another/dir">';
+		$expected .= '<filename>bar.txt</filename>';
+		$expected .= '</files>';
+		$expected .= '</fileset>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
 }
