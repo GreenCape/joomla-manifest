@@ -211,13 +211,15 @@ abstract class Manifest implements Section
 				throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
 			}
 			$this->$method($value);
-
-			unset($xml[$key]);
 		}
 
-		// Get children; in fact, only 'extension' => Array is left
-		foreach ($xml as $root)
+		// Get children
+		foreach ($xml as $tag => $root)
 		{
+			if ($tag[0] == '@')
+			{
+				continue;
+			}
 			foreach ((array) $root as $section)
 			{
 				$key = $value = null;

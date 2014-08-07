@@ -192,4 +192,25 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 
 		$this->assertRegExp('~\<media folder="media" destination="com_foo">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</media>~sm', (string) $this->manifest);
 	}
+
+	/**
+	 * Issue #4: method attribute is always set to 'install'
+	 */
+	public function testMethodAttributeIsImportedCorrectly()
+	{
+
+		$xml = GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#3.xml');
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<extension type="component" version="1.6" method="upgrade">';
+		$expected .= '<name>com_alpha</name>';
+		$expected .= '<author>John Doe</author>';
+		$expected .= '<creationDate>March 2006</creationDate>';
+		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+		$expected .= '<license>License Info</license>';
+		$expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
+		$expected .= '</extension>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
 }
