@@ -53,6 +53,15 @@ namespace GreenCape\Manifest;
  */
 class LibraryManifest extends Manifest
 {
+	/** @var  string Name of the library */
+	private $libraryname;
+
+	/** @var  string Name of the packager */
+	private $packager;
+
+	/** @var  string URL of the packager */
+	private $packagerurl;
+
 	/**
 	 * Constructor
 	 *
@@ -66,5 +75,101 @@ class LibraryManifest extends Manifest
 		{
 			$this->set($xml);
 		}
+	}
+
+	/**
+	 * Getter and Setter
+	 */
+
+	/**
+	 * Get the name of the library
+	 *
+	 * @return string Name of the library
+	 */
+	public function getLibraryName()
+	{
+		return $this->libraryname;
+	}
+
+	/**
+	 * Set the name of the library
+	 *
+	 * @param string $libraryName Name of the library
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setLibraryName($libraryName)
+	{
+		$this->libraryname = $libraryName;
+
+		return $this;
+	}
+
+	/**
+	 * Get the name of the packager
+	 *
+	 * @return string Name of the packager
+	 */
+	public function getPackager()
+	{
+		return $this->packager;
+	}
+
+	/**
+	 * Set the name of the packager
+	 *
+	 * @param string $packagerName Name of the packager
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setPackager($packagerName)
+	{
+		$this->packager = $packagerName;
+
+		return $this;
+	}
+
+	/**
+	 * Get the URL of the packager
+	 *
+	 * @return string URL of the packager
+	 */
+	public function getPackagerUrl()
+	{
+		return $this->packagerurl;
+	}
+
+	/**
+	 * Set the URL of the packager
+	 *
+	 * @param string $packagerUrl URL of the packager
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setPackagerUrl($packagerUrl)
+	{
+		$this->packagerurl = $packagerUrl;
+
+		return $this;
+	}
+
+	/**
+	 * Section interface
+	 */
+
+	/**
+	 * Get the manifest structure
+	 *
+	 * @return array
+	 */
+	public function getStructure()
+	{
+		$data = parent::getStructure();
+
+		$this->addElement($data['extension'], 'libraryname');
+		$this->addElement($data['extension'], 'packager');
+		$this->addElement($data['extension'], 'packagerurl');
+
+		return $data;
 	}
 }

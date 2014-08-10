@@ -223,6 +223,8 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 			array('language', 'xx-XX.xml', 'metafile'),
 			array('template', 'templateDetails.xml', 'extension'),
 			array('file', 'file.xml', 'extension'),
+			array('library', 'library.xml', 'extension'),
+			array('package', 'pkg_joomla.xml', 'extension'),
 		);
 	}
 
@@ -239,7 +241,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$demoClass = ucfirst($demo) . 'ManifestDemo';
 		ob_start();
 		include_once __DIR__ . '/../../demo/' . $demoFile;
-		ob_clean();
+		ob_get_clean();
 
 		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../data/'. $xml);
 		$this->sort($expected->data[$rootTag]);

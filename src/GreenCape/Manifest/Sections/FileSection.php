@@ -62,6 +62,9 @@ class FileSection implements Section
 	/** @var array The folder list */
 	protected $folders = array();
 
+	/** @var string The tag for the file entries */
+	protected $fileTag = 'filename';
+
 	/**
 	 * Constructor
 	 *
@@ -134,7 +137,7 @@ class FileSection implements Section
 	 */
 	public function addFile($filename, $attributes = array())
 	{
-		$element = array('filename' => $filename);
+		$element = array($this->fileTag => $filename);
 		foreach ($attributes as $key => $value)
 		{
 			$element["@{$key}"] = (string) $value;
@@ -207,6 +210,30 @@ class FileSection implements Section
 	/**
 	 * Getter and setter
 	 */
+
+	/**
+	 * Get the tag for the file entries
+	 *
+	 * @return string The tag for the file entries
+	 */
+	public function getFileTag()
+	{
+		return $this->fileTag;
+	}
+
+	/**
+	 * Set the tag for the file entries
+	 *
+	 * @param string $fileTag The tag for the file entries
+	 *
+	 * @return $this This object, to provide a fluent interface
+	 */
+	public function setFileTag($fileTag)
+	{
+		$this->fileTag = $fileTag;
+
+		return $this;
+	}
 
 	/**
 	 * Get the base folder within the distribution package (zip file)
