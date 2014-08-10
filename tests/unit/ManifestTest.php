@@ -268,4 +268,26 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 			return $nameA < $nameB ? -1 : 1;
 		});
 	}
+
+	/**
+	 * Issue #2: Line feeds in data fields should be removed
+	 */
+	public function testLineFeedsInDataFieldsAreRemoved()
+	{
+
+		$xml = GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#2.xml');
+
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
+		$expected .= '<extension type="component" version="1.6" method="upgrade">';
+		$expected .= '<name>com_alpha</name>';
+		$expected .= '<author>John Doe</author>';
+		$expected .= '<creationDate>March 2006</creationDate>';
+		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+		$expected .= '<license>License Info</license>';
+		$expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
+		$expected .= '</extension>';
+
+		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+	}
+
 }

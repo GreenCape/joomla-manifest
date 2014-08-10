@@ -203,7 +203,11 @@ abstract class Manifest implements Section
 				continue;
 			}
 
-			$attribute = substr($key, 1);
+			$attribute = trim(substr($key, 1));
+			if (empty($attribute))
+			{
+				continue;
+			}
 			if ($attribute == 'version')
 			{
 				$attribute = 'target';
@@ -238,7 +242,7 @@ abstract class Manifest implements Section
 					case 'copyright':
 						if (preg_match('~^\D*(\d{4})[ \d-]+(.*?)(?:\.?\s+All rights reserved\.)?$~', $value, $match))
 						{
-							$this->setCopyright($match[1], $match[2]);
+							$this->setCopyright($match[1], preg_replace('~\s+~', ' ', trim($match[2])));
 						}
 						break;
 
@@ -396,7 +400,7 @@ abstract class Manifest implements Section
 	 */
 	protected function addElement(&$data, $key)
 	{
-		$value = call_user_func(array($this, 'get' . ucfirst($key)));
+		$value = preg_replace('~\s+~', ' ', call_user_func(array($this, 'get' . ucfirst($key))));
 		if (!empty($value))
 		{
 			$data[] = array($key => $value);
