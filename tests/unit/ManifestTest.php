@@ -290,4 +290,10 @@ class ManifestTest extends PHPUnit_Framework_TestCase
 		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
 	}
 
+	public function testGetSection()
+	{
+		$manifest = GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
+
+		$this->assertInstanceOf('\\GreenCape\\Manifest\\FileSection', $manifest->getSection('files'));
+	}
 }

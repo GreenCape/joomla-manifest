@@ -285,6 +285,18 @@ abstract class Manifest implements Section
 	}
 
 	/**
+	 * Get a section from the manifest
+	 *
+	 * @param string $tag The tag of the section
+	 *
+	 * @return Section The content of the section
+	 */
+	public function getSection($tag)
+	{
+		return $this->sections[$tag];
+	}
+
+	/**
 	 * Remove a section from the manifest
 	 *
 	 * @param string $tag The tag of the section
