@@ -39,6 +39,9 @@ namespace GreenCape\Manifest;
  */
 class SqlSection implements Section
 {
+	protected $elementIndex;
+	protected $driverIndex;
+	protected $structureIndex;
 	/** @var array The file list */
 	protected $files = array();
 
@@ -49,6 +52,10 @@ class SqlSection implements Section
 	 */
 	public function __construct($data = null)
 	{
+		$this->structureIndex = 'sql';
+		$this->driverIndex  = '@driver';
+		$this->elementIndex = 'file';
+
 		if (!is_null($data))
 		{
 			$this->set($data);
@@ -79,13 +86,13 @@ class SqlSection implements Section
 
 				continue;
 			}
-			if (isset($value['sql'][0]))
+			if (isset($value[$this->structureIndex][0]))
 			{
-				$this->files = $value['sql'];
+				$this->files = $value[$this->structureIndex];
 			}
 			else
 			{
-				$this->files[] = $value['sql'];
+				$this->files[] = $value[$this->structureIndex];
 			}
 		}
 
@@ -103,8 +110,8 @@ class SqlSection implements Section
 	 */
 	public function addFile($driver, $filename, $attributes = array())
 	{
-		$element            = array('file' => $filename);
-		$element['@driver'] = (string) $driver;
+		$element            = array($this->elementIndex => $filename);
+		$element[$this->driverIndex] = (string) $driver;
 		foreach ($attributes as $key => $value)
 		{
 			$element["@{$key}"] = (string) $value;
@@ -125,7 +132,7 @@ class SqlSection implements Section
 	{
 		foreach ($this->files as $key => $element)
 		{
-			if ($element['file'] == $filename)
+			if ($element[$this->elementIndex] == $filename)
 			{
 				unset($this->files[$key]);
 			}
@@ -152,7 +159,7 @@ class SqlSection implements Section
 			$structure[] = $file;
 		}
 
-		return array('sql' =>$structure);
+		return array($this->structureIndex => $structure);
 	}
 
 	/**

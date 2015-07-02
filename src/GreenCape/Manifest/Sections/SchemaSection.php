@@ -37,10 +37,13 @@ namespace GreenCape\Manifest;
  * @author  Niels Braczek <nbraczek@bsds.de>
  * @since   Class available since Release 0.1.0
  */
-class SchemaSection implements Section
+class SchemaSection extends SqlSection
 {
+	protected $elementIndex;
+	protected $driverIndex;
+	protected $structureIndex;
 	/** @var array The file list */
-	protected $folders = array();
+	protected $files = array();
 
 	/**
 	 * Constructor
@@ -49,47 +52,14 @@ class SchemaSection implements Section
 	 */
 	public function __construct($data = null)
 	{
+		$this->structureIndex = 'schemas';
+		$this->driverIndex  = '@type';
+		$this->elementIndex = 'schemapath';
+
 		if (!is_null($data))
 		{
 			$this->set($data);
 		}
-	}
-
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if ($key[0] == '@')
-			{
-				$attribute = substr($key, 1);
-				$method = 'set' . ucfirst($attribute);
-				if (!is_callable(array($this, $method)))
-				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
-				}
-				$this->$method($value);
-
-				continue;
-			}
-			if (isset($value['schemas'][0]))
-			{
-				$this->folders = $value['schemas'];
-			}
-			else
-			{
-				$this->folders[] = $value['schemas'];
-			}
-		}
-
-		return $this;
 	}
 
 	/**
@@ -103,13 +73,7 @@ class SchemaSection implements Section
 	 */
 	public function addFolder($driver, $folder, $attributes = array())
 	{
-		$element       = array('schemapath' => $folder);
-		$element['@type'] = (string) $driver;
-		foreach ($attributes as $key => $value)
-		{
-			$element["@{$key}"] = (string) $value;
-		}
-		$this->folders[] = $element;
+		parent::addFile($driver, $folder, $attributes);
 
 		return $this;
 	}
@@ -123,45 +87,8 @@ class SchemaSection implements Section
 	 */
 	public function removeFolder($folder)
 	{
-		foreach ($this->folders as $key => $element)
-		{
-			if ($element['schemapath'] == $folder)
-			{
-				unset($this->folders[$key]);
-			}
-		}
+		parent::removeFile($folder);
 
 		return $this;
-	}
-
-	/**
-	 * Section interface
-	 */
-
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
-
-		foreach ($this->folders as $folder)
-		{
-			$structure[] = $folder;
-		}
-
-		return array('schemas' =>$structure);
-	}
-
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
 	}
 }
