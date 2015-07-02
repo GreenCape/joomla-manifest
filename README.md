@@ -1,7 +1,10 @@
+# Joomla Manifest
+
+![SensioLabsInsight](https://insight.sensiolabs.com/projects/073a6430-a4e1-4191-886e-78dfa07e8dd7/mini.png)
+[![Code Climate](https://codeclimate.com/github/GreenCape/joomla-manifest/badges/gpa.svg)](https://codeclimate.com/github/GreenCape/joomla-manifest)
+[![Test Coverage](https://codeclimate.com/github/GreenCape/joomla-manifest/badges/coverage.svg)](https://codeclimate.com/github/GreenCape/joomla-manifest/coverage)
 [![Latest Stable Version](https://poser.pugx.org/greencape/joomla-manifest/v/stable.png)](https://packagist.org/packages/greencape/joomla-manifest)
 [![Build Status](https://api.travis-ci.org/GreenCape/joomla-manifest.svg?branch=master)](https://travis-ci.org/greencape/joomla-manifest)
-
-# Joomla Manifest
 
 `joomla-manifest` is a class library for handling Joomla! extension manifest files.
 

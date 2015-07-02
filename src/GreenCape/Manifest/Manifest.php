@@ -127,7 +127,6 @@ abstract class Manifest implements Section
 		'languages'     => 'LanguageSection',
 		'media'         => 'MediaSection',
 		'updateservers' => 'ServerSection',
-		/** @todo Implement ConfigSection covering both params and config */
 		'params'        => 'VerbatimSection',
 		'config'        => 'VerbatimSection',
 	);

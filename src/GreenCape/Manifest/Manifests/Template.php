@@ -66,7 +66,6 @@ class TemplateManifest extends Manifest
 	public function __construct($xml = null)
 	{
 		$this->type = 'template';
-		/** @todo Implement PositionSection */
 		$this->map['positions']      = 'VerbatimSection';
 
 		// Legacy Joomla! 1.5 sections
