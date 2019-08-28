@@ -43,24 +43,7 @@ class SchemaSection extends SqlSection
 	protected $driverIndex;
 	protected $structureIndex;
 	/** @var array The file list */
-	protected $files = array();
-
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		$this->structureIndex = 'schemas';
-		$this->driverIndex  = '@type';
-		$this->elementIndex = 'schemapath';
-
-		if (!is_null($data))
-		{
-			$this->set($data);
-		}
-	}
+	protected $files = [];
 
 	/**
 	 * Add a folder to the section
@@ -73,7 +56,7 @@ class SchemaSection extends SqlSection
 	 */
 	public function addFolder($driver, $folder, $attributes = array())
 	{
-		parent::addFile($driver, $folder, $attributes);
+		$this->addFile($driver, $folder, $attributes);
 
 		return $this;
 	}
@@ -87,7 +70,7 @@ class SchemaSection extends SqlSection
 	 */
 	public function removeFolder($folder)
 	{
-		parent::removeFile($folder);
+		$this->removeFile($folder);
 
 		return $this;
 	}

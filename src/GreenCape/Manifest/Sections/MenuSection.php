@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Menu Section
  *
@@ -47,10 +49,11 @@ class MenuSection implements Section
 	 * Constructor
 	 *
 	 * @param array $menu Optional XML structure to preset the manifest
+	 * @param null  $submenu
 	 */
 	public function __construct($menu = null, $submenu = null)
 	{
-		if (!is_null($menu))
+		if ($menu !== null)
 		{
 			$this->set($menu, $submenu);
 		}
@@ -63,7 +66,7 @@ class MenuSection implements Section
 	 * @param array $submenu
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($menu, $submenu)
 	{

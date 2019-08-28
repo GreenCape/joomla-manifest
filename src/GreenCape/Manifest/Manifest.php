@@ -30,7 +30,10 @@
 
 namespace GreenCape\Manifest;
 
+use BadMethodCallException;
 use GreenCape\Xml\Converter;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 /**
  * Class Manifest
@@ -49,7 +52,7 @@ abstract class Manifest implements Section
 	 * @var string This attribute describes the type of the extension for the installer.
 	 *             Based on this type further requirements to sub-tags apply.
 	 */
-	protected $type = null;
+	protected $type;
 
 	/**
 	 * @var string String that identifies the version of Joomla for which this extension is developed.
@@ -122,13 +125,13 @@ abstract class Manifest implements Section
 	 */
 
 	/** @var string Install file, deprecated in 1.6 */
-	protected $installFile = null;
+	protected $installFile;
 
 	/** @var string Uninstall file, deprecated in 1.6 */
-	protected $uninstallFile = null;
+	protected $uninstallFile;
 
 	/** @var string Install/update/uninstall file, new in 1.6 */
-	protected $scriptFile = null;
+	protected $scriptFile;
 
 	/**
 	 * Magic methods
@@ -162,9 +165,8 @@ abstract class Manifest implements Section
 		$xml = new Converter($file);
 		$type = empty($xml['@type']) ? 'language' : $xml['@type'];
 		$classname = '\\GreenCape\\Manifest\\' . ucfirst($type) . 'Manifest';
-		$manifest = new $classname($xml);
 
-		return $manifest;
+		return new $classname($xml);
 	}
 
 	/**
@@ -173,7 +175,7 @@ abstract class Manifest implements Section
 	 * @param Converter $xml
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set(Converter $xml)
 	{
@@ -183,7 +185,7 @@ abstract class Manifest implements Section
 		// Get attributes
 		foreach ($xml as $key => $value)
 		{
-			if ($key[0] != '@')
+			if ($key[0] !== '@')
 			{
 				continue;
 			}
@@ -193,14 +195,14 @@ abstract class Manifest implements Section
 			{
 				continue;
 			}
-			if ($attribute == 'version')
+			if ($attribute === 'version')
 			{
 				$attribute = 'target';
 			}
 			$method = 'set' . ucfirst($attribute);
 			if (!is_callable(array($this, $method)))
 			{
-				throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+				throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 			}
 			$this->$method($value);
 		}
@@ -208,7 +210,7 @@ abstract class Manifest implements Section
 		// Get children
 		foreach ($xml as $tag => $root)
 		{
-			if ($tag[0] == '@')
+			if (strpos($tag, '@') === 0)
 			{
 				continue;
 			}
@@ -217,39 +219,36 @@ abstract class Manifest implements Section
 				$key = $value = null;
 				foreach ((array) $section as $key => $value)
 				{
-					if ($key[0] != '@' && $key[0] != '#')
+					if ($key[0] !== '@' && $key[0] !== '#')
 					{
 						break;
 					}
 				}
-				switch ($key)
+				if ($key === 'copyright')
 				{
-					case 'copyright':
-						if (preg_match('~^\D*(\d{4})[ \d-]+(.*?)(?:\.?\s+All rights reserved\.)?$~', $value, $match))
-						{
-							$this->setCopyright($match[1], preg_replace('~\s+~', ' ', trim($match[2])));
-						}
+					if (preg_match('~^\D*(\d{4})[ \d-]+(.*?)(?:\.?\s+All rights reserved\.)?$~', $value, $match))
+					{
+						$this->setCopyright($match[1], preg_replace('~\s+~', ' ', trim($match[2])));
+					}
+				}
+				else
+				{
+					if (isset($this->map[$key]))
+					{
+						$classname = '\\GreenCape\\Manifest\\' . $this->map[$key];
+						$this->removeSection($key);
+						$this->addSection($key, new $classname($section));
 						break;
-
-					default:
-						if (isset($this->map[$key]))
-						{
-							$classname = '\\GreenCape\\Manifest\\' . $this->map[$key];
-							$this->removeSection($key);
-							$this->addSection($key, new $classname($section));
-							break;
-						}
-						$method = 'set' . ucfirst($key);
-						if (!is_callable(array($this, $method)))
-						{
-							throw new \UnexpectedValueException("Can't handle section '$key'");
-						}
-						$this->$method($value);
-						break;
+					}
+					$method = 'set' . ucfirst($key);
+					if (!is_callable(array($this, $method)))
+					{
+						throw new UnexpectedValueException("Can't handle section '$key'");
+					}
+					$this->$method($value);
 				}
 			}
 		}
-		unset($xml);
 
 		return $this;
 	}
@@ -397,7 +396,7 @@ abstract class Manifest implements Section
 	 */
 	protected function addElement(&$data, $key)
 	{
-		$value = preg_replace('~\s+~', ' ', call_user_func(array($this, 'get' . ucfirst($key))));
+		$value = preg_replace('~\s+~', ' ', $this->{'get' . ucfirst($key)}());
 		if (!empty($value))
 		{
 			$data[] = array($key => $value);
@@ -423,11 +422,11 @@ abstract class Manifest implements Section
 	 * Manifest type cannot be set
 	 * Method is included for symmetry reasons.
 	 *
-	 * @throws \BadMethodCallException
+	 * @throws BadMethodCallException
 	 */
 	public function setType()
 	{
-		throw new \BadMethodCallException('Manifest type cannot be set.');
+		throw new BadMethodCallException('Manifest type cannot be set.');
 	}
 
 	/**
@@ -474,14 +473,14 @@ abstract class Manifest implements Section
 	 *                       if it finds any existing file/folder of the new extension.
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	public function setMethod($method)
 	{
 		$allowed = array('install', 'upgrade');
-		if (!in_array($method, $allowed))
+		if (!in_array($method, $allowed, true))
 		{
-			throw new \InvalidArgumentException('Method must be one of ' . implode('|', $allowed) . '.');
+			throw new InvalidArgumentException('Method must be one of ' . implode('|', $allowed) . '.');
 		}
 		$this->method = $method;
 
@@ -615,7 +614,7 @@ abstract class Manifest implements Section
 		{
 			$this->creationDate = $year;
 		}
-		if ($createRange && $this->copyrightYear != date('Y'))
+		if ($createRange && $this->copyrightYear !== date('Y'))
 		{
 			$this->copyrightYear .= ' - ' . date('Y');
 		}

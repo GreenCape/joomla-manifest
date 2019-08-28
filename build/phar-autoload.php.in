@@ -1,5 +1,8 @@
 #!/usr/bin/env php
 <?php
+
+use GreenCape\JoomlaCLI\Application;
+
 if ($_SERVER['SCRIPT_NAME'] != '-') {
     $phar = realpath($_SERVER['SCRIPT_NAME']);
 } else {
@@ -11,7 +14,7 @@ define('__JOOMLACLI_PHAR__', str_replace(DIRECTORY_SEPARATOR, '/', $phar));
 define('__JOOMLACLI_PHAR_ROOT__', 'phar://___PHAR___');
 
 spl_autoload_register(
-  function ($class)
+  static function ($class)
   {
       static $classes = NULL;
 
@@ -36,7 +39,7 @@ if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '--manifest') {
     exit;
 }
 
-$console = new \GreenCape\JoomlaCLI\Application();
+$console = new Application();
 $console->run();
 
 __HALT_COMPILER();

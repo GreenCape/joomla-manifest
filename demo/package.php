@@ -43,6 +43,9 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\PackageManifest;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -55,7 +58,7 @@ class PackageManifestDemo
 	public static function getManifest()
 	{
 		// Create the package manifest
-		$manifest = new \GreenCape\Manifest\PackageManifest();
+		$manifest = new PackageManifest();
 
 		// Meta data
 		$manifest
@@ -76,7 +79,7 @@ class PackageManifestDemo
 			;
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 
 		$manifest->addSection('files', $files);
 
@@ -84,4 +87,5 @@ class PackageManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) PackageManifestDemo::getManifest());

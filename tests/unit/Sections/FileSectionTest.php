@@ -31,6 +31,10 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Xml\Converter;
+use PHPUnit_Framework_TestCase;
+
 /**
  * File Section Tests
  *
@@ -39,10 +43,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class FileSectionTest extends \PHPUnit_Framework_TestCase
+class FileSectionTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\FileSection */
-	private $section = null;
+	/** @var FileSection */
+	private $section;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +54,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->section = new \GreenCape\Manifest\FileSection();
+		$this->section = new FileSection();
 	}
 
 	/**
@@ -65,7 +69,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 	public function testAddFile()
 	{
 		$this->section->addFile('foo.txt');
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -78,7 +82,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 	public function testAddFileWithAttribute()
 	{
 		$this->section->addFile('foo.txt', array('plugin' => 'foo'));
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -91,7 +95,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 	public function testAddFolder()
 	{
 		$this->section->addFolder('foo');
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -108,7 +112,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 		$this->section->addFolder('foo');
 		$this->section->addFolder('bar');
 
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -127,7 +131,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 		$this->section->addFile('bar.txt');
 		$this->section->removeFile('foo.txt');
 
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';
@@ -143,7 +147,7 @@ class FileSectionTest extends \PHPUnit_Framework_TestCase
 		$this->section->addFolder('bar');
 		$this->section->removeFolder('foo');
 
-		$xml = new \GreenCape\Xml\Converter(array('files' => $this->section->getStructure()));
+		$xml = new Converter(array('files' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<files>';

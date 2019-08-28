@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Library Manifest
  *
@@ -40,24 +42,24 @@ namespace GreenCape\Manifest;
 class LibraryManifest extends Manifest
 {
 	/** @var  string Name of the library */
-	private $libraryname;
+	private $libraryName;
 
 	/** @var  string Name of the packager */
 	private $packager;
 
 	/** @var  string URL of the packager */
-	private $packagerurl;
+	private $packagerUrl;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'library';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}
@@ -74,7 +76,7 @@ class LibraryManifest extends Manifest
 	 */
 	public function getLibraryName()
 	{
-		return $this->libraryname;
+		return $this->libraryName;
 	}
 
 	/**
@@ -86,7 +88,7 @@ class LibraryManifest extends Manifest
 	 */
 	public function setLibraryName($libraryName)
 	{
-		$this->libraryname = $libraryName;
+		$this->libraryName = $libraryName;
 
 		return $this;
 	}
@@ -122,7 +124,7 @@ class LibraryManifest extends Manifest
 	 */
 	public function getPackagerUrl()
 	{
-		return $this->packagerurl;
+		return $this->packagerUrl;
 	}
 
 	/**
@@ -134,7 +136,7 @@ class LibraryManifest extends Manifest
 	 */
 	public function setPackagerUrl($packagerUrl)
 	{
-		$this->packagerurl = $packagerUrl;
+		$this->packagerUrl = $packagerUrl;
 
 		return $this;
 	}
@@ -152,9 +154,9 @@ class LibraryManifest extends Manifest
 	{
 		$data = parent::getStructure();
 
-		$this->addElement($data['extension'], 'libraryname');
+		$this->addElement($data['extension'], 'libraryName');
 		$this->addElement($data['extension'], 'packager');
-		$this->addElement($data['extension'], 'packagerurl');
+		$this->addElement($data['extension'], 'packagerUrl');
 
 		return $data;
 	}

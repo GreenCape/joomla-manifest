@@ -31,6 +31,12 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\FileManifest;
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\FilesetSection;
+use GreenCape\Manifest\Manifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * File Manifest Tests
  *
@@ -39,10 +45,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class FileManifestTest extends \PHPUnit_Framework_TestCase
+class FileManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var Manifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +56,7 @@ class FileManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\FileManifest();
+		$this->manifest = new FileManifest();
 	}
 
 	/**
@@ -81,9 +87,9 @@ class FileManifestTest extends \PHPUnit_Framework_TestCase
 			->setCreationDate('August 2014')
 			->setCopyright('2014', 'Test', false);
 
-		$section = new \GreenCape\Manifest\FilesetSection();
+		$section = new FilesetSection();
 
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('dir')
 			->addFile('foo.txt');

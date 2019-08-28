@@ -43,6 +43,12 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\LanguageSection;
+use GreenCape\Manifest\ModuleManifest;
+use GreenCape\Manifest\SchemaSection;
+use GreenCape\Manifest\SqlSection;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -58,7 +64,7 @@ class ModuleManifestDemo
 	public static function getManifest()
 	{
 		// Create the module manifest
-		$manifest = new \GreenCape\Manifest\ModuleManifest();
+		$manifest = new ModuleManifest();
 
 		// Meta data
 		$manifest
@@ -81,26 +87,26 @@ class ModuleManifestDemo
 			->setScriptFile('alpha.scriptfile.php');
 
 		// SQL files
-		$install = new \GreenCape\Manifest\SqlSection();
+		$install = new SqlSection();
 		$install
 			->addFile('mysql', 'sql/install.mysql.utf8.sql', array('charset' => 'utf8'));
 
 		$manifest->addSection('install', $install);
 
-		$uninstall = new \GreenCape\Manifest\SqlSection();
+		$uninstall = new SqlSection();
 		$uninstall
 			->addFile('mysql', 'sql/uninstall.mysql.utf8.sql', array('charset' => 'utf8'));
 
 		$manifest->addSection('uninstall', $uninstall);
 
-		$update = new \GreenCape\Manifest\SchemaSection();
+		$update = new SchemaSection();
 		$update
 			->addFolder('mysql', 'sql/updates/mysql');
 
 		$manifest->addSection('update', $update);
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->addFile('mod_alpha.php', array('module' => 'mod_alpha'))
 			->addFolder('sql');
@@ -108,7 +114,7 @@ class ModuleManifestDemo
 		$manifest->addSection('files', $files);
 
 		// Front-end language (legacy 1.5 support)
-		$language = new \GreenCape\Manifest\LanguageSection();
+		$language = new LanguageSection();
 		$language
 			->addFile('en-GB', 'en-GB.mod_alpha.ini');
 
@@ -118,4 +124,5 @@ class ModuleManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) ModuleManifestDemo::getManifest());

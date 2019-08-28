@@ -31,6 +31,9 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\LanguageManifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Language Manifest Tests
  *
@@ -39,10 +42,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class LanguageManifestTest extends \PHPUnit_Framework_TestCase
+class LanguageManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\LanguageManifest */
-	private $manifest = null;
+	/** @var LanguageManifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +53,7 @@ class LanguageManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\LanguageManifest();
+		$this->manifest = new LanguageManifest();
 	}
 
 	/**

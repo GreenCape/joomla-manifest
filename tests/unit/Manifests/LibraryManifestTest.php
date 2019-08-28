@@ -31,6 +31,10 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\LibraryManifest;
+use GreenCape\Manifest\Manifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Library Manifest Tests
  *
@@ -39,10 +43,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class LibraryManifestTest extends \PHPUnit_Framework_TestCase
+class LibraryManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var Manifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +54,7 @@ class LibraryManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\LibraryManifest();
+		$this->manifest = new LibraryManifest();
 	}
 
 	/**

@@ -43,6 +43,18 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\AdminSection;
+use GreenCape\Manifest\ComponentManifest;
+use GreenCape\Manifest\DependencySection;
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\LanguageSection;
+use GreenCape\Manifest\MediaSection;
+use GreenCape\Manifest\MenuSection;
+use GreenCape\Manifest\SchemaSection;
+use GreenCape\Manifest\ServerSection;
+use GreenCape\Manifest\SqlSection;
+use GreenCape\Manifest\TableSection;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -58,7 +70,7 @@ class ComponentManifestDemo
 	public static function getManifest()
 	{
 		// Create the component manifest
-		$manifest = new \GreenCape\Manifest\ComponentManifest();
+		$manifest = new ComponentManifest();
 
 		// Meta data
 		$manifest
@@ -80,19 +92,19 @@ class ComponentManifestDemo
 			->setScriptFile('file.script.php');
 
 		// SQL files
-		$install = new \GreenCape\Manifest\SqlSection();
+		$install = new SqlSection();
 		$install
 			->addFile('mysql', 'sql/install.mysql.utf8.sql', array('charset' => 'utf8'));
 
 		$manifest->addSection('install', $install);
 
-		$uninstall = new \GreenCape\Manifest\SqlSection();
+		$uninstall = new SqlSection();
 		$uninstall
 			->addFile('mysql', 'sql/uninstall.mysql.utf8.sql', array('charset' => 'utf8', 'folder' => 'sql'));
 
 		$manifest->addSection('uninstall', $uninstall);
 
-		$update = new \GreenCape\Manifest\SchemaSection();
+		$update = new SchemaSection();
 		$update
 			->addFolder('mysql', 'sql/updates/mysql')
 			->addFolder('sqlsrv', 'sql/updates/sqlsrv');
@@ -100,7 +112,7 @@ class ComponentManifestDemo
 		$manifest->addSection('update', $update);
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('site')
 			->addFile('alpha.php');
@@ -108,7 +120,7 @@ class ComponentManifestDemo
 		$manifest->addSection('files', $files);
 
 		// Front-end language (legacy 1.5 support)
-		$language = new \GreenCape\Manifest\LanguageSection();
+		$language = new LanguageSection();
 		$language
 			->setBase('site')
 			->addFile('en-GB', 'language/en-GB/en-GB.com_alpha.ini');
@@ -116,7 +128,7 @@ class ComponentManifestDemo
 		$manifest->addSection('languages', $language);
 
 		// Media Files
-		$media = new \GreenCape\Manifest\MediaSection();
+		$media = new MediaSection();
 		$media
 			->setDestination('com_alpha')
 			->addFile('com_alpha.jpg');
@@ -124,14 +136,14 @@ class ComponentManifestDemo
 		$manifest->addSection('media', $media);
 
 		// Backend files
-		$menu = new \GreenCape\Manifest\MenuSection();
+		$menu = new MenuSection();
 		$menu
 			->setLabel('Alpha')
 			->setIcon('components/com_alpha/applications-internet-16.png')
 			->addMenu('Installer', 'option=com_installer')
 			->addMenu('Users', 'option=com_users');
 
-		$adminFiles = new \GreenCape\Manifest\FileSection();
+		$adminFiles = new FileSection();
 		$adminFiles
 			->setBase('admin')
 			->addFile('admin.alpha.php')
@@ -140,13 +152,13 @@ class ComponentManifestDemo
 			->addFile('applications-internet-16.png')
 			->addFolder('sql');
 
-		$adminLanguage = new \GreenCape\Manifest\LanguageSection();
+		$adminLanguage = new LanguageSection();
 		$adminLanguage
 			->setBase('admin/language')
 			->addFile('en-GB', 'en-GB/en-GB.com_alpha.ini')
 			->addFile('en-GB', 'en-GB/en-GB.com_alpha.sys.ini');
 
-		$admin = new \GreenCape\Manifest\AdminSection();
+		$admin = new AdminSection();
 		$admin
 			->setMenu($menu)
 			->setFiles($adminFiles)
@@ -155,7 +167,7 @@ class ComponentManifestDemo
 		$manifest->addSection('administration', $admin);
 
 		// Extension Update Specification
-		$server = new \GreenCape\Manifest\ServerSection();
+		$server = new ServerSection();
 		$server
 			->addServer(
 				'extension',
@@ -173,7 +185,7 @@ class ComponentManifestDemo
 		$manifest->addSection('updateservers', $server);
 
 		// Tables
-		$tables = new \GreenCape\Manifest\TableSection();
+		$tables = new TableSection();
 		$tables
 			->addTable('#__alpha_install')
 			->addTable('#__alpha_update', true);
@@ -181,7 +193,7 @@ class ComponentManifestDemo
 		$manifest->addSection('tables', $tables);
 
 		// Dependencies
-		$dependencies = new \GreenCape\Manifest\DependencySection();
+		$dependencies = new DependencySection();
 		$dependencies
 			->addDependency('platform', 'joomla', '=', '1.5');
 
@@ -191,4 +203,5 @@ class ComponentManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) ComponentManifestDemo::getManifest());

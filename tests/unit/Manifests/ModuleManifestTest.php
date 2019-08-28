@@ -31,6 +31,10 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\Manifest;
+use GreenCape\Manifest\ModuleManifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Module Manifest Tests
  *
@@ -39,10 +43,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class ModuleManifestTest extends \PHPUnit_Framework_TestCase
+class ModuleManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\ModuleManifest */
-	private $manifest = null;
+	/** @var ModuleManifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +54,7 @@ class ModuleManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\ModuleManifest();
+		$this->manifest = new ModuleManifest();
 	}
 
 	/**
@@ -108,8 +112,8 @@ class ModuleManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHelpIsSupported()
 	{
-		/** @var \GreenCape\Manifest\ModuleManifest $xml */
-		$xml = \GreenCape\Manifest\Manifest::load(__DIR__ . '/../../data/issue#11.xml');
+		/** @var ModuleManifest $xml */
+		$xml = Manifest::load(__DIR__ . '/../../data/issue#11.xml');
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<extension type="module" version="1.6" method="upgrade" client="site">';

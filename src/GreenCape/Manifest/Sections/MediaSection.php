@@ -40,20 +40,7 @@ namespace GreenCape\Manifest;
 class MediaSection extends FileSection
 {
 	/** @var string The destination folder in the installation */
-	protected $destination = null;
-
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		if (!is_null($data))
-		{
-			$this->set($data);
-		}
-	}
+	protected $destination;
 
 	/**
 	 * Getter and setter

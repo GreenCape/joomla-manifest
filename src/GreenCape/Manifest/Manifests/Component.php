@@ -31,6 +31,7 @@
 namespace GreenCape\Manifest;
 
 use \GreenCape\Xml\Converter;
+use UnexpectedValueException;
 
 /**
  * Component Manifest
@@ -53,7 +54,7 @@ class ComponentManifest extends Manifest
 		$this->map['tables']         = 'TableSection';
 		$this->map['dependencies']   = 'DependencySection';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}
@@ -65,7 +66,7 @@ class ComponentManifest extends Manifest
 	 * @param Converter $xml
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set(Converter $xml)
 	{

@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * File Section
  *
@@ -40,7 +42,7 @@ namespace GreenCape\Manifest;
 class FileSection implements Section
 {
 	/** @var string The base folder in the zip package */
-	protected $base = null;
+	protected $base;
 
 	/** @var array The file list */
 	protected $files = array();
@@ -58,7 +60,7 @@ class FileSection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -70,23 +72,23 @@ class FileSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$attribute = substr($key, 1);
-				if ($attribute == 'folder')
+				if ($attribute === 'folder')
 				{
 					$attribute = 'base';
 				}
 				$method = 'set' . ucfirst($attribute);
 				if (!is_callable(array($this, $method)))
 				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 				}
 				$this->$method($value);
 
@@ -144,7 +146,7 @@ class FileSection implements Section
 	{
 		foreach ($this->files as $key => $element)
 		{
-			if ($element['filename'] == $filename)
+			if ($element['filename'] === $filename)
 			{
 				unset($this->files[$key]);
 			}
@@ -184,7 +186,7 @@ class FileSection implements Section
 	{
 		foreach ($this->folders as $key => $element)
 		{
-			if ($element['folder'] == $folder)
+			if ($element['folder'] === $folder)
 			{
 				unset($this->folders[$key]);
 			}
@@ -302,7 +304,7 @@ class FileSection implements Section
 	 */
 	private function reTag($entry, $oldTag, $newTag)
 	{
-		if ($newTag == $oldTag)
+		if ($newTag === $oldTag)
 		{
 			return $entry;
 		}
@@ -310,7 +312,7 @@ class FileSection implements Section
 		$modifiedEntry = array();
 		foreach ($entry as $tag => $value)
 		{
-			if ($tag == $oldTag)
+			if ($tag === $oldTag)
 			{
 				$modifiedEntry[$newTag] = $value;
 			}

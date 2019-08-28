@@ -43,6 +43,12 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileManifest;
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\FilesetSection;
+use GreenCape\Manifest\SchemaSection;
+use GreenCape\Manifest\ServerSection;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -55,7 +61,7 @@ class FileManifestDemo
 	public static function getManifest()
 	{
 		// Create the file manifest
-		$manifest = new \GreenCape\Manifest\FileManifest();
+		$manifest = new FileManifest();
 
 		// Meta data
 		$manifest
@@ -76,7 +82,7 @@ class FileManifestDemo
 			->setScriptFile('administrator/components/com_admin/script.php');
 
 		// SQL files
-		$update = new \GreenCape\Manifest\SchemaSection();
+		$update = new SchemaSection();
 		$update
 			->addFolder('mysql', 'administrator/components/com_admin/sql/updates/mysql')
 			->addFolder('sqlsrv', 'administrator/components/com_admin/sql/updates/sqlsrv')
@@ -86,7 +92,7 @@ class FileManifestDemo
 		$manifest->addSection('update', $update);
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->addFolder('administrator')
 			->addFolder('cache')
@@ -109,14 +115,14 @@ class FileManifestDemo
 			->addFile('README.txt')
 			->addFile('index.php');
 
-		$fileset = new \GreenCape\Manifest\FilesetSection();
+		$fileset = new FilesetSection();
 		$fileset
 			->addFileset($files);
 
 		$manifest->addSection('fileset', $fileset);
 
 		// Extension Update Specification
-		$server = new \GreenCape\Manifest\ServerSection();
+		$server = new ServerSection();
 		$server
 			->addServer('collection', null, 'http://update.joomla.org/core/list.xml')
 			->addServer('collection', null, 'http://update.joomla.org/jed/list.xml');
@@ -127,4 +133,5 @@ class FileManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) FileManifestDemo::getManifest());

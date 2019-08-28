@@ -43,6 +43,12 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\LanguageSection;
+use GreenCape\Manifest\PluginManifest;
+use GreenCape\Manifest\SchemaSection;
+use GreenCape\Manifest\SqlSection;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -58,7 +64,7 @@ class PluginManifestDemo
 	public static function getManifest()
 	{
 		// Create the plugin manifest
-		$manifest = new \GreenCape\Manifest\PluginManifest();
+		$manifest = new PluginManifest();
 
 		// Meta data
 		$manifest
@@ -81,26 +87,26 @@ class PluginManifestDemo
 			->setScriptFile('alpha.scriptfile.php');
 
 		// SQL files
-		$install = new \GreenCape\Manifest\SqlSection();
+		$install = new SqlSection();
 		$install
 			->addFile('mysql', 'sql/install.mysql.utf8.sql', array('charset' => 'utf8'));
 
 		$manifest->addSection('install', $install);
 
-		$uninstall = new \GreenCape\Manifest\SqlSection();
+		$uninstall = new SqlSection();
 		$uninstall
 			->addFile('mysql', 'sql/uninstall.mysql.utf8.sql', array('charset' => 'utf8'));
 
 		$manifest->addSection('uninstall', $uninstall);
 
-		$update = new \GreenCape\Manifest\SchemaSection();
+		$update = new SchemaSection();
 		$update
 			->addFolder('mysql', 'sql/updates/mysql');
 
 		$manifest->addSection('update', $update);
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->addFile('alpha.php', array('plugin' => 'alpha'))
 			->addFolder('sql')
@@ -109,7 +115,7 @@ class PluginManifestDemo
 		$manifest->addSection('files', $files);
 
 		// Front-end language (legacy 1.5 support)
-		$language = new \GreenCape\Manifest\LanguageSection();
+		$language = new LanguageSection();
 		$language
 			->setBase('language')
 			->addFile('en-GB', 'admin/en-GB.plg_system_alpha.ini', array('client' => 'administrator'))
@@ -121,4 +127,5 @@ class PluginManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) PluginManifestDemo::getManifest());

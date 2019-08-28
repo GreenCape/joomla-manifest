@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Verbatim Section
  *
@@ -52,7 +54,7 @@ class VerbatimSection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -64,13 +66,13 @@ class VerbatimSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$this->attributes[$key] = (string) $value;
 

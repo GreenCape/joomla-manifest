@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * File Manifest
  *
@@ -42,14 +44,14 @@ class FileManifest extends Manifest
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'file';
 		$this->map['fileset'] = 'FilesetSection';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}

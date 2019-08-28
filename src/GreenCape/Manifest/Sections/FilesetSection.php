@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Fileset Section
  *
@@ -49,7 +51,7 @@ class FilesetSection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -61,7 +63,7 @@ class FilesetSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{

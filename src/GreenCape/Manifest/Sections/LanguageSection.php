@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Language Section
  *
@@ -40,7 +42,7 @@ namespace GreenCape\Manifest;
 class LanguageSection implements Section
 {
 	/** @var string The base folder in the zip package */
-	protected $base = null;
+	protected $base;
 
 	/** @var array The file list */
 	protected $files = array();
@@ -52,7 +54,7 @@ class LanguageSection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -64,23 +66,23 @@ class LanguageSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$attribute = substr($key, 1);
-				if ($attribute == 'folder')
+				if ($attribute === 'folder')
 				{
 					$attribute = 'base';
 				}
 				$method = 'set' . ucfirst($attribute);
 				if (!is_callable(array($this, $method)))
 				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 				}
 				$this->$method($value);
 
@@ -132,7 +134,7 @@ class LanguageSection implements Section
 	{
 		foreach ($this->files as $key => $element)
 		{
-			if ($element['filename'] == $filename)
+			if ($element['filename'] === $filename)
 			{
 				unset($this->files[$key]);
 			}

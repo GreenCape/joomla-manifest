@@ -43,6 +43,9 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\TemplateManifest;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -58,7 +61,7 @@ class TemplateManifestDemo
 	public static function getManifest()
 	{
 		// Create the template manifest
-		$manifest = new \GreenCape\Manifest\TemplateManifest();
+		$manifest = new TemplateManifest();
 
 		// Meta data
 		$manifest
@@ -76,7 +79,7 @@ class TemplateManifestDemo
 		;
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->addFile('index.php');
 
@@ -86,4 +89,5 @@ class TemplateManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) TemplateManifestDemo::getManifest());

@@ -31,6 +31,11 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\FilesetSection;
+use GreenCape\Xml\Converter;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Fileset Section Tests
  *
@@ -39,10 +44,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class FilesetSectionTest extends \PHPUnit_Framework_TestCase
+class FilesetSectionTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\FilesetSection */
-	private $section = null;
+	/** @var FilesetSection */
+	private $section;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +55,7 @@ class FilesetSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->section = new \GreenCape\Manifest\FilesetSection();
+		$this->section = new FilesetSection();
 	}
 
 	/**
@@ -67,13 +72,13 @@ class FilesetSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAddFileSection()
 	{
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('dir')
 			->addFile('foo.txt');
 
 		$this->section->addFileset($files);
-		$xml = new \GreenCape\Xml\Converter(array('fileset' => $this->section->getStructure()));
+		$xml = new Converter(array('fileset' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<fileset>';
@@ -90,21 +95,21 @@ class FilesetSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAddMultipleFileSections()
 	{
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('dir')
 			->addFile('foo.txt');
 
 		$this->section->addFileset($files);
 
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('another/dir')
 			->addFile('bar.txt');
 
 		$this->section->addFileset($files);
 
-		$xml = new \GreenCape\Xml\Converter(array('fileset' => $this->section->getStructure()));
+		$xml = new Converter(array('fileset' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<fileset>';

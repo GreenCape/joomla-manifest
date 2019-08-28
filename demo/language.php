@@ -43,6 +43,8 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\LanguageManifest;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -60,7 +62,7 @@ class LanguageManifestDemo
 	public static function getManifest()
 	{
 		// Create the language manifest
-		$manifest = new \GreenCape\Manifest\LanguageManifest();
+		$manifest = new LanguageManifest();
 
 		// Meta data
 		$manifest
@@ -86,4 +88,5 @@ class LanguageManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) LanguageManifestDemo::getManifest());

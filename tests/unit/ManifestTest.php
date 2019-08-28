@@ -31,6 +31,13 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\ComponentManifest;
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\Manifest;
+use GreenCape\Manifest\MediaSection;
+use GreenCape\Xml\Converter;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Generic Manifest Tests
  *
@@ -39,10 +46,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class ManifestTest extends \PHPUnit_Framework_TestCase
+class ManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\Manifest */
-	private $manifest = null;
+	/** @var Manifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +57,7 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\ComponentManifest();
+		$this->manifest = new ComponentManifest();
 	}
 
 	/**
@@ -144,7 +151,7 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 
 	public function testAddFileSection()
 	{
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files->setBase('site');
 		$files->addFile('foo.php');
 		$files->addFolder('bar');
@@ -156,21 +163,21 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 
 	public function testAttributesDoNotFlowIntoSiblings()
 	{
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files->setBase('site');
 		$files->addFile('foo.php');
 		$files->addFolder('bar');
 
 		$this->manifest->addSection('files', $files);
 
-		preg_match_all('~\<(\w+)[^>]*folder="site"~sm', (string) $this->manifest, $matches, PREG_SET_ORDER);
-		$this->assertEquals(1, count($matches));
+		preg_match_all('~<(\w+)[^>]*folder="site"~m', (string) $this->manifest, $matches, PREG_SET_ORDER);
+		$this->assertCount(1, $matches);
 		$this->assertEquals('files', $matches[0][1]);
 	}
 
 	public function testAddMediaSection()
 	{
-		$files = new \GreenCape\Manifest\MediaSection();
+		$files = new MediaSection();
 		$files->setBase('media');
 		$files->setDestination('com_foo');
 		$files->addFile('foo.php');
@@ -187,7 +194,7 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 	public function testMethodAttributeIsImportedCorrectly()
 	{
 
-		$xml = \GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#4.xml');
+		$xml = Manifest::load(__DIR__ . '/../data/issue#4.xml');
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<extension type="component" version="1.6" method="upgrade">';
@@ -228,13 +235,14 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 		$demoFile  = $demo . '.php';
 		$demoClass = ucfirst($demo) . 'ManifestDemo';
 		ob_start();
+		/** @noinspection PhpIncludeInspection */
 		include_once __DIR__ . '/../../demo/' . $demoFile;
 		ob_get_clean();
 
-		$expected = new \GreenCape\Xml\Converter(__DIR__ . '/../data/'. $xml);
+		$expected = new Converter(__DIR__ . '/../data/'. $xml);
 		$this->sort($expected->data[$rootTag]);
 
-		$manifest = new \GreenCape\Xml\Converter((string) call_user_func(array($demoClass, 'getManifest')));
+		$manifest = new Converter((string) call_user_func(array($demoClass, 'getManifest')));
 		$this->sort($manifest->data[$rootTag]);
 
 		$this->assertEquals($expected->data, $manifest->data);
@@ -242,14 +250,14 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 
 	private function sort(&$manifestData)
 	{
-		usort($manifestData, function ($a, $b)
+		usort($manifestData, static function ($a, $b)
 		{
 			reset($a);
 			$nameA = key($a);
 			reset($b);
 			$nameB = key($b);
 
-			if ($nameA == $nameB)
+			if ($nameA === $nameB)
 			{
 				return 0;
 			}
@@ -263,7 +271,7 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 	public function testLineFeedsInDataFieldsAreRemoved()
 	{
 
-		$xml = \GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/issue#2.xml');
+		$xml = Manifest::load(__DIR__ . '/../data/issue#2.xml');
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<extension type="component" version="1.6" method="upgrade">';
@@ -280,7 +288,7 @@ class ManifestTest extends \PHPUnit_Framework_TestCase
 
 	public function testGetSection()
 	{
-		$manifest = \GreenCape\Manifest\Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
+		$manifest = Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
 
 		$this->assertInstanceOf('\\GreenCape\\Manifest\\FileSection', $manifest->getSection('files'));
 	}

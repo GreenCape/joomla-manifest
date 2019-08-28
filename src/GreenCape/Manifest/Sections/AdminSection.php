@@ -28,6 +28,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Admin Section
  *
@@ -38,13 +40,13 @@ namespace GreenCape\Manifest;
 class AdminSection implements Section
 {
 	/** @var MenuSection The component menu */
-	protected $menu = null;
+	protected $menu;
 
 	/** @var FileSection The back-end files */
-	protected $files = null;
+	protected $files;
 
 	/** @var LanguageSection Legacy 1.5 language support */
-	protected $language = null;
+	protected $language;
 
 	/**
 	 * Constructor
@@ -53,7 +55,7 @@ class AdminSection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -65,19 +67,19 @@ class AdminSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$attribute = substr($key, 1);
 				$method = 'set' . ucfirst($attribute);
 				if (!is_callable(array($this, $method)))
 				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 				}
 				$this->$method($value);
 

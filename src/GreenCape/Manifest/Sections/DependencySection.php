@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * Dependency Section
  *
@@ -49,7 +51,7 @@ class DependencySection implements Section
 	 */
 	public function __construct($data = null)
 	{
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -61,19 +63,19 @@ class DependencySection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$attribute = substr($key, 1);
 				$method = 'set' . ucfirst($attribute);
 				if (!is_callable(array($this, $method)))
 				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 				}
 				$this->$method($value);
 
@@ -122,7 +124,7 @@ class DependencySection implements Section
 	{
 		foreach ($this->dependencies as $key => $element)
 		{
-			if ($element['@name'] == $name)
+			if ($element['@name'] === $name)
 			{
 				unset($this->dependencies[$key]);
 			}

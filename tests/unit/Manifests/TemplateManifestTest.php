@@ -31,6 +31,9 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\TemplateManifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Template Manifest Tests
  *
@@ -39,10 +42,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class TemplateManifestTest extends \PHPUnit_Framework_TestCase
+class TemplateManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\TemplateManifest */
-	private $manifest = null;
+	/** @var TemplateManifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +53,7 @@ class TemplateManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\TemplateManifest();
+		$this->manifest = new TemplateManifest();
 	}
 
 	/**

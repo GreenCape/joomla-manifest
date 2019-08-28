@@ -31,6 +31,9 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\PluginManifest;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Plugin Manifest Tests
  *
@@ -39,10 +42,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class PluginManifestTest extends \PHPUnit_Framework_TestCase
+class PluginManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\PluginManifest */
-	private $manifest = null;
+	/** @var PluginManifest */
+	private $manifest;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +53,7 @@ class PluginManifestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->manifest = new \GreenCape\Manifest\PluginManifest();
+		$this->manifest = new PluginManifest();
 	}
 
 	/**

@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Plugin Manifest
  *
@@ -44,18 +46,18 @@ class PluginManifest extends Manifest
 	 *             The existing groups are the folder names within the directory /plugins.
 	 *             The installer will create new folder names for group names that do not exist yet.
 	 */
-	protected $group = null;
+	protected $group;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'plugin';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}

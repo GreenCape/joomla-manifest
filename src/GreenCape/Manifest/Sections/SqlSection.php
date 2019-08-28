@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use UnexpectedValueException;
+
 /**
  * SQL Section
  *
@@ -56,7 +58,7 @@ class SqlSection implements Section
 		$this->driverIndex  = '@driver';
 		$this->elementIndex = 'file';
 
-		if (!is_null($data))
+		if ($data !== null)
 		{
 			$this->set($data);
 		}
@@ -68,19 +70,19 @@ class SqlSection implements Section
 	 * @param array $data
 	 *
 	 * @return $this This object, to provide a fluent interface
-	 * @throws \UnexpectedValueException on unsupported attributes
+	 * @throws UnexpectedValueException on unsupported attributes
 	 */
 	protected function set($data)
 	{
 		foreach ($data as $key => $value)
 		{
-			if ($key[0] == '@')
+			if (strpos($key, '@') === 0)
 			{
 				$attribute = substr($key, 1);
 				$method = 'set' . ucfirst($attribute);
 				if (!is_callable(array($this, $method)))
 				{
-					throw new \UnexpectedValueException("Can't handle attribute '$attribute'");
+					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
 				}
 				$this->$method($value);
 
@@ -132,7 +134,7 @@ class SqlSection implements Section
 	{
 		foreach ($this->files as $key => $element)
 		{
-			if ($element[$this->elementIndex] == $filename)
+			if ($element[$this->elementIndex] === $filename)
 			{
 				unset($this->files[$key]);
 			}

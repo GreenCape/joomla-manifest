@@ -5,3 +5,5 @@ build/*.tgz
 cache.properties
 debug.php
 vendor
+/build/logs/
+/gource.mp4

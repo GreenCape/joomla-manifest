@@ -43,6 +43,9 @@
  * @since       File available since Release 0.1.0
  */
 
+use GreenCape\Manifest\FileSection;
+use GreenCape\Manifest\LibraryManifest;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -55,7 +58,7 @@ class LibraryManifestDemo
 	public static function getManifest()
 	{
 		// Create the library manifest
-		$manifest = new \GreenCape\Manifest\LibraryManifest();
+		$manifest = new LibraryManifest();
 
 		// Meta data
 		$manifest
@@ -76,7 +79,7 @@ class LibraryManifestDemo
 			;
 
 		// Front-end files
-		$files = new \GreenCape\Manifest\FileSection();
+		$files = new FileSection();
 		$files
 			->setBase('libraries')
 			->setFileTag('file')
@@ -94,4 +97,5 @@ class LibraryManifestDemo
 	}
 }
 
+/** @noinspection ForgottenDebugOutputInspection */
 print_r((string) LibraryManifestDemo::getManifest());

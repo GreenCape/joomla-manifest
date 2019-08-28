@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Template Manifest
  *
@@ -42,14 +44,14 @@ class TemplateManifest extends Manifest
 	/**
 	 * @var string The client attribute allows you to specify for which application client the template is available.
 	 */
-	protected $client = null;
+	protected $client;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'template';
 		$this->map['positions']      = 'VerbatimSection';
@@ -59,7 +61,7 @@ class TemplateManifest extends Manifest
 		$this->map['images']         = 'FileSection';
 		$this->map['css']            = 'FileSection';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}

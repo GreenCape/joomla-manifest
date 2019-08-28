@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Module Manifest
  *
@@ -47,14 +49,14 @@ class ModuleManifest extends Manifest
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'module';
 		$this->map['help'] = 'VerbatimSection';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}

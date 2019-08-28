@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Language Manifest
  *
@@ -45,7 +47,7 @@ class LanguageManifest extends Manifest
 	protected $client = 'site';
 
 	/** @var string The ISO code for the language */
-	protected $tag = null;
+	protected $tag;
 
 	/** @var  int  */
 	protected $rtl;
@@ -68,14 +70,14 @@ class LanguageManifest extends Manifest
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type                 = 'language';
 		$this->sections['metadata'] = array();
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}

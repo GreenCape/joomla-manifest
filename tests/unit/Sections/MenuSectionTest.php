@@ -31,6 +31,10 @@
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\MenuSection;
+use GreenCape\Xml\Converter;
+use PHPUnit_Framework_TestCase;
+
 /**
  * Menu Section Tests
  *
@@ -39,10 +43,10 @@ namespace GreenCape\ManifestTest;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class MenuSectionTest extends \PHPUnit_Framework_TestCase
+class MenuSectionTest extends PHPUnit_Framework_TestCase
 {
-	/** @var \GreenCape\Manifest\MenuSection */
-	private $section = null;
+	/** @var MenuSection */
+	private $section;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,7 +54,7 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->section = new \GreenCape\Manifest\MenuSection();
+		$this->section = new MenuSection();
 	}
 
 	/**
@@ -69,7 +73,7 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->section->setLabel('Menu');
 		$this->section->setIcon('Icon');
-		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
+		$xml = new Converter(array('administration' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<administration>';
@@ -81,12 +85,12 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 
 	public function testMenuSectionWorksAsSubmenu()
 	{
-		$submenu1 = new \GreenCape\Manifest\MenuSection();
+		$submenu1 = new MenuSection();
 		$submenu1
 			->setLabel('submenu 1')
 			->setIcon('icon1');
 
-		$submenu2 = new \GreenCape\Manifest\MenuSection();
+		$submenu2 = new MenuSection();
 		$submenu2
 			->setLabel('submenu 2')
 			->setIcon('icon2');
@@ -95,7 +99,7 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 		$this->section->setIcon('Icon');
 		$this->section->addMenu($submenu1);
 		$this->section->addMenu($submenu2);
-		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
+		$xml = new Converter(array('administration' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<administration>';
@@ -114,7 +118,7 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMenuHasMissingAttributes()
 	{
-		$submenu1 = new \GreenCape\Manifest\MenuSection();
+		$submenu1 = new MenuSection();
 		$submenu1
 			->setLabel('menu1')
 			->setIcon('icon1')
@@ -130,7 +134,7 @@ class MenuSectionTest extends \PHPUnit_Framework_TestCase
 			->setAttribute('view', 'view')
 			->setAttribute('foo', 'bar')
 			->addMenu($submenu1);
-		$xml = new \GreenCape\Xml\Converter(array('administration' => $this->section->getStructure()));
+		$xml = new Converter(array('administration' => $this->section->getStructure()));
 
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
 		$expected .= '<administration>';

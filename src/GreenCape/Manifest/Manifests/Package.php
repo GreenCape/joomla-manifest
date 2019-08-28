@@ -30,6 +30,8 @@
 
 namespace GreenCape\Manifest;
 
+use GreenCape\Xml\Converter;
+
 /**
  * Package Manifest
  *
@@ -40,29 +42,28 @@ namespace GreenCape\Manifest;
 class PackageManifest extends Manifest
 {
 	/** @var  string Name of the package */
-	private $packagename;
+	private $packageName;
 
 	/** @var  string Name of the packager */
 	private $packager;
 
 	/** @var  string URL of the packager */
-	private $packagerurl;
+	private $packagerUrl;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $xml Optional XML string to preset the manifest
+	 * @param Converter $xml Optional XML string to preset the manifest
 	 */
-	public function __construct($xml = null)
+	public function __construct(Converter $xml = null)
 	{
 		$this->type = 'package';
 
-		if (!is_null($xml))
+		if ($xml !== null)
 		{
 			$this->set($xml);
 		}
 	}
-
 
 	/**
 	 * Getter and Setter
@@ -75,7 +76,7 @@ class PackageManifest extends Manifest
 	 */
 	public function getPackageName()
 	{
-		return $this->packagename;
+		return $this->packageName;
 	}
 
 	/**
@@ -87,7 +88,7 @@ class PackageManifest extends Manifest
 	 */
 	public function setPackageName($packageName)
 	{
-		$this->packagename = $packageName;
+		$this->packageName = $packageName;
 
 		return $this;
 	}
@@ -123,7 +124,7 @@ class PackageManifest extends Manifest
 	 */
 	public function getPackagerUrl()
 	{
-		return $this->packagerurl;
+		return $this->packagerUrl;
 	}
 
 	/**
@@ -135,7 +136,7 @@ class PackageManifest extends Manifest
 	 */
 	public function setPackagerUrl($packagerUrl)
 	{
-		$this->packagerurl = $packagerUrl;
+		$this->packagerUrl = $packagerUrl;
 
 		return $this;
 	}
@@ -153,9 +154,9 @@ class PackageManifest extends Manifest
 	{
 		$data = parent::getStructure();
 
-		$this->addElement($data['extension'], 'packagename');
+		$this->addElement($data['extension'], 'packageName');
 		$this->addElement($data['extension'], 'packager');
-		$this->addElement($data['extension'], 'packagerurl');
+		$this->addElement($data['extension'], 'packagerUrl');
 
 		return $data;
 	}
