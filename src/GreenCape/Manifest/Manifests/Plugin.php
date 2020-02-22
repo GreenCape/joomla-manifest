@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,70 +41,69 @@ use GreenCape\Xml\Converter;
  */
 class PluginManifest extends Manifest
 {
-	/**
-	 * @var string The group name specifies for which group of plugins the new plugin is available.
-	 *             The existing groups are the folder names within the directory /plugins.
-	 *             The installer will create new folder names for group names that do not exist yet.
-	 */
-	protected $group;
+    /**
+     * @var string The group name specifies for which group of plugins the new plugin is available.
+     *             The existing groups are the folder names within the directory /plugins.
+     *             The installer will create new folder names for group names that do not exist yet.
+     */
+    protected $group;
 
-	/**
-	 * Constructor
-	 *
-	 * @param Converter $xml Optional XML string to preset the manifest
-	 */
-	public function __construct(Converter $xml = null)
-	{
-		$this->type = 'plugin';
+    /**
+     * Constructor
+     *
+     * @param Converter $xml Optional XML string to preset the manifest
+     */
+    public function __construct(Converter $xml = null)
+    {
+        $this->type = 'plugin';
 
-		if ($xml !== null)
-		{
-			$this->set($xml);
-		}
-	}
+        if ($xml !== null) {
+            $this->set($xml);
+        }
+    }
 
-	/**
-	 * Getter and Setter
-	 */
+    /**
+     * Getter and Setter
+     */
 
-	/**
-	 * Get the plugin group
-	 *
-	 * @return string The name of the group of plugins for which the new plugin is available
-	 */
-	public function getGroup()
-	{
-		return $this->group;
-	}
+    /**
+     * Get the attributes for the plugin manifest
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        $attributes           = parent::getAttributes();
+        $attributes['@group'] = $this->getGroup();
 
-	/**
-	 * Set the plugin group
-	 *
-	 * @param string $group The name of the group of plugins for which the new plugin is available
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setGroup($group)
-	{
-		$this->group = $group;
+        return $attributes;
+    }
 
-		return $this;
-	}
+    /**
+     * Get the plugin group
+     *
+     * @return string The name of the group of plugins for which the new plugin is available
+     */
+    public function getGroup(): string
+    {
+        return $this->group;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the attributes for the plugin manifest
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = parent::getAttributes();
-		$attributes['@group'] = $this->getGroup();
+    /**
+     * Set the plugin group
+     *
+     * @param string $group The name of the group of plugins for which the new plugin is available
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setGroup($group): self
+    {
+        $this->group = $group;
 
-		return $attributes;
-	}
+        return $this;
+    }
 }

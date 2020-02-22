@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,70 +41,67 @@ use UnexpectedValueException;
  */
 class VerbatimSection implements Section
 {
-	/** @var array The structure */
-	protected $structure = array();
+    /** @var array The structure */
+    protected $structure = [];
 
-	/** @var array The attributes */
-	protected $attributes = array();
+    /** @var array The attributes */
+    protected $attributes = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if (strpos($key, '@') === 0)
-			{
-				$this->attributes[$key] = (string) $value;
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            if (strpos($key, '@') === 0) {
+                $this->attributes[$key] = (string)$value;
 
-				continue;
-			}
-			$this->structure = $value;
-		}
+                continue;
+            }
+            $this->structure = $value;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		return $this->structure;
-	}
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        return $this->structure;
+    }
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return $this->attributes;
-	}
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
 }

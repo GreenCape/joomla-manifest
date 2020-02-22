@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,128 +41,123 @@ use UnexpectedValueException;
  */
 class ServerSection implements Section
 {
-	/** @var array The server list */
-	protected $server = array();
+    /** @var array The server list */
+    protected $server = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if (strpos($key, '@') === 0)
-			{
-				$attribute = substr($key, 1);
-				$method = 'set' . ucfirst($attribute);
-				if (!is_callable(array($this, $method)))
-				{
-					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
-				}
-				$this->$method($value);
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            if (strpos($key, '@') === 0) {
+                $attribute = substr($key, 1);
+                $method    = 'set' . ucfirst($attribute);
 
-				continue;
-			}
-			$this->server = $value;
-		}
+                if (!is_callable([$this, $method])) {
+                    throw new UnexpectedValueException("Can't handle attribute '$attribute'");
+                }
 
-		return $this;
-	}
+                $this->$method($value);
 
-	/**
-	 * Add an update server to the section
-	 *
-	 * @param string $type     The server type, one of 'extension', 'collection'
-	 * @param string $name     A name for the server
-	 * @param string $url      The URL of the update XML file
-	 * @param int    $priority The priority
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addServer($type, $name, $url, $priority = null)
-	{
-		$element              = array('server' => $url);
-		$element['@type']     = (string) $type;
-		if (!empty($name))
-		{
-			$element['@name'] = (string) $name;
-		}
-		if ($priority !== null)
-		{
-			$element['@priority'] = (string) $priority;
-		}
+                continue;
+            }
+            $this->server = $value;
+        }
 
-		$this->server[] = $element;
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Add an update server to the section
+     *
+     * @param string $type     The server type, one of 'extension', 'collection'
+     * @param string $name     A name for the server
+     * @param string $url      The URL of the update XML file
+     * @param int    $priority The priority
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addServer($type, $name, $url, $priority = null): self
+    {
+        $element          = ['server' => $url];
+        $element['@type'] = (string)$type;
 
-	/**
-	 * Remove a server from the section
-	 *
-	 * @param string $name The name of the server
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeServer($name)
-	{
-		foreach ($this->server as $key => $element)
-		{
-			if ($element['@name'] === $name)
-			{
-				unset($this->server[$key]);
-			}
-		}
+        if (!empty($name)) {
+            $element['@name'] = (string)$name;
+        }
 
-		return $this;
-	}
+        if ($priority !== null) {
+            $element['@priority'] = (string)$priority;
+        }
 
-	/**
-	 * Section interface
-	 */
+        $this->server[] = $element;
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
+        return $this;
+    }
 
-		foreach ($this->server as $server)
-		{
-			$structure[] = $server;
-		}
+    /**
+     * Remove a server from the section
+     *
+     * @param string $name The name of the server
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeServer($name): self
+    {
+        foreach ($this->server as $key => $element) {
+            if ($element['@name'] === $name) {
+                unset($this->server[$key]);
+            }
+        }
 
-		return $structure;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
-	}
+    /**
+     * Section interface
+     */
+
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $structure = [];
+
+        foreach ($this->server as $server) {
+            $structure[] = $server;
+        }
+
+        return $structure;
+    }
+
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return [];
+    }
 }

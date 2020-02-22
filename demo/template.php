@@ -34,13 +34,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package     GreenCape\Manifest
- * @subpackage  Demo
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @subpackage      Demo
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
- * @link        http://www.greencape.com/
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
+ * @link            http://www.greencape.com/
+ * @since           File available since Release 0.1.0
  */
 
 use GreenCape\Manifest\FileSection;
@@ -54,40 +54,41 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * The copyright statement was supplemented with 'All rights reserved.'
  *
  * For the original,
+ *
  * @see http://svn.joomla.org/project/cms/development/trunk/tests/_data/installer_packages/tpl_simple/templateDetails.xml
  */
 class TemplateManifestDemo
 {
-	public static function getManifest()
-	{
-		// Create the template manifest
-		$manifest = new TemplateManifest();
+    public static function getManifest(): TemplateManifest
+    {
+        // Create the template manifest
+        $manifest = new TemplateManifest();
 
-		// Meta data
-		$manifest
-			->setTarget('1.6')
-			->setMethod('upgrade')
-			->setName('simple_template')
-			->setCreationDate('July 2008')
-			->setAuthor('John Doe')
-			->setAuthorEmail('john.doe@example.org')
-			->setAuthorUrl('http://www.example.org')
-			->setCopyright(2008, 'Copyright Info', false)
-			->setLicense('License Info')
-			->setVersion('1.6.0')
-			->setDescription('TPL_TPL_SIMPLE_XML_DESCRIPTION')
-		;
+        // Meta data
+        $manifest
+            ->setTarget('1.6')
+            ->setMethod('upgrade')
+            ->setName('simple_template')
+            ->setCreationDate('July 2008')
+            ->setAuthor('John Doe')
+            ->setAuthorEmail('john.doe@example.org')
+            ->setAuthorUrl('http://www.example.org')
+            ->setCopyright(2008, 'Copyright Info', false)
+            ->setLicense('License Info')
+            ->setVersion('1.6.0')
+            ->setDescription('TPL_TPL_SIMPLE_XML_DESCRIPTION')
+        ;
 
-		// Front-end files
-		$files = new FileSection();
-		$files
-			->addFile('index.php');
+        // Front-end files
+        $files = new FileSection();
+        $files
+            ->addFile('index.php');
 
-		$manifest->addSection('files', $files);
+        $manifest->addSection('files', $files);
 
-		return $manifest;
-	}
+        return $manifest;
+    }
 }
 
 /** @noinspection ForgottenDebugOutputInspection */
-print_r((string) TemplateManifestDemo::getManifest());
+print_r((string)TemplateManifestDemo::getManifest());

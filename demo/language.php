@@ -34,13 +34,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package     GreenCape\Manifest
- * @subpackage  Demo
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @subpackage      Demo
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
- * @link        http://www.greencape.com/
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
+ * @link            http://www.greencape.com/
+ * @since           File available since Release 0.1.0
  */
 
 use GreenCape\Manifest\LanguageManifest;
@@ -55,38 +55,40 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * A description was added. Empty params section was removed.
  *
  * For the original,
+ *
  * @see http://svn.joomla.org/project/cms/development/trunk/tests/_data/installer_packages/lng_xx-XX/xx-XX.xml
  */
 class LanguageManifestDemo
 {
-	public static function getManifest()
-	{
-		// Create the language manifest
-		$manifest = new LanguageManifest();
+    public static function getManifest(): LanguageManifest
+    {
+        // Create the language manifest
+        $manifest = new LanguageManifest();
 
-		// Meta data
-		$manifest
-			->setTarget('1.6')
-			->setClient('site')
-			->setName('Examplish (Example)')
-			->setTag('xx-XX')
-			->setVersion('1.6.0')
-			->setCreationDate('March 2008')
-			->setAuthor('Joomla! Project')
-			->setAuthorEmail('admin@joomla.org')
-			->setAuthorUrl('www.joomla.org')
-			->setCopyright('2005 - 2011', 'Open Source Matters', false)
-			->setLicense('http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL')
-			->setDescription('EXAMPLISH_XML_DESCRIPTION')
-			->setRtl(false)
-			->setLocale('xx_XX.utf8, xx_XX.UTF-8, xx_XX, xx, examplish, examplish-example')
-			->setCodePage('iso-8859-1')
-			->setBackwardLanguage('examplish')
-			->setFontName('freesans');
+        // Meta data
+        $manifest
+            ->setTarget('1.6')
+            ->setClient('site')
+            ->setName('Examplish (Example)')
+            ->setTag('xx-XX')
+            ->setVersion('1.6.0')
+            ->setCreationDate('March 2008')
+            ->setAuthor('Joomla! Project')
+            ->setAuthorEmail('admin@joomla.org')
+            ->setAuthorUrl('www.joomla.org')
+            ->setCopyright('2005 - 2011', 'Open Source Matters', false)
+            ->setLicense('http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL')
+            ->setDescription('EXAMPLISH_XML_DESCRIPTION')
+            ->setRtl(false)
+            ->setLocale('xx_XX.utf8, xx_XX.UTF-8, xx_XX, xx, examplish, examplish-example')
+            ->setCodePage('iso-8859-1')
+            ->setBackwardLanguage('examplish')
+            ->setFontName('freesans')
+        ;
 
-		return $manifest;
-	}
+        return $manifest;
+    }
 }
 
 /** @noinspection ForgottenDebugOutputInspection */
-print_r((string) LanguageManifestDemo::getManifest());
+print_r((string)LanguageManifestDemo::getManifest());

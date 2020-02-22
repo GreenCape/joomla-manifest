@@ -34,13 +34,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package     GreenCape\Manifest
- * @subpackage  Demo
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @subpackage      Demo
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
- * @link        http://www.greencape.com/
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
+ * @link            http://www.greencape.com/
+ * @since           File available since Release 0.1.0
  */
 
 use GreenCape\Manifest\FileSection;
@@ -57,75 +57,78 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * and the copyright statement was supplemented with 'All rights reserved.'
  *
  * For the commented original,
+ *
  * @see http://svn.joomla.org/project/cms/development/trunk/tests/_data/installer_packages/plg_system_alpha/alpha.xml
  */
 class PluginManifestDemo
 {
-	public static function getManifest()
-	{
-		// Create the plugin manifest
-		$manifest = new PluginManifest();
+    public static function getManifest(): PluginManifest
+    {
+        // Create the plugin manifest
+        $manifest = new PluginManifest();
 
-		// Meta data
-		$manifest
-			->setTarget('1.6')
-			->setGroup('system')
-			->setMethod('upgrade')
-			->setName('System - Alpha')
-			->setCreationDate('July 2008')
-			->setAuthor('John Doe')
-			->setAuthorEmail('john.doe@example.org')
-			->setAuthorUrl('http://www.example.org')
-			->setCopyright(2008, 'Copyright Info', false)
-			->setLicense('License Info')
-			->setVersion('1.6.0')
-			->setDescription('PLG_ALPHA_XML_DESCRIPTION')
-		;
+        // Meta data
+        $manifest
+            ->setTarget('1.6')
+            ->setGroup('system')
+            ->setMethod('upgrade')
+            ->setName('System - Alpha')
+            ->setCreationDate('July 2008')
+            ->setAuthor('John Doe')
+            ->setAuthorEmail('john.doe@example.org')
+            ->setAuthorUrl('http://www.example.org')
+            ->setCopyright(2008, 'Copyright Info', false)
+            ->setLicense('License Info')
+            ->setVersion('1.6.0')
+            ->setDescription('PLG_ALPHA_XML_DESCRIPTION')
+        ;
 
-		// Installer hooks
-		$manifest
-			->setScriptFile('alpha.scriptfile.php');
+        // Installer hooks
+        $manifest
+            ->setScriptFile('alpha.scriptfile.php');
 
-		// SQL files
-		$install = new SqlSection();
-		$install
-			->addFile('mysql', 'sql/install.mysql.utf8.sql', array('charset' => 'utf8'));
+        // SQL files
+        $install = new SqlSection();
+        $install
+            ->addFile('mysql', 'sql/install.mysql.utf8.sql', ['charset' => 'utf8']);
 
-		$manifest->addSection('install', $install);
+        $manifest->addSection('install', $install);
 
-		$uninstall = new SqlSection();
-		$uninstall
-			->addFile('mysql', 'sql/uninstall.mysql.utf8.sql', array('charset' => 'utf8'));
+        $uninstall = new SqlSection();
+        $uninstall
+            ->addFile('mysql', 'sql/uninstall.mysql.utf8.sql', ['charset' => 'utf8']);
 
-		$manifest->addSection('uninstall', $uninstall);
+        $manifest->addSection('uninstall', $uninstall);
 
-		$update = new SchemaSection();
-		$update
-			->addFolder('mysql', 'sql/updates/mysql');
+        $update = new SchemaSection();
+        $update
+            ->addFolder('mysql', 'sql/updates/mysql');
 
-		$manifest->addSection('update', $update);
+        $manifest->addSection('update', $update);
 
-		// Front-end files
-		$files = new FileSection();
-		$files
-			->addFile('alpha.php', array('plugin' => 'alpha'))
-			->addFolder('sql')
-			->addFolder('language');
+        // Front-end files
+        $files = new FileSection();
+        $files
+            ->addFile('alpha.php', ['plugin' => 'alpha'])
+            ->addFolder('sql')
+            ->addFolder('language')
+        ;
 
-		$manifest->addSection('files', $files);
+        $manifest->addSection('files', $files);
 
-		// Front-end language (legacy 1.5 support)
-		$language = new LanguageSection();
-		$language
-			->setBase('language')
-			->addFile('en-GB', 'admin/en-GB.plg_system_alpha.ini', array('client' => 'administrator'))
-			->addFile('en-GB', 'site/en-GB.plg_system_alpha.ini', array('client' => 'site'));
+        // Front-end language (legacy 1.5 support)
+        $language = new LanguageSection();
+        $language
+            ->setBase('language')
+            ->addFile('en-GB', 'admin/en-GB.plg_system_alpha.ini', ['client' => 'administrator'])
+            ->addFile('en-GB', 'site/en-GB.plg_system_alpha.ini', ['client' => 'site'])
+        ;
 
-		$manifest->addSection('languages', $language);
+        $manifest->addSection('languages', $language);
 
-		return $manifest;
-	}
+        return $manifest;
+    }
 }
 
 /** @noinspection ForgottenDebugOutputInspection */
-print_r((string) PluginManifestDemo::getManifest());
+print_r((string)PluginManifestDemo::getManifest());

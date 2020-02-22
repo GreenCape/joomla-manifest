@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,221 +41,217 @@ use UnexpectedValueException;
  */
 class MenuSection implements Section
 {
-	protected $menu = array();
+    protected $menu = [];
 
-	protected $submenu = array();
+    protected $submenu = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $menu Optional XML structure to preset the manifest
-	 * @param null  $submenu
-	 */
-	public function __construct($menu = null, $submenu = null)
-	{
-		if ($menu !== null)
-		{
-			$this->set($menu, $submenu);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $menu Optional XML structure to preset the manifest
+     * @param null  $submenu
+     */
+    public function __construct($menu = null, $submenu = null)
+    {
+        if ($menu !== null) {
+            $this->set($menu, $submenu);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $menu
-	 * @param array $submenu
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($menu, $submenu)
-	{
-		$this->menu = $menu;
-		$this->submenu = $submenu['submenu'];
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $menu
+     * @param array $submenu
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($menu, $submenu): self
+    {
+        $this->menu    = $menu;
+        $this->submenu = $submenu['submenu'];
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add a menu item
-	 *
-	 * @param MenuSection|string $label
-	 * @param string $link
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addMenu($label, $link = '#')
-	{
-		if (is_string($label))
-		{
-			$this->submenu[] = array(
-				'menu'  => $label,
-				'@link' => $link
-			);
-		}
-		else
-		{
-			$this->submenu = array_merge($this->submenu, $label->getStructure());
-		}
+    /**
+     * Add a menu item
+     *
+     * @param MenuSection|string $label
+     * @param string             $link
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addMenu($label, $link = '#'): self
+    {
+        if (is_string($label)) {
+            $this->submenu[] = [
+                'menu'  => $label,
+                '@link' => $link,
+            ];
+        } else {
+            $this->submenu = array_merge($this->submenu, $label->getStructure());
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Getter and setter
-	 */
+    /**
+     * Getter and setter
+     */
 
-	/**
-	 * Get the menu label
-	 *
-	 * @return string The label
-	 */
-	public function getLabel()
-	{
-		return $this->menu['menu'];
-	}
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $structure   = [];
+        $structure[] = $this->menu;
 
-	/**
-	 * Set the menu label
-	 *
-	 * @param string $label The label
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setLabel($label)
-	{
-		$this->menu['menu'] = $label;
+        if (!empty($this->submenu)) {
+            $structure[] = ['submenu' => $this->submenu];
+        }
 
-		return $this;
-	}
+        return $structure;
+    }
 
-	/**
-	 * Get the icon filename
-	 *
-	 * @return string  The icon filename
-	 */
-	public function getIcon()
-	{
-		return $this->menu['@img'];
-	}
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return [];
+    }
 
-	/**
-	 * Set the icon filename
-	 *
-	 * @param string $icon The icon filename
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setIcon($icon)
-	{
-		$this->menu['@img'] = $icon;
+    /**
+     * Get the menu label
+     *
+     * @return string The label
+     */
+    public function getLabel(): string
+    {
+        return $this->menu['menu'];
+    }
 
-		return $this;
-	}
+    /**
+     * Set the menu label
+     *
+     * @param string $label The label
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setLabel($label): self
+    {
+        $this->menu['menu'] = $label;
 
-	/**
-	 * Get the link
-	 *
-	 * @return string  The link
-	 */
-	public function getLink()
-	{
-		return $this->menu['@link'];
-	}
+        return $this;
+    }
 
-	/**
-	 * Set the link
-	 *
-	 * @param string $link The link
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setLink($link)
-	{
-		$this->menu['@link'] = $link;
+    /**
+     * Get the icon filename
+     *
+     * @return string  The icon filename
+     */
+    public function getIcon(): string
+    {
+        return $this->menu['@img'];
+    }
 
-		return $this;
-	}
+    /**
+     * Set the icon filename
+     *
+     * @param string $icon The icon filename
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setIcon($icon): self
+    {
+        $this->menu['@img'] = $icon;
 
-	/**
-	 * Get an attribute
-	 *
-	 * @param string $key The key
-	 *
-	 * @return string  The parameter
-	 */
-	public function getAttribute($key)
-	{
-		return $this->menu["@{$key}"];
-	}
+        return $this;
+    }
 
-	/**
-	 * Set an attribute
-	 *
-	 * @param string $key   The key
-	 * @param string $value The value
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setAttribute($key, $value)
-	{
-		$this->menu["@{$key}"] = $value;
+    /**
+     * Get the link
+     *
+     * @return string  The link
+     */
+    public function getLink(): string
+    {
+        return $this->menu['@link'];
+    }
 
-		return $this;
-	}
+    /**
+     * Set the link
+     *
+     * @param string $link The link
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setLink($link): self
+    {
+        $this->menu['@link'] = $link;
 
-	/**
-	 * Get the alt text
-	 *
-	 * @return string  The alt text
-	 */
-	public function getAlt()
-	{
-		return $this->menu['@alt'];
-	}
+        return $this;
+    }
 
-	/**
-	 * Set the alt text
-	 *
-	 * @param string $alt The alt text
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setAlt($alt)
-	{
-		$this->menu['@alt'] = $alt;
+    /**
+     * Get an attribute
+     *
+     * @param string $key The key
+     *
+     * @return string  The parameter
+     */
+    public function getAttribute($key): string
+    {
+        return $this->menu["@{$key}"];
+    }
 
-		return $this;
-	}
+    /**
+     * Set an attribute
+     *
+     * @param string $key   The key
+     * @param string $value The value
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setAttribute($key, $value): self
+    {
+        $this->menu["@{$key}"] = $value;
 
-	/**
-	 * Section interface
-	 */
+        return $this;
+    }
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
-		$structure[] = $this->menu;
-		if (!empty($this->submenu))
-		{
-			$structure[] = array('submenu' => $this->submenu);
-		}
+    /**
+     * Section interface
+     */
 
-		return $structure;
-	}
+    /**
+     * Get the alt text
+     *
+     * @return string  The alt text
+     */
+    public function getAlt(): string
+    {
+        return $this->menu['@alt'];
+    }
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
-	}
+    /**
+     * Set the alt text
+     *
+     * @param string $alt The alt text
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setAlt($alt): self
+    {
+        $this->menu['@alt'] = $alt;
+
+        return $this;
+    }
 }

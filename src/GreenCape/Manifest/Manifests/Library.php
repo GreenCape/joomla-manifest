@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,123 +41,122 @@ use GreenCape\Xml\Converter;
  */
 class LibraryManifest extends Manifest
 {
-	/** @var  string Name of the library */
-	private $libraryName;
+    /** @var  string Name of the library */
+    private $libraryName;
 
-	/** @var  string Name of the packager */
-	private $packager;
+    /** @var  string Name of the packager */
+    private $packager;
 
-	/** @var  string URL of the packager */
-	private $packagerUrl;
+    /** @var  string URL of the packager */
+    private $packagerUrl;
 
-	/**
-	 * Constructor
-	 *
-	 * @param Converter $xml Optional XML string to preset the manifest
-	 */
-	public function __construct(Converter $xml = null)
-	{
-		$this->type = 'library';
+    /**
+     * Constructor
+     *
+     * @param Converter $xml Optional XML string to preset the manifest
+     */
+    public function __construct(Converter $xml = null)
+    {
+        $this->type = 'library';
 
-		if ($xml !== null)
-		{
-			$this->set($xml);
-		}
-	}
+        if ($xml !== null) {
+            $this->set($xml);
+        }
+    }
 
-	/**
-	 * Getter and Setter
-	 */
+    /**
+     * Getter and Setter
+     */
 
-	/**
-	 * Get the name of the library
-	 *
-	 * @return string Name of the library
-	 */
-	public function getLibraryName()
-	{
-		return $this->libraryName;
-	}
+    /**
+     * Get the name of the library
+     *
+     * @return string Name of the library
+     */
+    public function getLibraryName(): string
+    {
+        return $this->libraryName;
+    }
 
-	/**
-	 * Set the name of the library
-	 *
-	 * @param string $libraryName Name of the library
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setLibraryName($libraryName)
-	{
-		$this->libraryName = $libraryName;
+    /**
+     * Set the name of the library
+     *
+     * @param string $libraryName Name of the library
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setLibraryName($libraryName): self
+    {
+        $this->libraryName = $libraryName;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the name of the packager
-	 *
-	 * @return string Name of the packager
-	 */
-	public function getPackager()
-	{
-		return $this->packager;
-	}
+    /**
+     * Get the name of the packager
+     *
+     * @return string Name of the packager
+     */
+    public function getPackager(): string
+    {
+        return $this->packager;
+    }
 
-	/**
-	 * Set the name of the packager
-	 *
-	 * @param string $packagerName Name of the packager
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setPackager($packagerName)
-	{
-		$this->packager = $packagerName;
+    /**
+     * Set the name of the packager
+     *
+     * @param string $packagerName Name of the packager
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setPackager($packagerName): self
+    {
+        $this->packager = $packagerName;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the URL of the packager
-	 *
-	 * @return string URL of the packager
-	 */
-	public function getPackagerUrl()
-	{
-		return $this->packagerUrl;
-	}
+    /**
+     * Get the URL of the packager
+     *
+     * @return string URL of the packager
+     */
+    public function getPackagerUrl(): string
+    {
+        return $this->packagerUrl;
+    }
 
-	/**
-	 * Set the URL of the packager
-	 *
-	 * @param string $packagerUrl URL of the packager
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setPackagerUrl($packagerUrl)
-	{
-		$this->packagerUrl = $packagerUrl;
+    /**
+     * Set the URL of the packager
+     *
+     * @param string $packagerUrl URL of the packager
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setPackagerUrl($packagerUrl): self
+    {
+        $this->packagerUrl = $packagerUrl;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the manifest structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$data = parent::getStructure();
+    /**
+     * Get the manifest structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $data = parent::getStructure();
 
-		$this->addElement($data['extension'], 'libraryName');
-		$this->addElement($data['extension'], 'packager');
-		$this->addElement($data['extension'], 'packagerUrl');
+        $this->addElement($data['extension'], 'libraryName');
+        $this->addElement($data['extension'], 'packager');
+        $this->addElement($data['extension'], 'packagerUrl');
 
-		return $data;
-	}
+        return $data;
+    }
 }

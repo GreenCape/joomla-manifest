@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,287 +41,271 @@ use UnexpectedValueException;
  */
 class FileSection implements Section
 {
-	/** @var string The base folder in the zip package */
-	protected $base;
+    /** @var string The base folder in the zip package */
+    protected $base;
 
-	/** @var array The file list */
-	protected $files = array();
+    /** @var array The file list */
+    protected $files = [];
 
-	/** @var array The folder list */
-	protected $folders = array();
+    /** @var array The folder list */
+    protected $folders = [];
 
-	/** @var string The tag for the file entries */
-	protected $fileTag = 'filename';
+    /** @var string The tag for the file entries */
+    protected $fileTag = 'filename';
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if (strpos($key, '@') === 0)
-			{
-				$attribute = substr($key, 1);
-				if ($attribute === 'folder')
-				{
-					$attribute = 'base';
-				}
-				$method = 'set' . ucfirst($attribute);
-				if (!is_callable(array($this, $method)))
-				{
-					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
-				}
-				$this->$method($value);
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            if (strpos($key, '@') === 0) {
+                $attribute = substr($key, 1);
 
-				continue;
-			}
-			if (isset($value['file']))
-			{
-				$this->files[] = $this->reTag($value, 'file', 'filename');
-			}
-			elseif (isset($value['filename']))
-			{
-				$this->files[] = $value;
-			}
-			elseif (isset($value['folder']))
-			{
-				$this->folders[] = $value;
-			}
-			else
-			{
-				$this->files = $value;
-			}
-		}
+                if ($attribute === 'folder') {
+                    $attribute = 'base';
+                }
 
-		return $this;
-	}
+                $method = 'set' . ucfirst($attribute);
 
-	/**
-	 * Add a file to the section
-	 *
-	 * @param string $filename   The name of the file
-	 * @param array  $attributes Optional attributes for this entry
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addFile($filename, $attributes = array())
-	{
-		$element = array($this->fileTag => $filename);
-		foreach ($attributes as $key => $value)
-		{
-			$element["@{$key}"] = (string) $value;
-		}
-		$this->files[] = $element;
+                if (!is_callable([$this, $method])) {
+                    throw new UnexpectedValueException("Can't handle attribute '$attribute'");
+                }
 
-		return $this;
-	}
+                $this->$method($value);
 
-	/**
-	 * Remove a file from the section
-	 *
-	 * @param string $filename   The name of the file
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeFile($filename)
-	{
-		foreach ($this->files as $key => $element)
-		{
-			if ($element['filename'] === $filename)
-			{
-				unset($this->files[$key]);
-			}
-		}
+                continue;
+            }
 
-		return $this;
-	}
+            if (isset($value['file'])) {
+                $this->files[] = $this->reTag($value, 'file', 'filename');
+            } elseif (isset($value['filename'])) {
+                $this->files[] = $value;
+            } elseif (isset($value['folder'])) {
+                $this->folders[] = $value;
+            } else {
+                $this->files = $value;
+            }
+        }
 
-	/**
-	 * Add a folder to the section
-	 *
-	 * @param string $folder     The name of the folder
-	 * @param array  $attributes Optional attributes for this entry
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addFolder($folder, $attributes = array())
-	{
-		$element       = array('folder' => $folder);
-		foreach ($attributes as $key => $value)
-		{
-			$element["@{$key}"] = (string) $value;
-		}
-		$this->folders[] = $element;
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Exchange the element tags, if necessary
+     *
+     * @param array  $entry  The file or folder entry
+     * @param string $oldTag The old tag
+     * @param string $newTag The new tag
+     *
+     * @return array
+     */
+    private function reTag($entry, $oldTag, $newTag): array
+    {
+        if ($newTag === $oldTag) {
+            return $entry;
+        }
 
-	/**
-	 * Remove a folder from the section
-	 *
-	 * @param string $folder The name of the folder
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeFolder($folder)
-	{
-		foreach ($this->folders as $key => $element)
-		{
-			if ($element['folder'] === $folder)
-			{
-				unset($this->folders[$key]);
-			}
-		}
+        $modifiedEntry = [];
 
-		return $this;
-	}
+        foreach ($entry as $tag => $value) {
+            if ($tag === $oldTag) {
+                $modifiedEntry[$newTag] = $value;
+            } else {
+                $modifiedEntry[$tag] = $value;
+            }
+        }
 
-	/**
-	 * Getter and setter
-	 */
+        return $modifiedEntry;
+    }
 
-	/**
-	 * Get the tag for the file entries
-	 *
-	 * @return string The tag for the file entries
-	 */
-	public function getFileTag()
-	{
-		return $this->fileTag;
-	}
+    /**
+     * Add a file to the section
+     *
+     * @param string $filename   The name of the file
+     * @param array  $attributes Optional attributes for this entry
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addFile($filename, $attributes = []): self
+    {
+        $element = [$this->fileTag => $filename];
 
-	/**
-	 * Set the tag for the file entries
-	 *
-	 * @param string $fileTag The tag for the file entries
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setFileTag($fileTag)
-	{
-		$this->fileTag = $fileTag;
+        foreach ($attributes as $key => $value) {
+            $element["@{$key}"] = (string)$value;
+        }
 
-		return $this;
-	}
+        $this->files[] = $element;
 
-	/**
-	 * Get the base folder within the distribution package (zip file)
-	 *
-	 * @return string The base folder within the distribution package
-	 */
-	public function getBase()
-	{
-		return $this->base;
-	}
+        return $this;
+    }
 
-	/**
-	 * Set the base folder within the distribution package (zip file)
-	 *
-	 * @param string $base The base folder within the distribution package
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setBase($base)
-	{
-		$this->base = $base;
+    /**
+     * Remove a file from the section
+     *
+     * @param string $filename The name of the file
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeFile($filename): self
+    {
+        foreach ($this->files as $key => $element) {
+            if ($element['filename'] === $filename) {
+                unset($this->files[$key]);
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Add a folder to the section
+     *
+     * @param string $folder     The name of the folder
+     * @param array  $attributes Optional attributes for this entry
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addFolder($folder, $attributes = []): self
+    {
+        $element = ['folder' => $folder];
 
-	/**
-	 * Get the section structure
-	 *
-	 * @param string $fileTag   Alternative tag for files
-	 * @param string $folderTag Alternative tag for folders
-	 *
-	 * @return array
-	 */
-	public function getStructure($fileTag = 'filename', $folderTag = 'folder')
-	{
-		$structure = array();
+        foreach ($attributes as $key => $value) {
+            $element["@{$key}"] = (string)$value;
+        }
 
-		foreach ($this->files as $file)
-		{
-			$structure[] = $this->reTag($file, 'filename', $fileTag);
-		}
+        $this->folders[] = $element;
 
-		foreach ($this->folders as $folder)
-		{
-			$structure[] = $this->reTag($folder, 'folder', $folderTag);
-		}
+        return $this;
+    }
 
-		return $structure;
-	}
+    /**
+     * Getter and setter
+     */
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = array();
+    /**
+     * Remove a folder from the section
+     *
+     * @param string $folder The name of the folder
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeFolder($folder): self
+    {
+        foreach ($this->folders as $key => $element) {
+            if ($element['folder'] === $folder) {
+                unset($this->folders[$key]);
+            }
+        }
 
-		if (!empty($this->base))
-		{
-			$attributes['@folder'] = $this->base;
-		}
+        return $this;
+    }
 
-		return $attributes;
-	}
+    /**
+     * Get the tag for the file entries
+     *
+     * @return string The tag for the file entries
+     */
+    public function getFileTag(): string
+    {
+        return $this->fileTag;
+    }
 
-	/**
-	 * Exchange the element tags, if necessary
-	 *
-	 * @param array  $entry  The file or folder entry
-	 * @param string $oldTag The old tag
-	 * @param string $newTag The new tag
-	 *
-	 * @return array
-	 */
-	private function reTag($entry, $oldTag, $newTag)
-	{
-		if ($newTag === $oldTag)
-		{
-			return $entry;
-		}
+    /**
+     * Set the tag for the file entries
+     *
+     * @param string $fileTag The tag for the file entries
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setFileTag($fileTag): self
+    {
+        $this->fileTag = $fileTag;
 
-		$modifiedEntry = array();
-		foreach ($entry as $tag => $value)
-		{
-			if ($tag === $oldTag)
-			{
-				$modifiedEntry[$newTag] = $value;
-			}
-			else
-			{
-				$modifiedEntry[$tag] = $value;
-			}
-		}
+        return $this;
+    }
 
-		return $modifiedEntry;
-	}
+    /**
+     * Get the base folder within the distribution package (zip file)
+     *
+     * @return string The base folder within the distribution package
+     */
+    public function getBase(): string
+    {
+        return $this->base;
+    }
+
+    /**
+     * Section interface
+     */
+
+    /**
+     * Set the base folder within the distribution package (zip file)
+     *
+     * @param string $base The base folder within the distribution package
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setBase($base): self
+    {
+        $this->base = $base;
+
+        return $this;
+    }
+
+    /**
+     * Get the section structure
+     *
+     * @param string $fileTag   Alternative tag for files
+     * @param string $folderTag Alternative tag for folders
+     *
+     * @return array
+     */
+    public function getStructure($fileTag = 'filename', $folderTag = 'folder'): array
+    {
+        $structure = [];
+
+        foreach ($this->files as $file) {
+            $structure[] = $this->reTag($file, 'filename', $fileTag);
+        }
+
+        foreach ($this->folders as $folder) {
+            $structure[] = $this->reTag($folder, 'folder', $folderTag);
+        }
+
+        return $structure;
+    }
+
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        $attributes = [];
+
+        if (!empty($this->base)) {
+            $attributes['@folder'] = $this->base;
+        }
+
+        return $attributes;
+    }
 }

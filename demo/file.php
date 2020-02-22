@@ -34,13 +34,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package     GreenCape\Manifest
- * @subpackage  Demo
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @subpackage      Demo
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
- * @link        http://www.greencape.com/
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
+ * @link            http://www.greencape.com/
+ * @since           File available since Release 0.1.0
  */
 
 use GreenCape\Manifest\FileManifest;
@@ -58,80 +58,84 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 class FileManifestDemo
 {
-	public static function getManifest()
-	{
-		// Create the file manifest
-		$manifest = new FileManifest();
+    public static function getManifest(): FileManifest
+    {
+        // Create the file manifest
+        $manifest = new FileManifest();
 
-		// Meta data
-		$manifest
-			->setTarget('3.1')
-			->setMethod('upgrade')
-			->setName('files_joomla')
-			->setAuthor('Joomla! Project')
-			->setAuthorEmail('admin@joomla.org')
-			->setAuthorUrl('www.joomla.org')
-			->setCopyright('2005 - 2013', 'Open Source Matters', false)
-			->setLicense('GNU General Public License version 2 or later; see LICENSE.txt')
-			->setVersion('3.1.1')
-			->setCreationDate('April 2013')
-			->setDescription('FILES_JOOMLA_XML_DESCRIPTION');
+        // Meta data
+        $manifest
+            ->setTarget('3.1')
+            ->setMethod('upgrade')
+            ->setName('files_joomla')
+            ->setAuthor('Joomla! Project')
+            ->setAuthorEmail('admin@joomla.org')
+            ->setAuthorUrl('www.joomla.org')
+            ->setCopyright('2005 - 2013', 'Open Source Matters', false)
+            ->setLicense('GNU General Public License version 2 or later; see LICENSE.txt')
+            ->setVersion('3.1.1')
+            ->setCreationDate('April 2013')
+            ->setDescription('FILES_JOOMLA_XML_DESCRIPTION')
+        ;
 
-		// Installer hooks
-		$manifest
-			->setScriptFile('administrator/components/com_admin/script.php');
+        // Installer hooks
+        $manifest
+            ->setScriptFile('administrator/components/com_admin/script.php');
 
-		// SQL files
-		$update = new SchemaSection();
-		$update
-			->addFolder('mysql', 'administrator/components/com_admin/sql/updates/mysql')
-			->addFolder('sqlsrv', 'administrator/components/com_admin/sql/updates/sqlsrv')
-			->addFolder('sqlazure', 'administrator/components/com_admin/sql/updates/sqlazure')
-			->addFolder('postgresql', 'administrator/components/com_admin/sql/updates/postgresql');
+        // SQL files
+        $update = new SchemaSection();
+        $update
+            ->addFolder('mysql', 'administrator/components/com_admin/sql/updates/mysql')
+            ->addFolder('sqlsrv', 'administrator/components/com_admin/sql/updates/sqlsrv')
+            ->addFolder('sqlazure', 'administrator/components/com_admin/sql/updates/sqlazure')
+            ->addFolder('postgresql', 'administrator/components/com_admin/sql/updates/postgresql')
+        ;
 
-		$manifest->addSection('update', $update);
+        $manifest->addSection('update', $update);
 
-		// Front-end files
-		$files = new FileSection();
-		$files
-			->addFolder('administrator')
-			->addFolder('cache')
-			->addFolder('cli')
-			->addFolder('components')
-			->addFolder('images')
-			->addFolder('includes')
-			->addFolder('language')
-			->addFolder('layouts')
-			->addFolder('libraries')
-			->addFolder('logs')
-			->addFolder('media')
-			->addFolder('modules')
-			->addFolder('plugins')
-			->addFolder('templates')
-			->addFolder('tmp')
-			->addFile('htaccess.txt')
-			->addFile('web.config.txt')
-			->addFile('LICENSE.txt')
-			->addFile('README.txt')
-			->addFile('index.php');
+        // Front-end files
+        $files = new FileSection();
+        $files
+            ->addFolder('administrator')
+            ->addFolder('cache')
+            ->addFolder('cli')
+            ->addFolder('components')
+            ->addFolder('images')
+            ->addFolder('includes')
+            ->addFolder('language')
+            ->addFolder('layouts')
+            ->addFolder('libraries')
+            ->addFolder('logs')
+            ->addFolder('media')
+            ->addFolder('modules')
+            ->addFolder('plugins')
+            ->addFolder('templates')
+            ->addFolder('tmp')
+            ->addFile('htaccess.txt')
+            ->addFile('web.config.txt')
+            ->addFile('LICENSE.txt')
+            ->addFile('README.txt')
+            ->addFile('index.php')
+        ;
 
-		$fileset = new FilesetSection();
-		$fileset
-			->addFileset($files);
+        $fileset = new FilesetSection();
+        $fileset
+            ->addFileset($files);
 
-		$manifest->addSection('fileset', $fileset);
+        $manifest->addSection('fileset', $fileset);
 
-		// Extension Update Specification
-		$server = new ServerSection();
-		$server
-			->addServer('collection', null, 'http://update.joomla.org/core/list.xml')
-			->addServer('collection', null, 'http://update.joomla.org/jed/list.xml');
+        // Extension Update Specification
+        $server = new ServerSection();
+        $server
+            ->addServer('collection', null, 'http://update.joomla.org/core/list.xml')
+            ->addServer('collection', null, 'http://update.joomla.org/jed/list.xml')
+        ;
 
-		$manifest->addSection('updateservers', $server);
+        $manifest->addSection('updateservers', $server);
 
-		return $manifest;
-	}
+        return $manifest;
+    }
 }
 
 /** @noinspection ForgottenDebugOutputInspection */
-print_r((string) FileManifestDemo::getManifest());
+print_r((string)FileManifestDemo::getManifest());

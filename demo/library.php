@@ -34,13 +34,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package     GreenCape\Manifest
- * @subpackage  Demo
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @subpackage      Demo
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
- * @link        http://www.greencape.com/
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/GPL-2.0 GNU General Public License, version 2.0 (GPLv2)
+ * @link            http://www.greencape.com/
+ * @since           File available since Release 0.1.0
  */
 
 use GreenCape\Manifest\FileSection;
@@ -55,47 +55,48 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 class LibraryManifestDemo
 {
-	public static function getManifest()
-	{
-		// Create the library manifest
-		$manifest = new LibraryManifest();
+    public static function getManifest(): LibraryManifest
+    {
+        // Create the library manifest
+        $manifest = new LibraryManifest();
 
-		// Meta data
-		$manifest
-			->setTarget('3.1')
-			->setMethod('install')
-			->setName('Joomla! Platform')
-			->setLibraryName('joomla')
-			->setVersion('12.2')
-			->setDescription('LIB_JOOMLA_XML_DESCRIPTION')
-			->setCreationDate('January 2008')
-			->setCopyright('2005 - 2013', 'Open Source Matters', false)
-			->setLicense('http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL')
-			->setAuthor('Joomla! Project')
-			->setAuthorEmail('admin@joomla.org')
-			->setAuthorUrl('http://www.joomla.org')
-			->setPackager('Joomla!')
-			->setPackagerUrl('http://www.joomla.org')
-			;
+        // Meta data
+        $manifest
+            ->setTarget('3.1')
+            ->setMethod('install')
+            ->setName('Joomla! Platform')
+            ->setLibraryName('joomla')
+            ->setVersion('12.2')
+            ->setDescription('LIB_JOOMLA_XML_DESCRIPTION')
+            ->setCreationDate('January 2008')
+            ->setCopyright('2005 - 2013', 'Open Source Matters', false)
+            ->setLicense('http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL')
+            ->setAuthor('Joomla! Project')
+            ->setAuthorEmail('admin@joomla.org')
+            ->setAuthorUrl('http://www.joomla.org')
+            ->setPackager('Joomla!')
+            ->setPackagerUrl('http://www.joomla.org')
+        ;
 
-		// Front-end files
-		$files = new FileSection();
-		$files
-			->setBase('libraries')
-			->setFileTag('file')
-			->addFolder('compat')
-			->addFolder('joomla')
-			->addFolder('legacy')
-			->addFile('import.legacy.php')
-			->addFile('import.php')
-			->addFile('loader.php')
-			->addFile('platform.php');
+        // Front-end files
+        $files = new FileSection();
+        $files
+            ->setBase('libraries')
+            ->setFileTag('file')
+            ->addFolder('compat')
+            ->addFolder('joomla')
+            ->addFolder('legacy')
+            ->addFile('import.legacy.php')
+            ->addFile('import.php')
+            ->addFile('loader.php')
+            ->addFile('platform.php')
+        ;
 
-		$manifest->addSection('files', $files);
+        $manifest->addSection('files', $files);
 
-		return $manifest;
-	}
+        return $manifest;
+    }
 }
 
 /** @noinspection ForgottenDebugOutputInspection */
-print_r((string) LibraryManifestDemo::getManifest());
+print_r((string)LibraryManifestDemo::getManifest());

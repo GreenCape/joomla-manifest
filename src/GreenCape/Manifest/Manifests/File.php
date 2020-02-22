@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,19 +41,18 @@ use GreenCape\Xml\Converter;
  */
 class FileManifest extends Manifest
 {
-	/**
-	 * Constructor
-	 *
-	 * @param Converter $xml Optional XML string to preset the manifest
-	 */
-	public function __construct(Converter $xml = null)
-	{
-		$this->type = 'file';
-		$this->map['fileset'] = 'FilesetSection';
+    /**
+     * Constructor
+     *
+     * @param Converter $xml Optional XML string to preset the manifest
+     */
+    public function __construct(Converter $xml = null)
+    {
+        $this->type           = 'file';
+        $this->map['fileset'] = 'FilesetSection';
 
-		if ($xml !== null)
-		{
-			$this->set($xml);
-		}
-	}
+        if ($xml !== null) {
+            $this->set($xml);
+        }
+    }
 }

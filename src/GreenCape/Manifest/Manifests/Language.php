@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,339 +41,334 @@ use GreenCape\Xml\Converter;
  */
 class LanguageManifest extends Manifest
 {
-	/**
-	 * @var string The client attribute allows you to specify for which application client the language is available.
-	 */
-	protected $client = 'site';
+    /**
+     * @var string The client attribute allows you to specify for which application client the language is available.
+     */
+    protected $client = 'site';
 
-	/** @var string The ISO code for the language */
-	protected $tag;
+    /** @var string The ISO code for the language */
+    protected $tag;
 
-	/** @var  int  */
-	protected $rtl;
+    /** @var  int */
+    protected $rtl;
 
-	/** @var  string */
-	protected $locale;
+    /** @var  string */
+    protected $locale;
 
-	/** @var  string */
-	protected $codePage;
+    /** @var  string */
+    protected $codePage;
 
-	/** @var  string */
-	protected $backwardLanguage;
+    /** @var  string */
+    protected $backwardLanguage;
 
-	/** @var  string */
-	protected $fontName;
+    /** @var  string */
+    protected $fontName;
 
-	/** @var  int  */
-	protected $firstDay = 0;
+    /** @var  int */
+    protected $firstDay = 0;
 
-	/**
-	 * Constructor
-	 *
-	 * @param Converter $xml Optional XML string to preset the manifest
-	 */
-	public function __construct(Converter $xml = null)
-	{
-		$this->type                 = 'language';
-		$this->sections['metadata'] = array();
+    /**
+     * Constructor
+     *
+     * @param Converter $xml Optional XML string to preset the manifest
+     */
+    public function __construct(Converter $xml = null)
+    {
+        $this->type                 = 'language';
+        $this->sections['metadata'] = [];
 
-		if ($xml !== null)
-		{
-			$this->set($xml);
-		}
-	}
+        if ($xml !== null) {
+            $this->set($xml);
+        }
+    }
 
-	/**
-	 * Getter and Setter
-	 */
+    /**
+     * Getter and Setter
+     */
 
-	/**
-	 * Set the extension name
-	 *
-	 * The description is preset to "<name>_XML_DESCRIPTION", if not already set.
-	 *
-	 * @param string $name Language name. This is a translatable field.
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setName($name)
-	{
-		parent::setName($name);
-		$this->sections['metadata']['name'] = $name;
+    /**
+     * Set the extension name
+     *
+     * The description is preset to "<name>_XML_DESCRIPTION", if not already set.
+     *
+     * @param string $name Language name. This is a translatable field.
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setName($name): self
+    {
+        parent::setName($name);
+        $this->sections['metadata']['name'] = $name;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the name of the client application
-	 *
-	 * @return string Name of the which application client for which the language is available
-	 */
-	public function getClient()
-	{
-		return $this->client;
-	}
+    /**
+     * Get the manifest structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $data = $this->getManifestRoot('metafile');
 
-	/**
-	 * Set the name of the client application
-	 *
-	 * @param string $client Name of the which application client for which the language is available
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setClient($client)
-	{
-		$this->client = $client;
+        $this->addMetadata($data['metafile']);
+        $this->addElement($data['metafile'], 'tag');
 
-		return $this;
-	}
+        foreach ($this->sections as $tag => $section) {
+            $element = [];
 
-	/**
-	 * Get the ISO tag
-	 *
-	 * @return string The ISO code for the language
-	 */
-	public function getTag()
-	{
-		return $this->tag;
-	}
+            if ($section instanceof Section) {
+                $element[$tag] = $section->getStructure();
 
-	/**
-	 * Set the ISO tag
-	 *
-	 * @param string $tag The ISO code for the language
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setTag($tag)
-	{
-		$this->tag = $tag;
-		$this->sections['metadata']['tag'] = $tag;
+                foreach ($section->getAttributes() as $attribute => $value) {
+                    $element[$attribute] = $value;
+                }
+            } else {
+                $element[$tag] = $section;
+            }
 
-		return $this;
-	}
+            $data['metafile'][] = $element;
+        }
 
-	/**
-	 * Get the PDF font name
-	 *
-	 * @return string PDF font name
-	 */
-	public function getFontName()
-	{
-		return $this->fontName;
-	}
+        return $data;
+    }
 
-	/**
-	 * Set the PDF font name
-	 *
-	 * @param string $fontName PDF font name
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setFontName($fontName)
-	{
-		$this->fontName = $fontName;
-		$this->sections['metadata']['pdfFontName'] = $fontName;
+    /**
+     * Get the attributes for the language manifest
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        $attributes             = [];
+        $attributes['@version'] = $this->getTarget();
+        $attributes['@client']  = $this->getClient();
 
-		return $this;
-	}
+        return $attributes;
+    }
 
-	/**
-	 * Get the locale
-	 *
-	 * @return string The locale string
-	 */
-	public function getLocale()
-	{
-		return $this->locale;
-	}
+    /**
+     * Get the name of the client application
+     *
+     * @return string Name of the which application client for which the language is available
+     */
+    public function getClient(): string
+    {
+        return $this->client;
+    }
 
-	/**
-	 * Set the locale
-	 *
-	 * @param string $locale The locale string
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setLocale($locale)
-	{
-		$this->locale = $locale;
-		$this->sections['metadata']['locale'] = $locale;
+    /**
+     * Set the name of the client application
+     *
+     * @param string $client Name of the which application client for which the language is available
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setClient($client): self
+    {
+        $this->client = $client;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get RTL value
-	 *
-	 * @return boolean true = RTL, false = LTR
-	 */
-	public function getRtl()
-	{
-		return (bool) $this->rtl;
-	}
+    /**
+     * Get the ISO tag
+     *
+     * @return string The ISO code for the language
+     */
+    public function getTag(): string
+    {
+        return $this->tag;
+    }
 
-	/**
-	 * Set RTL value
-	 *
-	 * @param boolean $rtl  true = RTL, false = LTR
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setRtl($rtl)
-	{
-		$this->rtl = $rtl ? 1 : 0;
-		$this->sections['metadata']['rtl'] = $this->rtl;
+    /**
+     * Set the ISO tag
+     *
+     * @param string $tag The ISO code for the language
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setTag($tag): self
+    {
+        $this->tag                         = $tag;
+        $this->sections['metadata']['tag'] = $tag;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the code page
-	 *
-	 * @return string The code page
-	 */
-	public function getCodePage()
-	{
-		return $this->codePage;
-	}
+    /**
+     * Get the PDF font name
+     *
+     * @return string PDF font name
+     */
+    public function getFontName(): string
+    {
+        return $this->fontName;
+    }
 
-	/**
-	 * Set the code page
-	 *
-	 * @param string $page The code page
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setCodePage($page)
-	{
-		$this->codePage = $page;
-		$this->sections['metadata']['winCodePage'] = $page;
+    /**
+     * Set the PDF font name
+     *
+     * @param string $fontName PDF font name
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setFontName($fontName): self
+    {
+        $this->fontName                            = $fontName;
+        $this->sections['metadata']['pdfFontName'] = $fontName;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the first day of week
-	 *
-	 * @return string The first day of week
-	 */
-	public function getFirstDay()
-	{
-		return $this->firstDay;
-	}
+    /**
+     * Get the locale
+     *
+     * @return string The locale string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
 
-	/**
-	 * Set the first day of week
-	 *
-	 * @param string $dayNum The first day of week
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setFirstDay($dayNum)
-	{
-		$this->firstDay = $dayNum;
-		$this->sections['metadata']['firstDay'] = $dayNum;
+    /**
+     * Set the locale
+     *
+     * @param string $locale The locale string
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setLocale($locale): self
+    {
+        $this->locale                         = $locale;
+        $this->sections['metadata']['locale'] = $locale;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Set the meta data
-	 *
-	 * This method is called during load of an XML file.
-	 * This makes the section look like a simple property to the import method.
-	 *
-	 * @param array $data The code page
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	protected function setMetadata($data)
-	{
-		foreach ($data as $entry)
-		{
-			foreach ($entry as $key => $value)
-			{
-				$this->sections['metadata'][$key] = $value;
-			}
-		}
+    /**
+     * Get RTL value
+     *
+     * @return boolean true = RTL, false = LTR
+     */
+    public function getRtl(): bool
+    {
+        return (bool)$this->rtl;
+    }
 
-		return $this;
-	}
+    /**
+     * Set RTL value
+     *
+     * @param boolean $rtl true = RTL, false = LTR
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setRtl($rtl): self
+    {
+        $this->rtl                         = $rtl ? 1 : 0;
+        $this->sections['metadata']['rtl'] = $this->rtl;
 
-	/**
-	 * Get the backward language
-	 *
-	 * @return string The backward language
-	 */
-	public function getBackwardLanguage()
-	{
-		return $this->backwardLanguage;
-	}
+        return $this;
+    }
 
-	/**
-	 * Set the backward language
-	 *
-	 * @param string $backwardLanguage The backward language
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setBackwardLanguage($backwardLanguage)
-	{
-		$this->backwardLanguage = $backwardLanguage;
-		$this->sections['metadata']['backwardLang'] = $backwardLanguage;
+    /**
+     * Get the code page
+     *
+     * @return string The code page
+     */
+    public function getCodePage(): string
+    {
+        return $this->codePage;
+    }
 
-		return $this;
-	}
+    /**
+     * Set the code page
+     *
+     * @param string $page The code page
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setCodePage($page): self
+    {
+        $this->codePage                            = $page;
+        $this->sections['metadata']['winCodePage'] = $page;
 
-	/**
-	 * Section interface
-	 */
+        return $this;
+    }
 
-	/**
-	 * Get the manifest structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$data = $this->getManifestRoot('metafile');
+    /**
+     * Get the first day of week
+     *
+     * @return string The first day of week
+     */
+    public function getFirstDay(): string
+    {
+        return $this->firstDay;
+    }
 
-		$this->addMetadata($data['metafile']);
-		$this->addElement($data['metafile'], 'tag');
+    /**
+     * Set the first day of week
+     *
+     * @param string $dayNum The first day of week
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setFirstDay($dayNum): self
+    {
+        $this->firstDay                         = $dayNum;
+        $this->sections['metadata']['firstDay'] = $dayNum;
 
-		foreach ($this->sections as $tag => $section)
-		{
-			$element = array();
-			if ($section instanceof Section)
-			{
-				$element[$tag] = $section->getStructure();
-				foreach ($section->getAttributes() as $attribute => $value)
-				{
-					$element[$attribute] = $value;
-				}
-			}
-			else
-			{
-				$element[$tag] = $section;
-			}
-			$data['metafile'][] = $element;
-		}
+        return $this;
+    }
 
-		return $data;
-	}
+    /**
+     * Set the meta data
+     *
+     * This method is called during load of an XML file.
+     * This makes the section look like a simple property to the import method.
+     *
+     * @param array $data The code page
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    protected function setMetadata($data): self
+    {
+        foreach ($data as $entry) {
+            foreach ($entry as $key => $value) {
+                $this->sections['metadata'][$key] = $value;
+            }
+        }
 
-	/**
-	 * Get the attributes for the language manifest
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = array();
-		$attributes['@version'] = $this->getTarget();
-		$attributes['@client']  = $this->getClient();
+        return $this;
+    }
 
-		return $attributes;
-	}
+    /**
+     * Section interface
+     */
+
+    /**
+     * Get the backward language
+     *
+     * @return string The backward language
+     */
+    public function getBackwardLanguage(): string
+    {
+        return $this->backwardLanguage;
+    }
+
+    /**
+     * Set the backward language
+     *
+     * @param string $backwardLanguage The backward language
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setBackwardLanguage($backwardLanguage): self
+    {
+        $this->backwardLanguage                     = $backwardLanguage;
+        $this->sections['metadata']['backwardLang'] = $backwardLanguage;
+
+        return $this;
+    }
 }

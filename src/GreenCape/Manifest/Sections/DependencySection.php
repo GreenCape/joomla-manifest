@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,126 +41,122 @@ use UnexpectedValueException;
  */
 class DependencySection implements Section
 {
-	/** @var array The dependency list */
-	protected $dependencies = array();
+    /** @var array The dependency list */
+    protected $dependencies = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if (strpos($key, '@') === 0)
-			{
-				$attribute = substr($key, 1);
-				$method = 'set' . ucfirst($attribute);
-				if (!is_callable(array($this, $method)))
-				{
-					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
-				}
-				$this->$method($value);
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            if (strpos($key, '@') === 0) {
+                $attribute = substr($key, 1);
+                $method    = 'set' . ucfirst($attribute);
 
-				continue;
-			}
-			$this->dependencies[] = $value;
-		}
+                if (!is_callable([$this, $method])) {
+                    throw new UnexpectedValueException("Can't handle attribute '$attribute'");
+                }
 
-		return $this;
-	}
+                $this->$method($value);
 
-	/**
-	 * Add a dependency to the section
-	 *
-	 * These are used for backups to determine which dependencies to backup;
-	 * ones marked optional are only backed up if they exist
-	 *
-	 * @param string $type     Type of required item
-	 * @param string $name     Name of required item
-	 * @param string $operator Comparision operator
-	 * @param string $version  Required version
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addDependency($type, $name, $operator, $version)
-	{
-		$element = array('dependency' => '');
-		$element['@type']     = $type;
-		$element['@name']     = $name;
-		$element['@operator'] = $operator;
-		$element['@version']  = $version;
+                continue;
+            }
 
-		$this->dependencies[] = $element;
+            $this->dependencies[] = $value;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Remove a dependency from the section
-	 *
-	 * @param string $name The name of the dependency
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeDependency($name)
-	{
-		foreach ($this->dependencies as $key => $element)
-		{
-			if ($element['@name'] === $name)
-			{
-				unset($this->dependencies[$key]);
-			}
-		}
+    /**
+     * Add a dependency to the section
+     *
+     * These are used for backups to determine which dependencies to backup;
+     * ones marked optional are only backed up if they exist
+     *
+     * @param string $type     Type of required item
+     * @param string $name     Name of required item
+     * @param string $operator Comparision operator
+     * @param string $version  Required version
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addDependency($type, $name, $operator, $version): self
+    {
+        $element              = ['dependency' => ''];
+        $element['@type']     = $type;
+        $element['@name']     = $name;
+        $element['@operator'] = $operator;
+        $element['@version']  = $version;
 
-		return $this;
-	}
+        $this->dependencies[] = $element;
 
-	/**
-	 * Section interface
-	 */
+        return $this;
+    }
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
+    /**
+     * Remove a dependency from the section
+     *
+     * @param string $name The name of the dependency
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeDependency($name): self
+    {
+        foreach ($this->dependencies as $key => $element) {
+            if ($element['@name'] === $name) {
+                unset($this->dependencies[$key]);
+            }
+        }
 
-		foreach ($this->dependencies as $dependency)
-		{
-			$structure[] = $dependency;
-		}
+        return $this;
+    }
 
-		return $structure;
-	}
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
-	}
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $structure = [];
+
+        foreach ($this->dependencies as $dependency) {
+            $structure[] = $dependency;
+        }
+
+        return $structure;
+    }
+
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return [];
+    }
 }

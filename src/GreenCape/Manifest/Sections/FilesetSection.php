@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,82 +41,80 @@ use UnexpectedValueException;
  */
 class FilesetSection implements Section
 {
-	/** @var array The filesets */
-	protected $filesets = array();
+    /** @var array The filesets */
+    protected $filesets = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the section
-	 */
-	public function __construct($data = null)
-	{
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the section
+     */
+    public function __construct($data = null)
+    {
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			$this->filesets[] = $value;
-		}
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            $this->filesets[] = $value;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add a file to the section
-	 *
-	 * @param FileSection $files      The file section
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addFileset(FileSection $files)
-	{
-		$element = $files->getAttributes();
-		$element['files'] = $files->getStructure('file', 'folder');
+    /**
+     * Add a file to the section
+     *
+     * @param FileSection $files The file section
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addFileset(FileSection $files): self
+    {
+        $element          = $files->getAttributes();
+        $element['files'] = $files->getStructure('file', 'folder');
 
-		$this->filesets[] = $element;
+        $this->filesets[] = $element;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Getter and setter
-	 */
+    /**
+     * Getter and setter
+     */
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		return $this->filesets;
-	}
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        return $this->filesets;
+    }
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
-	}
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return [];
+    }
 }

@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,77 +41,76 @@ use GreenCape\Xml\Converter;
  */
 class TemplateManifest extends Manifest
 {
-	/**
-	 * @var string The client attribute allows you to specify for which application client the template is available.
-	 */
-	protected $client;
+    /**
+     * @var string The client attribute allows you to specify for which application client the template is available.
+     */
+    protected $client;
 
-	/**
-	 * Constructor
-	 *
-	 * @param Converter $xml Optional XML string to preset the manifest
-	 */
-	public function __construct(Converter $xml = null)
-	{
-		$this->type = 'template';
-		$this->map['positions']      = 'VerbatimSection';
+    /**
+     * Constructor
+     *
+     * @param Converter $xml Optional XML string to preset the manifest
+     */
+    public function __construct(Converter $xml = null)
+    {
+        $this->type             = 'template';
+        $this->map['positions'] = 'VerbatimSection';
 
-		// Legacy Joomla! 1.5 sections
-		$this->map['administration'] = 'AdminSection';
-		$this->map['images']         = 'FileSection';
-		$this->map['css']            = 'FileSection';
+        // Legacy Joomla! 1.5 sections
+        $this->map['administration'] = 'AdminSection';
+        $this->map['images']         = 'FileSection';
+        $this->map['css']            = 'FileSection';
 
-		if ($xml !== null)
-		{
-			$this->set($xml);
-		}
-	}
+        if ($xml !== null) {
+            $this->set($xml);
+        }
+    }
 
-	/**
-	 * Getter and Setter
-	 */
+    /**
+     * Getter and Setter
+     */
 
-	/**
-	 * Get the name of the client application
-	 *
-	 * @return string Name of the which application client for which the new module is available
-	 */
-	public function getClient()
-	{
-		return $this->client;
-	}
+    /**
+     * Get the attributes for the module manifest
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        $attributes = parent::getAttributes();
 
-	/**
-	 * Set the name of the client application
-	 *
-	 * @param string $client Name of the which application client for which the new module is available
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setClient($client)
-	{
-		$this->client = $client;
+        if (!empty($this->client)) {
+            $attributes['@client'] = $this->getClient();
+        }
 
-		return $this;
-	}
+        return $attributes;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Get the name of the client application
+     *
+     * @return string Name of the which application client for which the new module is available
+     */
+    public function getClient(): string
+    {
+        return $this->client;
+    }
 
-	/**
-	 * Get the attributes for the module manifest
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = parent::getAttributes();
-		if (!empty($this->client))
-		{
-			$attributes['@client'] = $this->getClient();
-		}
+    /**
+     * Section interface
+     */
 
-		return $attributes;
-	}
+    /**
+     * Set the name of the client application
+     *
+     * @param string $client Name of the which application client for which the new module is available
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setClient($client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
 }

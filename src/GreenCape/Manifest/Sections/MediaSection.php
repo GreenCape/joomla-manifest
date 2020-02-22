@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -39,59 +39,58 @@ namespace GreenCape\Manifest;
  */
 class MediaSection extends FileSection
 {
-	/** @var string The destination folder in the installation */
-	protected $destination;
+    /** @var string The destination folder in the installation */
+    protected $destination;
 
-	/**
-	 * Getter and setter
-	 */
+    /**
+     * Getter and setter
+     */
 
-	/**
-	 * Get the destination folder
-	 *
-	 * @return string The destination folder
-	 */
-	public function getDestination()
-	{
-		return $this->destination;
-	}
+    /**
+     * Get the destination folder
+     *
+     * @return string The destination folder
+     */
+    public function getDestination(): string
+    {
+        return $this->destination;
+    }
 
-	/**
-	 * Set the destination folder
-	 *
-	 * @param string $destination The destination folder
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function setDestination($destination)
-	{
-		$this->destination = $destination;
+    /**
+     * Set the destination folder
+     *
+     * @param string $destination The destination folder
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function setDestination($destination): self
+    {
+        $this->destination = $destination;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Section interface
-	 */
+    /**
+     * Section interface
+     */
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		$attributes = array();
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        $attributes = [];
 
-		if (!empty($this->base))
-		{
-			$attributes['@folder'] = $this->base;
-		}
-		if (!empty($this->destination))
-		{
-			$attributes['@destination'] = $this->destination;
-		}
+        if (!empty($this->base)) {
+            $attributes['@folder'] = $this->base;
+        }
 
-		return $attributes;
-	}
+        if (!empty($this->destination)) {
+            $attributes['@destination'] = $this->destination;
+        }
+
+        return $attributes;
+    }
 }

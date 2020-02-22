@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -41,136 +41,130 @@ use UnexpectedValueException;
  */
 class SqlSection implements Section
 {
-	protected $elementIndex;
-	protected $driverIndex;
-	protected $structureIndex;
-	/** @var array The file list */
-	protected $files = array();
+    protected $elementIndex;
+    protected $driverIndex;
+    protected $structureIndex;
+    /** @var array The file list */
+    protected $files = [];
 
-	/**
-	 * Constructor
-	 *
-	 * @param array $data Optional XML structure to preset the manifest
-	 */
-	public function __construct($data = null)
-	{
-		$this->structureIndex = 'sql';
-		$this->driverIndex  = '@driver';
-		$this->elementIndex = 'file';
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        $this->structureIndex = 'sql';
+        $this->driverIndex    = '@driver';
+        $this->elementIndex   = 'file';
 
-		if ($data !== null)
-		{
-			$this->set($data);
-		}
-	}
+        if ($data !== null) {
+            $this->set($data);
+        }
+    }
 
-	/**
-	 * Set the section values from XML structure
-	 *
-	 * @param array $data
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 * @throws UnexpectedValueException on unsupported attributes
-	 */
-	protected function set($data)
-	{
-		foreach ($data as $key => $value)
-		{
-			if (strpos($key, '@') === 0)
-			{
-				$attribute = substr($key, 1);
-				$method = 'set' . ucfirst($attribute);
-				if (!is_callable(array($this, $method)))
-				{
-					throw new UnexpectedValueException("Can't handle attribute '$attribute'");
-				}
-				$this->$method($value);
+    /**
+     * Set the section values from XML structure
+     *
+     * @param array $data
+     *
+     * @return $this This object, to provide a fluent interface
+     * @throws UnexpectedValueException on unsupported attributes
+     */
+    protected function set($data): self
+    {
+        foreach ($data as $key => $value) {
+            if (strpos($key, '@') === 0) {
+                $attribute = substr($key, 1);
+                $method    = 'set' . ucfirst($attribute);
 
-				continue;
-			}
-			if (isset($value[$this->structureIndex][0]))
-			{
-				$this->files = $value[$this->structureIndex];
-			}
-			else
-			{
-				$this->files[] = $value[$this->structureIndex];
-			}
-		}
+                if (!is_callable([$this, $method])) {
+                    throw new UnexpectedValueException("Can't handle attribute '$attribute'");
+                }
 
-		return $this;
-	}
+                $this->$method($value);
 
-	/**
-	 * Add a file to the section
-	 *
-	 * @param string $driver     The name of a database driver
-	 * @param string $filename   The name of the file
-	 * @param array  $attributes Optional attributes for this entry
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addFile($driver, $filename, $attributes = array())
-	{
-		$element            = array($this->elementIndex => $filename);
-		$element[$this->driverIndex] = (string) $driver;
-		foreach ($attributes as $key => $value)
-		{
-			$element["@{$key}"] = (string) $value;
-		}
-		$this->files[] = $element;
+                continue;
+            }
 
-		return $this;
-	}
+            if (isset($value[$this->structureIndex][0])) {
+                $this->files = $value[$this->structureIndex];
+            } else {
+                $this->files[] = $value[$this->structureIndex];
+            }
+        }
 
-	/**
-	 * Remove a file from the section
-	 *
-	 * @param string $filename   The name of the file
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeFile($filename)
-	{
-		foreach ($this->files as $key => $element)
-		{
-			if ($element[$this->elementIndex] === $filename)
-			{
-				unset($this->files[$key]);
-			}
-		}
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Add a file to the section
+     *
+     * @param string $driver     The name of a database driver
+     * @param string $filename   The name of the file
+     * @param array  $attributes Optional attributes for this entry
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addFile($driver, $filename, $attributes = []): self
+    {
+        $element                     = [$this->elementIndex => $filename];
+        $element[$this->driverIndex] = (string)$driver;
 
-	/**
-	 * Section interface
-	 */
+        foreach ($attributes as $key => $value) {
+            $element["@{$key}"] = (string)$value;
+        }
 
-	/**
-	 * Get the section structure
-	 *
-	 * @return array
-	 */
-	public function getStructure()
-	{
-		$structure = array();
+        $this->files[] = $element;
 
-		foreach ($this->files as $file)
-		{
-			$structure[] = $file;
-		}
+        return $this;
+    }
 
-		return array($this->structureIndex => $structure);
-	}
+    /**
+     * Remove a file from the section
+     *
+     * @param string $filename The name of the file
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeFile($filename): self
+    {
+        foreach ($this->files as $key => $element) {
+            if ($element[$this->elementIndex] === $filename) {
+                unset($this->files[$key]);
+            }
+        }
 
-	/**
-	 * Get the attributes for the section
-	 *
-	 * @return array
-	 */
-	public function getAttributes()
-	{
-		return array();
-	}
+        return $this;
+    }
+
+    /**
+     * Section interface
+     */
+
+    /**
+     * Get the section structure
+     *
+     * @return array
+     */
+    public function getStructure(): array
+    {
+        $structure = [];
+
+        foreach ($this->files as $file) {
+            $structure[] = $file;
+        }
+
+        return [$this->structureIndex => $structure];
+    }
+
+    /**
+     * Get the attributes for the section
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return [];
+    }
 }
