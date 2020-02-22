@@ -4,27 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2764eef8e70a7dfb4c592693b76b329",
+    "content-hash": "872c774a7e7d645c38e436059646738c",
     "packages": [
         {
             "name": "greencape/xml-converter",
-            "version": "v1.1.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GreenCape/xml-converter.git",
-                "reference": "5094f1db585050a2260bca235304a69f26f1d483"
+                "reference": "6c6f368af9938562ff3c3b04b9960cc9dbba7fb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GreenCape/xml-converter/zipball/5094f1db585050a2260bca235304a69f26f1d483",
-                "reference": "5094f1db585050a2260bca235304a69f26f1d483",
+                "url": "https://api.github.com/repos/GreenCape/xml-converter/zipball/6c6f368af9938562ff3c3b04b9960cc9dbba7fb7",
+                "reference": "6c6f368af9938562ff3c3b04b9960cc9dbba7fb7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4"
+                "php": ">=7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4"
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -34,7 +35,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL 2.0+"
+                "MIT"
             ],
             "authors": [
                 {
@@ -47,8 +48,8 @@
                 }
             ],
             "description": "A PHP XML parser and compiler that provides an easy way to convert XML into native PHP arrays and back again. No dependencies on external libraries or extensions.",
-            "homepage": "https://github.com/greencape/xml-converter",
-            "time": "2014-08-06T01:42:10+00:00"
+            "homepage": "https://github.com/GreenCape/xml-converter",
+            "time": "2020-02-22T13:24:21+00:00"
         }
     ],
     "packages-dev": [

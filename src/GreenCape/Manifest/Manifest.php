@@ -435,7 +435,7 @@ abstract class Manifest implements Section
                         $classname = '\\GreenCape\\Manifest\\' . $this->map[$key];
                         $this->removeSection($key);
                         $this->addSection($key, new $classname($section));
-                        break;
+                        continue;
                     }
 
                     $method = 'set' . ucfirst($key);

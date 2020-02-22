@@ -15,7 +15,7 @@
   },
   "require": {
     "php": ">=7.2",
-    "greencape/xml-converter": ">=1.1",
+    "greencape/xml-converter": "^2",
     "ext-json": "*"
   },
   "require-dev": {

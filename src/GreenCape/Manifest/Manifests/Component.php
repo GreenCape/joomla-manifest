@@ -58,19 +58,4 @@ class ComponentManifest extends Manifest
             $this->set($xml);
         }
     }
-
-    /**
-     * Set the manifest values and sections from XML
-     *
-     * @param Converter $xml
-     *
-     * @return $this This object, to provide a fluent interface
-     * @throws UnexpectedValueException on unsupported attributes
-     */
-    protected function set(Converter $xml)
-    {
-        parent::set($xml);
-
-        return $this;
-    }
 }

@@ -52,11 +52,13 @@ class SchemaSection extends SqlSection
      */
     public function __construct($data = null)
     {
-        parent::__construct($data);
-
         $this->structureIndex = 'schemas';
         $this->driverIndex    = '@type';
         $this->elementIndex   = 'schemapath';
+
+        if ($data !== null) {
+            $this->set($data);
+        }
     }
 
     /**
