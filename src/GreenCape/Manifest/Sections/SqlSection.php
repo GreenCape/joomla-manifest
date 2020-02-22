@@ -71,7 +71,7 @@ class SqlSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -106,7 +106,7 @@ class SqlSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFile($driver, $filename, $attributes = []): self
+    public function addFile($driver, $filename, $attributes = [])
     {
         $element                     = [$this->elementIndex => $filename];
         $element[$this->driverIndex] = (string)$driver;
@@ -127,7 +127,7 @@ class SqlSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeFile($filename): self
+    public function removeFile($filename)
     {
         foreach ($this->files as $key => $element) {
             if ($element[$this->elementIndex] === $filename) {
@@ -147,7 +147,7 @@ class SqlSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -163,7 +163,7 @@ class SqlSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

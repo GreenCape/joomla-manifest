@@ -73,7 +73,7 @@ class LibraryManifest extends Manifest
      *
      * @return string Name of the library
      */
-    public function getLibraryName(): string
+    public function getLibraryName()
     {
         return $this->libraryName;
     }
@@ -85,7 +85,7 @@ class LibraryManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLibraryName($libraryName): self
+    public function setLibraryName($libraryName)
     {
         $this->libraryName = $libraryName;
 
@@ -97,7 +97,7 @@ class LibraryManifest extends Manifest
      *
      * @return string Name of the packager
      */
-    public function getPackager(): string
+    public function getPackager()
     {
         return $this->packager;
     }
@@ -109,7 +109,7 @@ class LibraryManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setPackager($packagerName): self
+    public function setPackager($packagerName)
     {
         $this->packager = $packagerName;
 
@@ -121,7 +121,7 @@ class LibraryManifest extends Manifest
      *
      * @return string URL of the packager
      */
-    public function getPackagerUrl(): string
+    public function getPackagerUrl()
     {
         return $this->packagerUrl;
     }
@@ -133,7 +133,7 @@ class LibraryManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setPackagerUrl($packagerUrl): self
+    public function setPackagerUrl($packagerUrl)
     {
         $this->packagerUrl = $packagerUrl;
 
@@ -149,7 +149,7 @@ class LibraryManifest extends Manifest
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $data = parent::getStructure();
 

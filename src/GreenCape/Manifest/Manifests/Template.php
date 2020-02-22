@@ -75,7 +75,7 @@ class TemplateManifest extends Manifest
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes = parent::getAttributes();
 
@@ -91,7 +91,7 @@ class TemplateManifest extends Manifest
      *
      * @return string Name of the which application client for which the new module is available
      */
-    public function getClient(): string
+    public function getClient()
     {
         return $this->client;
     }
@@ -107,7 +107,7 @@ class TemplateManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setClient($client): self
+    public function setClient($client)
     {
         $this->client = $client;
 

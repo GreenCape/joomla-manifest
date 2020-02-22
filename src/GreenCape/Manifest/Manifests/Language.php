@@ -95,7 +95,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setName($name): self
+    public function setName($name)
     {
         parent::setName($name);
         $this->sections['metadata']['name'] = $name;
@@ -108,7 +108,7 @@ class LanguageManifest extends Manifest
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $data = $this->getManifestRoot('metafile');
 
@@ -139,7 +139,7 @@ class LanguageManifest extends Manifest
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes             = [];
         $attributes['@version'] = $this->getTarget();
@@ -153,7 +153,7 @@ class LanguageManifest extends Manifest
      *
      * @return string Name of the which application client for which the language is available
      */
-    public function getClient(): string
+    public function getClient()
     {
         return $this->client;
     }
@@ -165,7 +165,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setClient($client): self
+    public function setClient($client)
     {
         $this->client = $client;
 
@@ -177,7 +177,7 @@ class LanguageManifest extends Manifest
      *
      * @return string The ISO code for the language
      */
-    public function getTag(): string
+    public function getTag()
     {
         return $this->tag;
     }
@@ -189,7 +189,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setTag($tag): self
+    public function setTag($tag)
     {
         $this->tag                         = $tag;
         $this->sections['metadata']['tag'] = $tag;
@@ -202,7 +202,7 @@ class LanguageManifest extends Manifest
      *
      * @return string PDF font name
      */
-    public function getFontName(): string
+    public function getFontName()
     {
         return $this->fontName;
     }
@@ -214,7 +214,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setFontName($fontName): self
+    public function setFontName($fontName)
     {
         $this->fontName                            = $fontName;
         $this->sections['metadata']['pdfFontName'] = $fontName;
@@ -227,7 +227,7 @@ class LanguageManifest extends Manifest
      *
      * @return string The locale string
      */
-    public function getLocale(): string
+    public function getLocale()
     {
         return $this->locale;
     }
@@ -239,7 +239,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLocale($locale): self
+    public function setLocale($locale)
     {
         $this->locale                         = $locale;
         $this->sections['metadata']['locale'] = $locale;
@@ -252,7 +252,7 @@ class LanguageManifest extends Manifest
      *
      * @return boolean true = RTL, false = LTR
      */
-    public function getRtl(): bool
+    public function getRtl()
     {
         return (bool)$this->rtl;
     }
@@ -264,7 +264,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setRtl($rtl): self
+    public function setRtl($rtl)
     {
         $this->rtl                         = $rtl ? 1 : 0;
         $this->sections['metadata']['rtl'] = $this->rtl;
@@ -277,7 +277,7 @@ class LanguageManifest extends Manifest
      *
      * @return string The code page
      */
-    public function getCodePage(): string
+    public function getCodePage()
     {
         return $this->codePage;
     }
@@ -289,7 +289,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setCodePage($page): self
+    public function setCodePage($page)
     {
         $this->codePage                            = $page;
         $this->sections['metadata']['winCodePage'] = $page;
@@ -302,7 +302,7 @@ class LanguageManifest extends Manifest
      *
      * @return string The first day of week
      */
-    public function getFirstDay(): string
+    public function getFirstDay()
     {
         return $this->firstDay;
     }
@@ -314,7 +314,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setFirstDay($dayNum): self
+    public function setFirstDay($dayNum)
     {
         $this->firstDay                         = $dayNum;
         $this->sections['metadata']['firstDay'] = $dayNum;
@@ -332,7 +332,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    protected function setMetadata($data): self
+    protected function setMetadata($data)
     {
         foreach ($data as $entry) {
             foreach ($entry as $key => $value) {
@@ -352,7 +352,7 @@ class LanguageManifest extends Manifest
      *
      * @return string The backward language
      */
-    public function getBackwardLanguage(): string
+    public function getBackwardLanguage()
     {
         return $this->backwardLanguage;
     }
@@ -364,7 +364,7 @@ class LanguageManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setBackwardLanguage($backwardLanguage): self
+    public function setBackwardLanguage($backwardLanguage)
     {
         $this->backwardLanguage                     = $backwardLanguage;
         $this->sections['metadata']['backwardLang'] = $backwardLanguage;

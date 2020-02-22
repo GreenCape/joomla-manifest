@@ -67,7 +67,7 @@ class ComponentManifest extends Manifest
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set(Converter $xml): self
+    protected function set(Converter $xml)
     {
         parent::set($xml);
 

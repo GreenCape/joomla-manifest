@@ -51,7 +51,7 @@ class MediaSection extends FileSection
      *
      * @return string The destination folder
      */
-    public function getDestination(): string
+    public function getDestination()
     {
         return $this->destination;
     }
@@ -63,7 +63,7 @@ class MediaSection extends FileSection
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setDestination($destination): self
+    public function setDestination($destination)
     {
         $this->destination = $destination;
 
@@ -79,7 +79,7 @@ class MediaSection extends FileSection
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes = [];
 

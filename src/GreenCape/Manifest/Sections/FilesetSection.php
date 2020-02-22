@@ -64,7 +64,7 @@ class FilesetSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             $this->filesets[] = $value;
@@ -80,7 +80,7 @@ class FilesetSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFileset(FileSection $files): self
+    public function addFileset(FileSection $files)
     {
         $element          = $files->getAttributes();
         $element['files'] = $files->getStructure('file', 'folder');
@@ -103,7 +103,7 @@ class FilesetSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         return $this->filesets;
     }
@@ -113,7 +113,7 @@ class FilesetSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

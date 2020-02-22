@@ -67,7 +67,7 @@ class VerbatimSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -90,7 +90,7 @@ class VerbatimSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         return $this->structure;
     }
@@ -100,7 +100,7 @@ class VerbatimSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return $this->attributes;
     }

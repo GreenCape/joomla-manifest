@@ -67,7 +67,7 @@ class MenuSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($menu, $submenu): self
+    protected function set($menu, $submenu)
     {
         $this->menu    = $menu;
         $this->submenu = $submenu['submenu'];
@@ -83,7 +83,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addMenu($label, $link = '#'): self
+    public function addMenu($label, $link = '#')
     {
         if (is_string($label)) {
             $this->submenu[] = [
@@ -106,7 +106,7 @@ class MenuSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure   = [];
         $structure[] = $this->menu;
@@ -123,7 +123,7 @@ class MenuSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }
@@ -133,7 +133,7 @@ class MenuSection implements Section
      *
      * @return string The label
      */
-    public function getLabel(): string
+    public function getLabel()
     {
         return $this->menu['menu'];
     }
@@ -145,7 +145,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLabel($label): self
+    public function setLabel($label)
     {
         $this->menu['menu'] = $label;
 
@@ -157,7 +157,7 @@ class MenuSection implements Section
      *
      * @return string  The icon filename
      */
-    public function getIcon(): string
+    public function getIcon()
     {
         return $this->menu['@img'];
     }
@@ -169,7 +169,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setIcon($icon): self
+    public function setIcon($icon)
     {
         $this->menu['@img'] = $icon;
 
@@ -181,7 +181,7 @@ class MenuSection implements Section
      *
      * @return string  The link
      */
-    public function getLink(): string
+    public function getLink()
     {
         return $this->menu['@link'];
     }
@@ -193,7 +193,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLink($link): self
+    public function setLink($link)
     {
         $this->menu['@link'] = $link;
 
@@ -207,7 +207,7 @@ class MenuSection implements Section
      *
      * @return string  The parameter
      */
-    public function getAttribute($key): string
+    public function getAttribute($key)
     {
         return $this->menu["@{$key}"];
     }
@@ -220,7 +220,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setAttribute($key, $value): self
+    public function setAttribute($key, $value)
     {
         $this->menu["@{$key}"] = $value;
 
@@ -236,7 +236,7 @@ class MenuSection implements Section
      *
      * @return string  The alt text
      */
-    public function getAlt(): string
+    public function getAlt()
     {
         return $this->menu['@alt'];
     }
@@ -248,7 +248,7 @@ class MenuSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setAlt($alt): self
+    public function setAlt($alt)
     {
         $this->menu['@alt'] = $alt;
 

@@ -68,7 +68,7 @@ class SchemaSection extends SqlSection
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFolder($driver, $folder, $attributes = []): self
+    public function addFolder($driver, $folder, $attributes = [])
     {
         $this->addFile($driver, $folder, $attributes);
 
@@ -82,7 +82,7 @@ class SchemaSection extends SqlSection
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeFolder($folder): self
+    public function removeFolder($folder)
     {
         $this->removeFile($folder);
 

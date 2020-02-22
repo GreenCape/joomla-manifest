@@ -44,12 +44,12 @@ interface Section
      *
      * @return array
      */
-    public function getStructure(): array;
+    public function getStructure();
 
     /**
      * Get the attributes for the section
      *
      * @return array
      */
-    public function getAttributes(): array;
+    public function getAttributes();
 }

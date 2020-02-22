@@ -64,7 +64,7 @@ class DependencySection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -99,7 +99,7 @@ class DependencySection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addDependency($type, $name, $operator, $version): self
+    public function addDependency($type, $name, $operator, $version)
     {
         $element              = ['dependency' => ''];
         $element['@type']     = $type;
@@ -119,7 +119,7 @@ class DependencySection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeDependency($name): self
+    public function removeDependency($name)
     {
         foreach ($this->dependencies as $key => $element) {
             if ($element['@name'] === $name) {
@@ -139,7 +139,7 @@ class DependencySection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -155,7 +155,7 @@ class DependencySection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

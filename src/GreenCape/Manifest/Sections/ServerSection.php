@@ -64,7 +64,7 @@ class ServerSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -95,7 +95,7 @@ class ServerSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addServer($type, $name, $url, $priority = null): self
+    public function addServer($type, $name, $url, $priority = null)
     {
         $element          = ['server' => $url];
         $element['@type'] = (string)$type;
@@ -120,7 +120,7 @@ class ServerSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeServer($name): self
+    public function removeServer($name)
     {
         foreach ($this->server as $key => $element) {
             if ($element['@name'] === $name) {
@@ -140,7 +140,7 @@ class ServerSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -156,7 +156,7 @@ class ServerSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

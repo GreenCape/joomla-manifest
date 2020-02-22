@@ -70,7 +70,7 @@ class ModuleManifest extends Manifest
      *
      * @return string The help key
      */
-    public function getHelp(): string
+    public function getHelp()
     {
         $attribute = $this->sections['help']->getAttributes();
 
@@ -84,7 +84,7 @@ class ModuleManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setHelp($help): self
+    public function setHelp($help)
     {
         $this->sections['help'] = new VerbatimSection(['help' => null, '@key' => $help]);
 
@@ -96,7 +96,7 @@ class ModuleManifest extends Manifest
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes            = parent::getAttributes();
         $attributes['@client'] = $this->getClient();
@@ -109,7 +109,7 @@ class ModuleManifest extends Manifest
      *
      * @return string Name of the which application client for which the new module is available
      */
-    public function getClient(): string
+    public function getClient()
     {
         return $this->client;
     }
@@ -125,7 +125,7 @@ class ModuleManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setClient($client): self
+    public function setClient($client)
     {
         $this->client = $client;
 

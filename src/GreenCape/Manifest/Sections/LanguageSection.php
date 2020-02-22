@@ -67,7 +67,7 @@ class LanguageSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -107,7 +107,7 @@ class LanguageSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFile($code, $filename, $attributes = []): self
+    public function addFile($code, $filename, $attributes = [])
     {
         $element         = ['language' => $filename];
         $element['@tag'] = (string)$code;
@@ -128,7 +128,7 @@ class LanguageSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeFile($filename): self
+    public function removeFile($filename)
     {
         foreach ($this->files as $key => $element) {
             if ($element['filename'] === $filename) {
@@ -148,7 +148,7 @@ class LanguageSection implements Section
      *
      * @return string The base folder within the distribution package
      */
-    public function getBase(): string
+    public function getBase()
     {
         return $this->base;
     }
@@ -160,7 +160,7 @@ class LanguageSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setBase($base): self
+    public function setBase($base)
     {
         $this->base = $base;
 
@@ -176,7 +176,7 @@ class LanguageSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -192,7 +192,7 @@ class LanguageSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes = [];
 

@@ -73,7 +73,7 @@ class FileSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -117,7 +117,7 @@ class FileSection implements Section
      *
      * @return array
      */
-    private function reTag($entry, $oldTag, $newTag): array
+    private function reTag($entry, $oldTag, $newTag)
     {
         if ($newTag === $oldTag) {
             return $entry;
@@ -144,7 +144,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFile($filename, $attributes = []): self
+    public function addFile($filename, $attributes = [])
     {
         $element = [$this->fileTag => $filename];
 
@@ -164,7 +164,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeFile($filename): self
+    public function removeFile($filename)
     {
         foreach ($this->files as $key => $element) {
             if ($element['filename'] === $filename) {
@@ -183,7 +183,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addFolder($folder, $attributes = []): self
+    public function addFolder($folder, $attributes = [])
     {
         $element = ['folder' => $folder];
 
@@ -207,7 +207,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeFolder($folder): self
+    public function removeFolder($folder)
     {
         foreach ($this->folders as $key => $element) {
             if ($element['folder'] === $folder) {
@@ -223,7 +223,7 @@ class FileSection implements Section
      *
      * @return string The tag for the file entries
      */
-    public function getFileTag(): string
+    public function getFileTag()
     {
         return $this->fileTag;
     }
@@ -235,7 +235,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setFileTag($fileTag): self
+    public function setFileTag($fileTag)
     {
         $this->fileTag = $fileTag;
 
@@ -247,7 +247,7 @@ class FileSection implements Section
      *
      * @return string The base folder within the distribution package
      */
-    public function getBase(): string
+    public function getBase()
     {
         return $this->base;
     }
@@ -263,7 +263,7 @@ class FileSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setBase($base): self
+    public function setBase($base)
     {
         $this->base = $base;
 
@@ -278,7 +278,7 @@ class FileSection implements Section
      *
      * @return array
      */
-    public function getStructure($fileTag = 'filename', $folderTag = 'folder'): array
+    public function getStructure($fileTag = 'filename', $folderTag = 'folder')
     {
         $structure = [];
 
@@ -298,7 +298,7 @@ class FileSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes = [];
 

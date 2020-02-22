@@ -68,7 +68,7 @@ class AdminSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -122,7 +122,7 @@ class AdminSection implements Section
      *
      * @return MenuSection The menu
      */
-    public function getMenu(): MenuSection
+    public function getMenu()
     {
         return $this->menu;
     }
@@ -134,7 +134,7 @@ class AdminSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setMenu(MenuSection $menu): self
+    public function setMenu(MenuSection $menu)
     {
         $this->menu = $menu;
 
@@ -146,7 +146,7 @@ class AdminSection implements Section
      *
      * @return FileSection The back-end files
      */
-    public function getFiles(): FileSection
+    public function getFiles()
     {
         return $this->files;
     }
@@ -158,7 +158,7 @@ class AdminSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setFiles(FileSection $files): self
+    public function setFiles(FileSection $files)
     {
         $this->files = $files;
 
@@ -170,7 +170,7 @@ class AdminSection implements Section
      *
      * @return LanguageSection
      */
-    public function getLanguage(): LanguageSection
+    public function getLanguage()
     {
         return $this->language;
     }
@@ -182,7 +182,7 @@ class AdminSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLanguage(LanguageSection $language): self
+    public function setLanguage(LanguageSection $language)
     {
         $this->language = $language;
 
@@ -198,7 +198,7 @@ class AdminSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -236,7 +236,7 @@ class AdminSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

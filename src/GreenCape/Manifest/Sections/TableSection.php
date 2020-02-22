@@ -64,7 +64,7 @@ class TableSection implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set($data): self
+    protected function set($data)
     {
         foreach ($data as $key => $value) {
             if (strpos($key, '@') === 0) {
@@ -97,7 +97,7 @@ class TableSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addTable($name, $optional = false): self
+    public function addTable($name, $optional = false)
     {
         $element = ['table' => $name];
 
@@ -117,7 +117,7 @@ class TableSection implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeTable($name): self
+    public function removeTable($name)
     {
         foreach ($this->tables as $key => $element) {
             if ($element['table'] === $name) {
@@ -137,7 +137,7 @@ class TableSection implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $structure = [];
 
@@ -153,7 +153,7 @@ class TableSection implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [];
     }

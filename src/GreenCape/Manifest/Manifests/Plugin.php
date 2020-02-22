@@ -71,7 +71,7 @@ class PluginManifest extends Manifest
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         $attributes           = parent::getAttributes();
         $attributes['@group'] = $this->getGroup();
@@ -84,7 +84,7 @@ class PluginManifest extends Manifest
      *
      * @return string The name of the group of plugins for which the new plugin is available
      */
-    public function getGroup(): string
+    public function getGroup()
     {
         return $this->group;
     }
@@ -100,7 +100,7 @@ class PluginManifest extends Manifest
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setGroup($group): self
+    public function setGroup($group)
     {
         $this->group = $group;
 

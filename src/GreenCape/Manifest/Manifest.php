@@ -142,7 +142,7 @@ abstract class Manifest implements Section
      *
      * @return string The XML string representation of the manifest
      */
-    public function __toString(): string
+    public function __toString()
     {
         $xml = new Converter($this->getStructure());
 
@@ -158,7 +158,7 @@ abstract class Manifest implements Section
      *
      * @return array
      */
-    public function getStructure(): array
+    public function getStructure()
     {
         $root = version_compare($this->target, 1.5, '>') ? 'extension' : 'install';
         $data = $this->getManifestRoot($root);
@@ -181,7 +181,7 @@ abstract class Manifest implements Section
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return [
             '@type'    => $this->getType(),
@@ -197,7 +197,7 @@ abstract class Manifest implements Section
      *
      * @return array
      */
-    protected function getManifestRoot($tag): array
+    protected function getManifestRoot($tag)
     {
         $data       = $this->getAttributes();
         $data[$tag] = [];
@@ -212,7 +212,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    protected function addMetadata(&$data): self
+    protected function addMetadata(&$data)
     {
         if (empty($this->creationDate)) {
             $this->setCreationDate();
@@ -238,7 +238,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    protected function addInstallHooks(&$data): self
+    protected function addInstallHooks(&$data)
     {
         $this->addElement($data, 'installfile');
         $this->addElement($data, 'uninstallfile');
@@ -261,7 +261,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    protected function addElement(&$data, $key): self
+    protected function addElement(&$data, $key)
     {
         $value = preg_replace('~\s+~', ' ', $this->{'get' . ucfirst($key)}());
 
@@ -278,7 +278,7 @@ abstract class Manifest implements Section
      * @return string This attribute describes the type of the extension for the installer.
      *                Based on this type further requirements to sub-tags apply.
      */
-    public function getType(): string
+    public function getType()
     {
         return $this->type;
     }
@@ -289,7 +289,7 @@ abstract class Manifest implements Section
      *
      * @throws BadMethodCallException
      */
-    public function setType(): self
+    public function setType()
     {
         throw new BadMethodCallException('Manifest type cannot be set.');
     }
@@ -299,7 +299,7 @@ abstract class Manifest implements Section
      *
      * @return string String that identifies the version of Joomla for which this extension is developed.
      */
-    public function getTarget(): string
+    public function getTarget()
     {
         return $this->target;
     }
@@ -311,7 +311,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setTarget($version): self
+    public function setTarget($version)
     {
         $this->target = $version;
 
@@ -325,7 +325,7 @@ abstract class Manifest implements Section
      *                The 'install' value means the installer will gracefully stop
      *                if it finds any existing file/folder of the new extension.
      */
-    public function getMethod(): string
+    public function getMethod()
     {
         return $this->method;
     }
@@ -344,7 +344,7 @@ abstract class Manifest implements Section
      * @return $this This object, to provide a fluent interface
      * @throws InvalidArgumentException
      */
-    public function setMethod($method): self
+    public function setMethod($method)
     {
         $allowed = ['install', 'upgrade'];
 
@@ -364,7 +364,7 @@ abstract class Manifest implements Section
      *
      * @return Manifest
      */
-    public static function load($file): Manifest
+    public static function load($file)
     {
         $xml       = new Converter($file);
         $type      = empty($xml['@type']) ? 'language' : $xml['@type'];
@@ -381,7 +381,7 @@ abstract class Manifest implements Section
      * @return $this This object, to provide a fluent interface
      * @throws UnexpectedValueException on unsupported attributes
      */
-    protected function set(Converter $xml): self
+    protected function set(Converter $xml)
     {
         // Remove type and comments, if any
         unset($xml['#comment'], $xml['@type']);
@@ -468,7 +468,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setCopyright($year, $owner, $createRange = true): self
+    public function setCopyright($year, $owner, $createRange = true)
     {
         $this->copyrightYear = $year;
 
@@ -496,7 +496,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function removeSection($tag): self
+    public function removeSection($tag)
     {
         unset($this->sections[$tag]);
 
@@ -511,7 +511,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function addSection($tag, Section $section): self
+    public function addSection($tag, Section $section)
     {
         $this->sections[$tag] = $section;
 
@@ -525,7 +525,7 @@ abstract class Manifest implements Section
      *
      * @return Section The content of the section
      */
-    public function getSection($tag): Section
+    public function getSection($tag)
     {
         return $this->sections[$tag];
     }
@@ -535,7 +535,7 @@ abstract class Manifest implements Section
      *
      * @return string Raw component name (e.g. com_banners). This is a translatable field.
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -549,7 +549,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setName($name): self
+    public function setName($name)
     {
         $this->name = $name;
 
@@ -565,7 +565,7 @@ abstract class Manifest implements Section
      *
      * @return string Author's name (e.g. Joomla! Project)
      */
-    public function getAuthor(): string
+    public function getAuthor()
     {
         return $this->author;
     }
@@ -579,7 +579,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setAuthor($author): self
+    public function setAuthor($author)
     {
         $this->author = $author;
 
@@ -595,7 +595,7 @@ abstract class Manifest implements Section
      *
      * @return string Date of creation or release (e.g. April 2006)
      */
-    public function getCreationDate(): string
+    public function getCreationDate()
     {
         return $this->creationDate;
     }
@@ -610,7 +610,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setCreationDate($creationDate = 'today'): self
+    public function setCreationDate($creationDate = 'today')
     {
         $datetime           = strtotime($creationDate);
         $this->creationDate = date('F Y', $datetime);
@@ -629,7 +629,7 @@ abstract class Manifest implements Section
      *
      * @return string The copyright string
      */
-    public function getCopyright(): string
+    public function getCopyright()
     {
         return "(C) {$this->copyrightYear} {$this->copyrightOwner}. All rights reserved.";
     }
@@ -639,7 +639,7 @@ abstract class Manifest implements Section
      *
      * @return string A license statement
      */
-    public function getLicense(): string
+    public function getLicense()
     {
         return $this->license;
     }
@@ -653,7 +653,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setLicense($license): self
+    public function setLicense($license)
     {
         $this->license = $license;
 
@@ -665,7 +665,7 @@ abstract class Manifest implements Section
      *
      * @return string Author's email address (e.g. admin@joomla.org)
      */
-    public function getAuthorEmail(): string
+    public function getAuthorEmail()
     {
         return $this->authorEmail;
     }
@@ -677,7 +677,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setAuthorEmail($authorEmail): self
+    public function setAuthorEmail($authorEmail)
     {
         $this->authorEmail = $authorEmail;
 
@@ -689,7 +689,7 @@ abstract class Manifest implements Section
      *
      * @return string URL to the author's website (e.g. www.joomla.org)
      */
-    public function getAuthorUrl(): string
+    public function getAuthorUrl()
     {
         return $this->authorUrl;
     }
@@ -701,7 +701,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setAuthorUrl($authorUrl): self
+    public function setAuthorUrl($authorUrl)
     {
         $this->authorUrl = $authorUrl;
 
@@ -713,7 +713,7 @@ abstract class Manifest implements Section
      *
      * @return string The version number of the extension (e.g. 1.6.0)
      */
-    public function getVersion(): string
+    public function getVersion()
     {
         return $this->version;
     }
@@ -725,7 +725,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setVersion($version): self
+    public function setVersion($version)
     {
         $this->version = $version;
 
@@ -737,7 +737,7 @@ abstract class Manifest implements Section
      *
      * @return string The description of the extension. This is a translatable field. (e.g. COM_BANNERS_XML_DESCRIPTION)
      */
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }
@@ -750,7 +750,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setDescription($description): self
+    public function setDescription($description)
     {
         $this->description = $description;
 
@@ -764,7 +764,7 @@ abstract class Manifest implements Section
      *
      * @return string The name of the file
      */
-    public function getInstallFile(): string
+    public function getInstallFile()
     {
         return $this->installFile;
     }
@@ -778,7 +778,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setInstallFile($installFile): self
+    public function setInstallFile($installFile)
     {
         $this->installFile = $installFile;
 
@@ -792,7 +792,7 @@ abstract class Manifest implements Section
      *
      * @return string The name of the file
      */
-    public function getUninstallFile(): string
+    public function getUninstallFile()
     {
         return $this->uninstallFile;
     }
@@ -806,7 +806,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setUninstallFile($uninstallFile): self
+    public function setUninstallFile($uninstallFile)
     {
         $this->uninstallFile = $uninstallFile;
 
@@ -820,7 +820,7 @@ abstract class Manifest implements Section
      *
      * @return string The name of the file
      */
-    public function getScriptFile(): string
+    public function getScriptFile()
     {
         return $this->scriptFile;
     }
@@ -834,7 +834,7 @@ abstract class Manifest implements Section
      *
      * @return $this This object, to provide a fluent interface
      */
-    public function setScriptFile($scriptFile): self
+    public function setScriptFile($scriptFile)
     {
         $this->scriptFile = $scriptFile;
 
