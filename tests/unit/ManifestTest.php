@@ -20,13 +20,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
@@ -48,248 +48,251 @@ use PHPUnit_Framework_TestCase;
  */
 class ManifestTest extends PHPUnit_Framework_TestCase
 {
-	/** @var Manifest */
-	private $manifest;
+    /** @var Manifest */
+    private $manifest;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->manifest = new ComponentManifest();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->manifest = new ComponentManifest();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+    }
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+    public function testIsManifest()
+    {
+        $this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
+    }
 
-	public function testDefaultVersionIs25()
-	{
-		$this->assertEquals('2.5', $this->manifest->getTarget());
-	}
+    public function testDefaultVersionIs25()
+    {
+        $this->assertEquals('2.5', $this->manifest->getTarget());
+    }
 
-	public function provideVersions()
-	{
-		return array(
-			array('version' => '1.5', 'expected' => '1.5'),
-			array('version' => '2.5', 'expected' => '2.5'),
-			array('version' => '3.0', 'expected' => '3.0'),
-		);
-	}
+    public function provideVersions()
+    {
+        return [
+            ['version' => '1.5', 'expected' => '1.5'],
+            ['version' => '2.5', 'expected' => '2.5'],
+            ['version' => '3.0', 'expected' => '3.0'],
+        ];
+    }
 
-	/**
-	 * @dataProvider provideVersions
-	 * @param $version
-	 * @param $expected
-	 */
-	public function testVersionCanBeChanged($version, $expected)
-	{
-		$this->manifest->setTarget($version);
+    /**
+     * @dataProvider provideVersions
+     *
+     * @param $version
+     * @param $expected
+     */
+    public function testVersionCanBeChanged($version, $expected)
+    {
+        $this->manifest->setTarget($version);
 
-		$this->assertEquals($expected, $this->manifest->getTarget());
-	}
+        $this->assertEquals($expected, $this->manifest->getTarget());
+    }
 
-	public function testDefaultMethodIsInstall()
-	{
-		$this->assertEquals('install', $this->manifest->getMethod());
-	}
+    public function testDefaultMethodIsInstall()
+    {
+        $this->assertEquals('install', $this->manifest->getMethod());
+    }
 
-	public function testExtensionIsManifestRoot()
-	{
-		$xml = (string) $this->manifest;
+    public function testExtensionIsManifestRoot()
+    {
+        $xml = (string)$this->manifest;
 
-		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension\b~sm', $xml);
-	}
+        $this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension\b~sm', $xml);
+    }
 
-	public function testInstallIsLegacyManifestRoot()
-	{
-		$this->manifest->setTarget('1.5');
+    public function testInstallIsLegacyManifestRoot()
+    {
+        $this->manifest->setTarget('1.5');
 
-		$xml = (string) $this->manifest;
+        $xml = (string)$this->manifest;
 
-		$this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<install\b~sm', $xml);
-	}
+        $this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<install\b~sm', $xml);
+    }
 
-	public function testNamePresetsDescription()
-	{
-		$this->manifest->setName('com_foo');
+    public function testNamePresetsDescription()
+    {
+        $this->manifest->setName('com_foo');
 
-		$this->assertEquals('COM_FOO_XML_DESCRIPTION', $this->manifest->getDescription());
-	}
+        $this->assertEquals('COM_FOO_XML_DESCRIPTION', $this->manifest->getDescription());
+    }
 
-	public function testAuthorPresetsCopyrightOwner()
-	{
-		$this->manifest->setAuthor('Any Name');
+    public function testAuthorPresetsCopyrightOwner()
+    {
+        $this->manifest->setAuthor('Any Name');
 
-		$this->assertRegExp('~Any Name\. All rights reserved\.~', $this->manifest->getCopyright());
-	}
+        $this->assertRegExp('~Any Name\. All rights reserved\.~', $this->manifest->getCopyright());
+    }
 
-	public function testDefaultCreationDateIsToday()
-	{
-		$this->manifest->setCreationDate();
+    public function testDefaultCreationDateIsToday()
+    {
+        $this->manifest->setCreationDate();
 
-		$this->assertEquals(date('F Y'), $this->manifest->getCreationDate());
-	}
+        $this->assertEquals(date('F Y'), $this->manifest->getCreationDate());
+    }
 
-	public function testCreationDateTriggersCopyrightYearRange()
-	{
-		$this->manifest->setAuthor('Sean Connery');
-		$this->manifest->setCreationDate('02.08.2010');
+    public function testCreationDateTriggersCopyrightYearRange()
+    {
+        $this->manifest->setAuthor('Sean Connery');
+        $this->manifest->setCreationDate('02.08.2010');
 
-		$this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
-	}
+        $this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
+    }
 
-	public function testAddFileSection()
-	{
-		$files = new FileSection();
-		$files->setBase('site');
-		$files->addFile('foo.php');
-		$files->addFolder('bar');
+    public function testAddFileSection()
+    {
+        $files = new FileSection();
+        $files->setBase('site');
+        $files->addFile('foo.php');
+        $files->addFolder('bar');
 
-		$this->manifest->addSection('files', $files);
+        $this->manifest->addSection('files', $files);
 
-		$this->assertRegExp('~\<files folder="site">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</files>~sm', (string) $this->manifest);
-	}
+        $this->assertRegExp('~\<files folder="site">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</files>~sm',
+            (string)$this->manifest);
+    }
 
-	public function testAttributesDoNotFlowIntoSiblings()
-	{
-		$files = new FileSection();
-		$files->setBase('site');
-		$files->addFile('foo.php');
-		$files->addFolder('bar');
+    public function testAttributesDoNotFlowIntoSiblings()
+    {
+        $files = new FileSection();
+        $files->setBase('site');
+        $files->addFile('foo.php');
+        $files->addFolder('bar');
 
-		$this->manifest->addSection('files', $files);
+        $this->manifest->addSection('files', $files);
 
-		preg_match_all('~<(\w+)[^>]*folder="site"~m', (string) $this->manifest, $matches, PREG_SET_ORDER);
-		$this->assertCount(1, $matches);
-		$this->assertEquals('files', $matches[0][1]);
-	}
+        preg_match_all('~<(\w+)[^>]*folder="site"~m', (string)$this->manifest, $matches, PREG_SET_ORDER);
+        $this->assertCount(1, $matches);
+        $this->assertEquals('files', $matches[0][1]);
+    }
 
-	public function testAddMediaSection()
-	{
-		$files = new MediaSection();
-		$files->setBase('media');
-		$files->setDestination('com_foo');
-		$files->addFile('foo.php');
-		$files->addFolder('bar');
+    public function testAddMediaSection()
+    {
+        $files = new MediaSection();
+        $files->setBase('media');
+        $files->setDestination('com_foo');
+        $files->addFile('foo.php');
+        $files->addFolder('bar');
 
-		$this->manifest->addSection('media', $files);
+        $this->manifest->addSection('media', $files);
 
-		$this->assertRegExp('~\<media folder="media" destination="com_foo">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</media>~sm', (string) $this->manifest);
-	}
+        $this->assertRegExp('~\<media folder="media" destination="com_foo">\s*\<filename>foo\.php\</filename>\s*\<folder>bar\</folder>\s*\</media>~sm',
+            (string)$this->manifest);
+    }
 
-	/**
-	 * Issue #4: method attribute is always set to 'install'
-	 */
-	public function testMethodAttributeIsImportedCorrectly()
-	{
+    /**
+     * Issue #4: method attribute is always set to 'install'
+     */
+    public function testMethodAttributeIsImportedCorrectly()
+    {
 
-		$xml = Manifest::load(__DIR__ . '/../data/issue#4.xml');
+        $xml = Manifest::load(__DIR__ . '/../data/issue#4.xml');
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<extension type="component" version="1.6" method="upgrade">';
-		$expected .= '<name>com_alpha</name>';
-		$expected .= '<author>John Doe</author>';
-		$expected .= '<creationDate>March 2006</creationDate>';
-		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
-		$expected .= '<license>License Info</license>';
-		$expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
-		$expected .= '</extension>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<extension type="component" version="1.6" method="upgrade">';
+        $expected .= '<name>com_alpha</name>';
+        $expected .= '<author>John Doe</author>';
+        $expected .= '<creationDate>March 2006</creationDate>';
+        $expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+        $expected .= '<license>License Info</license>';
+        $expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
+        $expected .= '</extension>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function provideSampleFiles()
-	{
-		return array(
-			array('component', 'com_alpha.xml', 'extension'),
-			array('module', 'mod_alpha.xml', 'extension'),
-			array('plugin', 'plg_system_alpha.xml', 'extension'),
-			array('language', 'xx-XX.xml', 'metafile'),
-			array('template', 'templateDetails.xml', 'extension'),
-			array('file', 'file.xml', 'extension'),
-			array('library', 'library.xml', 'extension'),
-			array('package', 'pkg_joomla.xml', 'extension'),
-		);
-	}
+    public function provideSampleFiles()
+    {
+        return [
+            ['component', 'com_alpha.xml', 'extension'],
+            ['module', 'mod_alpha.xml', 'extension'],
+            ['plugin', 'plg_system_alpha.xml', 'extension'],
+            ['language', 'xx-XX.xml', 'metafile'],
+            ['template', 'templateDetails.xml', 'extension'],
+            ['file', 'file.xml', 'extension'],
+            ['library', 'library.xml', 'extension'],
+            ['package', 'pkg_joomla.xml', 'extension'],
+        ];
+    }
 
-	/**
-	 * @dataProvider provideSampleFiles
-	 *
-	 * @param string $demo    The demo script
-	 * @param string $xml     The sample XML
-	 * @param string $rootTag The root tag in the sample file
-	 */
-	public function testReproduceSample($demo, $xml, $rootTag)
-	{
-		$demoFile  = $demo . '.php';
-		$demoClass = ucfirst($demo) . 'ManifestDemo';
-		ob_start();
-		/** @noinspection PhpIncludeInspection */
-		include_once __DIR__ . '/../../demo/' . $demoFile;
-		ob_get_clean();
+    /**
+     * @dataProvider provideSampleFiles
+     *
+     * @param string $demo    The demo script
+     * @param string $xml     The sample XML
+     * @param string $rootTag The root tag in the sample file
+     */
+    public function testReproduceSample($demo, $xml, $rootTag)
+    {
+        $demoFile  = $demo . '.php';
+        $demoClass = ucfirst($demo) . 'ManifestDemo';
+        ob_start();
+        /** @noinspection PhpIncludeInspection */
+        include_once __DIR__ . '/../../demo/' . $demoFile;
+        ob_get_clean();
 
-		$expected = new Converter(__DIR__ . '/../data/'. $xml);
-		$this->sort($expected->data[$rootTag]);
+        $expected = new Converter(__DIR__ . '/../data/' . $xml);
+        $this->sort($expected->data[$rootTag]);
 
-		$manifest = new Converter((string) call_user_func(array($demoClass, 'getManifest')));
-		$this->sort($manifest->data[$rootTag]);
+        $manifest = new Converter((string)call_user_func([$demoClass, 'getManifest']));
+        $this->sort($manifest->data[$rootTag]);
 
-		$this->assertEquals($expected->data, $manifest->data);
-	}
+        $this->assertEquals($expected->data, $manifest->data);
+    }
 
-	private function sort(&$manifestData)
-	{
-		usort($manifestData, static function ($a, $b)
-		{
-			reset($a);
-			$nameA = key($a);
-			reset($b);
-			$nameB = key($b);
+    private function sort(&$manifestData)
+    {
+        usort($manifestData, static function ($a, $b) {
+            reset($a);
+            $nameA = key($a);
+            reset($b);
+            $nameB = key($b);
 
-			if ($nameA === $nameB)
-			{
-				return 0;
-			}
-			return $nameA < $nameB ? -1 : 1;
-		});
-	}
+            if ($nameA === $nameB) {
+                return 0;
+            }
 
-	/**
-	 * Issue #2: Line feeds in data fields should be removed
-	 */
-	public function testLineFeedsInDataFieldsAreRemoved()
-	{
+            return $nameA < $nameB ? -1 : 1;
+        });
+    }
 
-		$xml = Manifest::load(__DIR__ . '/../data/issue#2.xml');
+    /**
+     * Issue #2: Line feeds in data fields should be removed
+     */
+    public function testLineFeedsInDataFieldsAreRemoved()
+    {
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<extension type="component" version="1.6" method="upgrade">';
-		$expected .= '<name>com_alpha</name>';
-		$expected .= '<author>John Doe</author>';
-		$expected .= '<creationDate>March 2006</creationDate>';
-		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
-		$expected .= '<license>License Info</license>';
-		$expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
-		$expected .= '</extension>';
+        $xml = Manifest::load(__DIR__ . '/../data/issue#2.xml');
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<extension type="component" version="1.6" method="upgrade">';
+        $expected .= '<name>com_alpha</name>';
+        $expected .= '<author>John Doe</author>';
+        $expected .= '<creationDate>March 2006</creationDate>';
+        $expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+        $expected .= '<license>License Info</license>';
+        $expected .= '<description>COM_ALPHA_XML_DESCRIPTION</description>';
+        $expected .= '</extension>';
 
-	public function testGetSection()
-	{
-		$manifest = Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-		$this->assertInstanceOf('\\GreenCape\\Manifest\\FileSection', $manifest->getSection('files'));
-	}
+    public function testGetSection()
+    {
+        $manifest = Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
+
+        $this->assertEquals('', print_r($manifest, true));
+        $this->assertInstanceOf('\\GreenCape\\Manifest\\FileSection', $manifest->getSection('files'));
+    }
 }
