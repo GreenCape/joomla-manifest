@@ -20,20 +20,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
 
 use GreenCape\Manifest\MediaSection;
 use GreenCape\Xml\Converter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Media Section Tests
@@ -43,118 +43,117 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class MediaSectionTest extends PHPUnit_Framework_TestCase
+class MediaSectionTest extends TestCase
 {
-	/** @var MediaSection */
-	private $section;
+    /** @var MediaSection */
+    private $section;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->section = new MediaSection();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->section = new MediaSection();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-		unset($this->section);
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+        unset($this->section);
+    }
 
-	public function testAddFile()
-	{
-		$this->section->addFile('foo.txt');
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+    public function testAddFile(): void
+    {
+        $this->section->addFile('foo.txt');
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<filename>foo.txt</filename>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<filename>foo.txt</filename>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testAddFileWithAttribute()
-	{
-		$this->section->addFile('foo.txt', array('plugin' => 'foo'));
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+    public function testAddFileWithAttribute(): void
+    {
+        $this->section->addFile('foo.txt', ['plugin' => 'foo']);
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<filename plugin="foo">foo.txt</filename>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<filename plugin="foo">foo.txt</filename>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testAddFolder()
-	{
-		$this->section->addFolder('foo');
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+    public function testAddFolder(): void
+    {
+        $this->section->addFolder('foo');
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<folder>foo</folder>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<folder>foo</folder>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testAddMultiple()
-	{
-		$this->section->addFile('foo.txt');
-		$this->section->addFile('bar.txt');
-		$this->section->addFolder('foo');
-		$this->section->addFolder('bar');
+    public function testAddMultiple(): void
+    {
+        $this->section->addFile('foo.txt');
+        $this->section->addFile('bar.txt');
+        $this->section->addFolder('foo');
+        $this->section->addFolder('bar');
 
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<filename>foo.txt</filename>';
-		$expected .= '<filename>bar.txt</filename>';
-		$expected .= '<folder>foo</folder>';
-		$expected .= '<folder>bar</folder>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<filename>foo.txt</filename>';
+        $expected .= '<filename>bar.txt</filename>';
+        $expected .= '<folder>foo</folder>';
+        $expected .= '<folder>bar</folder>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testRemoveFile()
-	{
-		$this->section->addFile('foo.txt');
-		$this->section->addFile('bar.txt');
-		$this->section->removeFile('foo.txt');
+    public function testRemoveFile(): void
+    {
+        $this->section->addFile('foo.txt');
+        $this->section->addFile('bar.txt');
+        $this->section->removeFile('foo.txt');
 
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<filename>bar.txt</filename>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<filename>bar.txt</filename>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testRemoveFolder()
-	{
-		$this->section->addFolder('foo');
-		$this->section->addFolder('bar');
-		$this->section->removeFolder('foo');
+    public function testRemoveFolder(): void
+    {
+        $this->section->addFolder('foo');
+        $this->section->addFolder('bar');
+        $this->section->removeFolder('foo');
 
-		$xml = new Converter(array('files' => $this->section->getStructure()));
+        $xml = new Converter(['files' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<files>';
-		$expected .= '<folder>bar</folder>';
-		$expected .= '</files>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<files>';
+        $expected .= '<folder>bar</folder>';
+        $expected .= '</files>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
-
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 }

@@ -20,19 +20,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\Manifest;
 use GreenCape\Manifest\PluginManifest;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Plugin Manifest Tests
@@ -42,70 +43,70 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class PluginManifestTest extends PHPUnit_Framework_TestCase
+class PluginManifestTest extends TestCase
 {
-	/** @var PluginManifest */
-	private $manifest;
+    /** @var PluginManifest */
+    private $manifest;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->manifest = new PluginManifest();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->manifest = new PluginManifest();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+    }
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+    public function testIsManifest(): void
+    {
+        $this->assertInstanceOf(Manifest::class, $this->manifest);
+    }
 
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('plugin', $this->manifest->getType());
-	}
+    public function testTypeIsCorrect(): void
+    {
+        $this->assertEquals('plugin', $this->manifest->getType());
+    }
 
-	public function testThereIsNoDefaultGroup()
-	{
-		$this->assertEmpty($this->manifest->getGroup());
-	}
+    public function testThereIsNoDefaultGroup(): void
+    {
+        $this->assertEmpty($this->manifest->getGroup());
+    }
 
-	public function provideGroups()
-	{
-		return array(
-			array('group' => 'system', 'expected' => 'system'),
-			array('group' => 'user', 'expected' => 'user'),
-			array('group' => 'content', 'expected' => 'content'),
-		);
-	}
+    public function provideGroups(): array
+    {
+        return [
+            ['group' => 'system', 'expected' => 'system'],
+            ['group' => 'user', 'expected' => 'user'],
+            ['group' => 'content', 'expected' => 'content'],
+        ];
+    }
 
-	/**
-	 * @dataProvider provideGroups
-	 *
-	 * @param $group
-	 * @param $expected
-	 */
-	public function testGroupCanBeChanged($group, $expected)
-	{
-		$this->manifest->setGroup($group);
+    /**
+     * @dataProvider provideGroups
+     *
+     * @param $group
+     * @param $expected
+     */
+    public function testGroupCanBeChanged($group, $expected): void
+    {
+        $this->manifest->setGroup($group);
 
-		$this->assertEquals($expected, $this->manifest->getGroup());
-	}
+        $this->assertEquals($expected, $this->manifest->getGroup());
+    }
 
-	public function testManifestRootHasGroupAttribute()
-	{
-		$this->manifest->setGroup('foo');
-		$xml = (string) $this->manifest;
+    public function testManifestRootHasGroupAttribute(): void
+    {
+        $this->manifest->setGroup('foo');
+        $xml = (string)$this->manifest;
 
-		$this->assertRegExp('~\<extension [^>]*group="foo"~sm', $xml);
-	}
+        $this->assertRegExp('~\<extension [^>]*group="foo"~sm', $xml);
+    }
 }

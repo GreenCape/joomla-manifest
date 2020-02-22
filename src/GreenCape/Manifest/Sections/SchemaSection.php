@@ -20,12 +20,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\Manifest
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\Manifest
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\Manifest;
@@ -39,39 +39,53 @@ namespace GreenCape\Manifest;
  */
 class SchemaSection extends SqlSection
 {
-	protected $elementIndex;
-	protected $driverIndex;
-	protected $structureIndex;
-	/** @var array The file list */
-	protected $files = [];
+    protected $elementIndex;
+    protected $driverIndex;
+    protected $structureIndex;
+    /** @var array The file list */
+    protected $files = [];
 
-	/**
-	 * Add a folder to the section
-	 *
-	 * @param string $driver     The name of a database driver
-	 * @param string $folder     The name of the folder
-	 * @param array  $attributes Optional attributes for this entry
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function addFolder($driver, $folder, $attributes = array())
-	{
-		$this->addFile($driver, $folder, $attributes);
+    /**
+     * Constructor
+     *
+     * @param array $data Optional XML structure to preset the manifest
+     */
+    public function __construct($data = null)
+    {
+        parent::__construct($data);
 
-		return $this;
-	}
+        $this->structureIndex = 'schemas';
+        $this->driverIndex    = '@type';
+        $this->elementIndex   = 'schemapath';
+    }
 
-	/**
-	 * Remove a folder from the section
-	 *
-	 * @param string $folder The name of the folder
-	 *
-	 * @return $this This object, to provide a fluent interface
-	 */
-	public function removeFolder($folder)
-	{
-		$this->removeFile($folder);
+    /**
+     * Add a folder to the section
+     *
+     * @param string $driver     The name of a database driver
+     * @param string $folder     The name of the folder
+     * @param array  $attributes Optional attributes for this entry
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function addFolder($driver, $folder, $attributes = [])
+    {
+        $this->addFile($driver, $folder, $attributes);
 
-		return $this;
-	}
+        return $this;
+    }
+
+    /**
+     * Remove a folder from the section
+     *
+     * @param string $folder The name of the folder
+     *
+     * @return $this This object, to provide a fluent interface
+     */
+    public function removeFolder($folder)
+    {
+        $this->removeFile($folder);
+
+        return $this;
+    }
 }

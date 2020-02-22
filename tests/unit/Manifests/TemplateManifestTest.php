@@ -20,19 +20,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
 
+use GreenCape\Manifest\Manifest;
 use GreenCape\Manifest\TemplateManifest;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Template Manifest Tests
@@ -42,43 +43,43 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class TemplateManifestTest extends PHPUnit_Framework_TestCase
+class TemplateManifestTest extends TestCase
 {
-	/** @var TemplateManifest */
-	private $manifest;
+    /** @var TemplateManifest */
+    private $manifest;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->manifest = new TemplateManifest();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->manifest = new TemplateManifest();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+    }
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+    public function testIsManifest(): void
+    {
+        $this->assertInstanceOf(Manifest::class, $this->manifest);
+    }
 
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('template', $this->manifest->getType());
-	}
+    public function testTypeIsCorrect(): void
+    {
+        $this->assertEquals('template', $this->manifest->getType());
+    }
 
-	public function testManifestRootHasClientAttribute()
-	{
-		$this->manifest
-			->setClient('site');
+    public function testManifestRootHasClientAttribute(): void
+    {
+        $this->manifest
+            ->setClient('site');
 
-		$this->assertRegExp('~\<extension [^>]*client="site"~sm', (string) $this->manifest);
-	}
+        $this->assertRegExp('~\<extension [^>]*client="site"~sm', (string)$this->manifest);
+    }
 }

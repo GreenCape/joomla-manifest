@@ -36,7 +36,7 @@ use GreenCape\Manifest\FileSection;
 use GreenCape\Manifest\Manifest;
 use GreenCape\Manifest\MediaSection;
 use GreenCape\Xml\Converter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Generic Manifest Tests
@@ -46,7 +46,7 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class ManifestTest extends PHPUnit_Framework_TestCase
+class ManifestTest extends TestCase
 {
     /** @var Manifest */
     private $manifest;
@@ -55,7 +55,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->manifest = new ComponentManifest();
     }
@@ -64,21 +64,21 @@ class ManifestTest extends PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 
-    public function testIsManifest()
+    public function testIsManifest(): void
     {
-        $this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
+        $this->assertInstanceOf(Manifest::class, $this->manifest);
     }
 
-    public function testDefaultVersionIs25()
+    public function testDefaultVersionIs25(): void
     {
         $this->assertEquals('2.5', $this->manifest->getTarget());
     }
 
-    public function provideVersions()
+    public function provideVersions(): array
     {
         return [
             ['version' => '1.5', 'expected' => '1.5'],
@@ -93,26 +93,26 @@ class ManifestTest extends PHPUnit_Framework_TestCase
      * @param $version
      * @param $expected
      */
-    public function testVersionCanBeChanged($version, $expected)
+    public function testVersionCanBeChanged($version, $expected): void
     {
         $this->manifest->setTarget($version);
 
         $this->assertEquals($expected, $this->manifest->getTarget());
     }
 
-    public function testDefaultMethodIsInstall()
+    public function testDefaultMethodIsInstall(): void
     {
         $this->assertEquals('install', $this->manifest->getMethod());
     }
 
-    public function testExtensionIsManifestRoot()
+    public function testExtensionIsManifestRoot(): void
     {
         $xml = (string)$this->manifest;
 
         $this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<extension\b~sm', $xml);
     }
 
-    public function testInstallIsLegacyManifestRoot()
+    public function testInstallIsLegacyManifestRoot(): void
     {
         $this->manifest->setTarget('1.5');
 
@@ -121,28 +121,28 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('~^\<\?xml [^>]*\?>\s*\<install\b~sm', $xml);
     }
 
-    public function testNamePresetsDescription()
+    public function testNamePresetsDescription(): void
     {
         $this->manifest->setName('com_foo');
 
         $this->assertEquals('COM_FOO_XML_DESCRIPTION', $this->manifest->getDescription());
     }
 
-    public function testAuthorPresetsCopyrightOwner()
+    public function testAuthorPresetsCopyrightOwner(): void
     {
         $this->manifest->setAuthor('Any Name');
 
         $this->assertRegExp('~Any Name\. All rights reserved\.~', $this->manifest->getCopyright());
     }
 
-    public function testDefaultCreationDateIsToday()
+    public function testDefaultCreationDateIsToday(): void
     {
         $this->manifest->setCreationDate();
 
         $this->assertEquals(date('F Y'), $this->manifest->getCreationDate());
     }
 
-    public function testCreationDateTriggersCopyrightYearRange()
+    public function testCreationDateTriggersCopyrightYearRange(): void
     {
         $this->manifest->setAuthor('Sean Connery');
         $this->manifest->setCreationDate('02.08.2010');
@@ -150,7 +150,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('~\(C\) 2010 - \d+ Sean Connery\. All rights reserved\.~', $this->manifest->getCopyright());
     }
 
-    public function testAddFileSection()
+    public function testAddFileSection(): void
     {
         $files = new FileSection();
         $files->setBase('site');
@@ -163,7 +163,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
             (string)$this->manifest);
     }
 
-    public function testAttributesDoNotFlowIntoSiblings()
+    public function testAttributesDoNotFlowIntoSiblings(): void
     {
         $files = new FileSection();
         $files->setBase('site');
@@ -177,7 +177,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('files', $matches[0][1]);
     }
 
-    public function testAddMediaSection()
+    public function testAddMediaSection(): void
     {
         $files = new MediaSection();
         $files->setBase('media');
@@ -194,7 +194,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
     /**
      * Issue #4: method attribute is always set to 'install'
      */
-    public function testMethodAttributeIsImportedCorrectly()
+    public function testMethodAttributeIsImportedCorrectly(): void
     {
 
         $xml = Manifest::load(__DIR__ . '/../data/issue#4.xml');
@@ -212,7 +212,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
     }
 
-    public function provideSampleFiles()
+    public function provideSampleFiles(): array
     {
         return [
             ['component', 'com_alpha.xml', 'extension'],
@@ -233,12 +233,12 @@ class ManifestTest extends PHPUnit_Framework_TestCase
      * @param string $xml     The sample XML
      * @param string $rootTag The root tag in the sample file
      */
-    public function testReproduceSample($demo, $xml, $rootTag)
+    public function testReproduceSample($demo, $xml, $rootTag): void
     {
         $demoFile  = $demo . '.php';
         $demoClass = ucfirst($demo) . 'ManifestDemo';
+
         ob_start();
-        /** @noinspection PhpIncludeInspection */
         include_once __DIR__ . '/../../demo/' . $demoFile;
         ob_get_clean();
 
@@ -251,7 +251,10 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected->data, $manifest->data);
     }
 
-    private function sort(&$manifestData)
+    /**
+     * @param $manifestData
+     */
+    private function sort(&$manifestData): void
     {
         usort($manifestData, static function ($a, $b) {
             reset($a);
@@ -270,7 +273,7 @@ class ManifestTest extends PHPUnit_Framework_TestCase
     /**
      * Issue #2: Line feeds in data fields should be removed
      */
-    public function testLineFeedsInDataFieldsAreRemoved()
+    public function testLineFeedsInDataFieldsAreRemoved(): void
     {
 
         $xml = Manifest::load(__DIR__ . '/../data/issue#2.xml');
@@ -288,11 +291,10 @@ class ManifestTest extends PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
     }
 
-    public function testGetSection()
+    public function testGetSection(): void
     {
         $manifest = Manifest::load(__DIR__ . '/../data/plg_system_alpha.xml');
 
-        $this->assertEquals('', print_r($manifest, true));
-        $this->assertInstanceOf('\\GreenCape\\Manifest\\FileSection', $manifest->getSection('files'));
+        $this->assertInstanceOf(FileSection::class, $manifest->getSection('files'));
     }
 }

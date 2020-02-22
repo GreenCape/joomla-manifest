@@ -20,13 +20,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
@@ -34,7 +34,7 @@ namespace GreenCape\ManifestTest;
 use GreenCape\Manifest\FileSection;
 use GreenCape\Manifest\FilesetSection;
 use GreenCape\Xml\Converter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Fileset Section Tests
@@ -44,83 +44,86 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class FilesetSectionTest extends PHPUnit_Framework_TestCase
+class FilesetSectionTest extends TestCase
 {
-	/** @var FilesetSection */
-	private $section;
+    /** @var FilesetSection */
+    private $section;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->section = new FilesetSection();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->section = new FilesetSection();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-		unset($this->section);
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+        unset($this->section);
+    }
 
-	/**
-	 * Issue #9: File manifest: fileset is not supported
-	 */
-	public function testAddFileSection()
-	{
-		$files = new FileSection();
-		$files
-			->setBase('dir')
-			->addFile('foo.txt');
+    /**
+     * Issue #9: File manifest: fileset is not supported
+     */
+    public function testAddFileSection(): void
+    {
+        $files = new FileSection();
+        $files
+            ->setBase('dir')
+            ->addFile('foo.txt')
+        ;
 
-		$this->section->addFileset($files);
-		$xml = new Converter(array('fileset' => $this->section->getStructure()));
+        $this->section->addFileset($files);
+        $xml = new Converter(['fileset' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<fileset>';
-		$expected .= '<files folder="dir">';
-		$expected .= '<file>foo.txt</file>';
-		$expected .= '</files>';
-		$expected .= '</fileset>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<fileset>';
+        $expected .= '<files folder="dir">';
+        $expected .= '<file>foo.txt</file>';
+        $expected .= '</files>';
+        $expected .= '</fileset>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	/**
-	 * Issue #9: File manifest: fileset is not supported
-	 */
-	public function testAddMultipleFileSections()
-	{
-		$files = new FileSection();
-		$files
-			->setBase('dir')
-			->addFile('foo.txt');
+    /**
+     * Issue #9: File manifest: fileset is not supported
+     */
+    public function testAddMultipleFileSections(): void
+    {
+        $files = new FileSection();
+        $files
+            ->setBase('dir')
+            ->addFile('foo.txt')
+        ;
 
-		$this->section->addFileset($files);
+        $this->section->addFileset($files);
 
-		$files = new FileSection();
-		$files
-			->setBase('another/dir')
-			->addFile('bar.txt');
+        $files = new FileSection();
+        $files
+            ->setBase('another/dir')
+            ->addFile('bar.txt')
+        ;
 
-		$this->section->addFileset($files);
+        $this->section->addFileset($files);
 
-		$xml = new Converter(array('fileset' => $this->section->getStructure()));
+        $xml = new Converter(['fileset' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<fileset>';
-		$expected .= '<files folder="dir">';
-		$expected .= '<file>foo.txt</file>';
-		$expected .= '</files>';
-		$expected .= '<files folder="another/dir">';
-		$expected .= '<file>bar.txt</file>';
-		$expected .= '</files>';
-		$expected .= '</fileset>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<fileset>';
+        $expected .= '<files folder="dir">';
+        $expected .= '<file>foo.txt</file>';
+        $expected .= '</files>';
+        $expected .= '<files folder="another/dir">';
+        $expected .= '<file>bar.txt</file>';
+        $expected .= '</files>';
+        $expected .= '</fileset>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 }

@@ -20,20 +20,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
 
 use GreenCape\Manifest\Manifest;
 use GreenCape\Manifest\ModuleManifest;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Module Manifest Tests
@@ -43,95 +43,96 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class ModuleManifestTest extends PHPUnit_Framework_TestCase
+class ModuleManifestTest extends TestCase
 {
-	/** @var ModuleManifest */
-	private $manifest;
+    /** @var ModuleManifest */
+    private $manifest;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->manifest = new ModuleManifest();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->manifest = new ModuleManifest();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+    }
 
-	public function testIsManifest()
-	{
-		$this->assertInstanceOf('GreenCape\\Manifest\\Manifest', $this->manifest);
-	}
+    public function testIsManifest(): void
+    {
+        $this->assertInstanceOf(Manifest::class, $this->manifest);
+    }
 
-	public function testTypeIsCorrect()
-	{
-		$this->assertEquals('module', $this->manifest->getType());
-	}
+    public function testTypeIsCorrect(): void
+    {
+        $this->assertEquals('module', $this->manifest->getType());
+    }
 
-	public function testDefaultClientIsSite()
-	{
-		$this->assertEquals('site', $this->manifest->getClient());
-	}
+    public function testDefaultClientIsSite(): void
+    {
+        $this->assertEquals('site', $this->manifest->getClient());
+    }
 
-	public function provideClients()
-	{
-		return array(
-			array('client' => 'site', 'expected' => 'site'),
-			array('client' => 'administrator', 'expected' => 'administrator'),
-		);
-	}
+    public function provideClients()
+    {
+        return [
+            ['client' => 'site', 'expected' => 'site'],
+            ['client' => 'administrator', 'expected' => 'administrator'],
+        ];
+    }
 
-	/**
-	 * @dataProvider provideClients
-	 * @param $client
-	 * @param $expected
-	 */
-	public function testClientCanBeChanged($client, $expected)
-	{
-		$this->manifest->setClient($client);
+    /**
+     * @dataProvider provideClients
+     *
+     * @param $client
+     * @param $expected
+     */
+    public function testClientCanBeChanged($client, $expected): void
+    {
+        $this->manifest->setClient($client);
 
-		$this->assertEquals($expected, $this->manifest->getClient());
-	}
+        $this->assertEquals($expected, $this->manifest->getClient());
+    }
 
-	public function testManifestRootHasClientAttribute()
-	{
-		$xml = (string) $this->manifest;
+    public function testManifestRootHasClientAttribute(): void
+    {
+        $xml = (string)$this->manifest;
 
-		$this->assertRegExp('~\<extension [^>]*client="site"~sm', $xml);
-	}
+        $this->assertRegExp('~\<extension [^>]*client="site"~sm', $xml);
+    }
 
-	/**
-	 * Issue #11: help is not supported
-	 */
-	public function testHelpIsSupported()
-	{
-		/** @var ModuleManifest $xml */
-		$xml = Manifest::load(__DIR__ . '/../../data/issue#11.xml');
+    /**
+     * Issue #11: help is not supported
+     */
+    public function testHelpIsSupported(): void
+    {
+        /** @var ModuleManifest $xml */
+        $xml = Manifest::load(__DIR__ . '/../../data/issue#11.xml');
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<extension type="module" version="1.6" method="upgrade" client="site">';
-		$expected .= '<name>mod_alpha</name>';
-		$expected .= '<author>John Doe</author>';
-		$expected .= '<creationDate>March 2006</creationDate>';
-		$expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
-		$expected .= '<license>License Info</license>';
-		$expected .= '<description>MOD_ALPHA_XML_DESCRIPTION</description>';
-		$expected .= '<help key="MOD_ALPHA_HELP_KEY" />';
-		$expected .= '</extension>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<extension type="module" version="1.6" method="upgrade" client="site">';
+        $expected .= '<name>mod_alpha</name>';
+        $expected .= '<author>John Doe</author>';
+        $expected .= '<creationDate>March 2006</creationDate>';
+        $expected .= '<copyright>(C) 2008 - ' . date('Y') . ' Copyright Info. All rights reserved.</copyright>';
+        $expected .= '<license>License Info</license>';
+        $expected .= '<description>MOD_ALPHA_XML_DESCRIPTION</description>';
+        $expected .= '<help key="MOD_ALPHA_HELP_KEY" />';
+        $expected .= '</extension>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
 
-		$this->assertEquals('MOD_ALPHA_HELP_KEY', $xml->getHelp());
+        $this->assertEquals('MOD_ALPHA_HELP_KEY', $xml->getHelp());
 
-		$xml->setHelp('CHANGED');
+        $xml->setHelp('CHANGED');
 
-		$this->assertEquals('CHANGED', $xml->getHelp());
-	}
+        $this->assertEquals('CHANGED', $xml->getHelp());
+    }
 }

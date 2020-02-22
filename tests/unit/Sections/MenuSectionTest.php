@@ -20,20 +20,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * @package     GreenCape\ManifestTest
- * @subpackage  Unittests
- * @author      Niels Braczek <nbraczek@bsds.de>
+ * @package         GreenCape\ManifestTest
+ * @subpackage      Unittests
+ * @author          Niels Braczek <nbraczek@bsds.de>
  * @copyright   (C) 2014-2015 GreenCape, Niels Braczek <nbraczek@bsds.de>
- * @license     http://opensource.org/licenses/MIT The MIT license (MIT)
- * @link        http://greencape.github.io
- * @since       File available since Release 0.1.0
+ * @license         http://opensource.org/licenses/MIT The MIT license (MIT)
+ * @link            http://greencape.github.io
+ * @since           File available since Release 0.1.0
  */
 
 namespace GreenCape\ManifestTest;
 
 use GreenCape\Manifest\MenuSection;
 use GreenCape\Xml\Converter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Menu Section Tests
@@ -43,107 +43,111 @@ use PHPUnit_Framework_TestCase;
  * @author     Niels Braczek <nbraczek@bsds.de>
  * @since      Class available since Release 0.1.0
  */
-class MenuSectionTest extends PHPUnit_Framework_TestCase
+class MenuSectionTest extends TestCase
 {
-	/** @var MenuSection */
-	private $section;
+    /** @var MenuSection */
+    private $section;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp()
-	{
-		$this->section = new MenuSection();
-	}
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp(): void
+    {
+        $this->section = new MenuSection();
+    }
 
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown()
-	{
-		unset($this->section);
-	}
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown(): void
+    {
+        unset($this->section);
+    }
 
-	/**
-	 * Issue #1
-	 */
-	public function testEmptySubmenusAreOmitted()
-	{
-		$this->section->setLabel('Menu');
-		$this->section->setIcon('Icon');
-		$xml = new Converter(array('administration' => $this->section->getStructure()));
+    /**
+     * Issue #1
+     */
+    public function testEmptySubmenusAreOmitted(): void
+    {
+        $this->section->setLabel('Menu');
+        $this->section->setIcon('Icon');
+        $xml = new Converter(['administration' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<administration>';
-		$expected .= '<menu img="Icon">Menu</menu>';
-		$expected .= '</administration>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<administration>';
+        $expected .= '<menu img="Icon">Menu</menu>';
+        $expected .= '</administration>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	public function testMenuSectionWorksAsSubmenu()
-	{
-		$submenu1 = new MenuSection();
-		$submenu1
-			->setLabel('submenu 1')
-			->setIcon('icon1');
+    public function testMenuSectionWorksAsSubmenu(): void
+    {
+        $submenu1 = new MenuSection();
+        $submenu1
+            ->setLabel('submenu 1')
+            ->setIcon('icon1')
+        ;
 
-		$submenu2 = new MenuSection();
-		$submenu2
-			->setLabel('submenu 2')
-			->setIcon('icon2');
+        $submenu2 = new MenuSection();
+        $submenu2
+            ->setLabel('submenu 2')
+            ->setIcon('icon2')
+        ;
 
-		$this->section->setLabel('Menu');
-		$this->section->setIcon('Icon');
-		$this->section->addMenu($submenu1);
-		$this->section->addMenu($submenu2);
-		$xml = new Converter(array('administration' => $this->section->getStructure()));
+        $this->section->setLabel('Menu');
+        $this->section->setIcon('Icon');
+        $this->section->addMenu($submenu1);
+        $this->section->addMenu($submenu2);
+        $xml = new Converter(['administration' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<administration>';
-		$expected .= '<menu img="Icon">Menu</menu>';
-		$expected .= '<submenu>';
-		$expected .= '<menu img="icon1">submenu 1</menu>';
-		$expected .= '<menu img="icon2">submenu 2</menu>';
-		$expected .= '</submenu>';
-		$expected .= '</administration>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<administration>';
+        $expected .= '<menu img="Icon">Menu</menu>';
+        $expected .= '<submenu>';
+        $expected .= '<menu img="icon1">submenu 1</menu>';
+        $expected .= '<menu img="icon2">submenu 2</menu>';
+        $expected .= '</submenu>';
+        $expected .= '</administration>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 
-	/**
-	 * Issue #3, issue #6
-	 */
-	public function testMenuHasMissingAttributes()
-	{
-		$submenu1 = new MenuSection();
-		$submenu1
-			->setLabel('menu1')
-			->setIcon('icon1')
-			->setAlt('alt1')
-			->setLink('link1')
-			->setAttribute('view', 'view1');
+    /**
+     * Issue #3, issue #6
+     */
+    public function testMenuHasMissingAttributes(): void
+    {
+        $submenu1 = new MenuSection();
+        $submenu1
+            ->setLabel('menu1')
+            ->setIcon('icon1')
+            ->setAlt('alt1')
+            ->setLink('link1')
+            ->setAttribute('view', 'view1')
+        ;
 
-		$this->section
-			->setLabel('menu')
-			->setIcon('icon')
-			->setAlt('alt')
-			->setLink('link')
-			->setAttribute('view', 'view')
-			->setAttribute('foo', 'bar')
-			->addMenu($submenu1);
-		$xml = new Converter(array('administration' => $this->section->getStructure()));
+        $this->section
+            ->setLabel('menu')
+            ->setIcon('icon')
+            ->setAlt('alt')
+            ->setLink('link')
+            ->setAttribute('view', 'view')
+            ->setAttribute('foo', 'bar')
+            ->addMenu($submenu1)
+        ;
+        $xml = new Converter(['administration' => $this->section->getStructure()]);
 
-		$expected = '<?xml version="1.0" encoding="UTF-8"?>';
-		$expected .= '<administration>';
-		$expected .= '<menu link="link" view="view" img="icon" alt="alt" foo="bar">menu</menu>';
-		$expected .= '<submenu>';
-		$expected .= '<menu link="link1" view="view1" img="icon1" alt="alt1">menu1</menu>';
-		$expected .= '</submenu>';
-		$expected .= '</administration>';
+        $expected = '<?xml version="1.0" encoding="UTF-8"?>';
+        $expected .= '<administration>';
+        $expected .= '<menu link="link" view="view" img="icon" alt="alt" foo="bar">menu</menu>';
+        $expected .= '<submenu>';
+        $expected .= '<menu link="link1" view="view1" img="icon1" alt="alt1">menu1</menu>';
+        $expected .= '</submenu>';
+        $expected .= '</administration>';
 
-		$this->assertXmlStringEqualsXmlString($expected, (string) $xml);
-	}
+        $this->assertXmlStringEqualsXmlString($expected, (string)$xml);
+    }
 }
