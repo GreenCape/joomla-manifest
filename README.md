@@ -10,7 +10,7 @@
 
 ## Requirements
 
-PHP 5.4+
+PHP 7.2+
 
 ## Installation
 
@@ -20,15 +20,19 @@ Simply add a dependency on `greencape/joomla-manifest` to your project's `compos
 [Composer](http://getcomposer.org/) to manage the dependencies of your project. Here is a minimal example of a
 `composer.json` file that just defines a dependency on Joomla Manifest:
 
-    {
-        "require": {
-            "greencape/joomla-manifest": "*@dev"
-        }
+```json
+{
+    "require": {
+        "greencape/joomla-manifest": "*@dev"
     }
+}
+```
 
 For a system-wide installation via Composer, you can run:
 
-    composer global require 'greencape/joomla-manifest=*'
+```bash
+$ composer global require 'greencape/joomla-manifest=*'
+```
 
 Make sure you have `~/.composer/vendor/bin/` in your path.
 
